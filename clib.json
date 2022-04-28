@@ -1,0 +1,32 @@
+{
+  "name": "pman",
+  "version": "x",
+  "repo": "binRick/pman",
+  "description": "pman",
+  "keywords": [
+    "c",
+    "pman"
+  ],
+  "license": "MIT",
+  "makefile": "Makefile",
+  "install": "make install",
+  "files": [],
+  "dependencies": {
+    "clibs/module": "0.1.1",
+    "flag": "0.0.1",
+    "clibs/timestamp": "0.0.2",
+    "ms": "0.0.4",
+    "bytes": "0.0.4",
+    "list": "0.2.0",
+    "kokke/tiny-regex-c": "0.1.0",
+    "littlstar/b64.c": "0.0.2",
+    "pepaslabs/rhash_md5.c": "0.0.1",
+    "4thel00z/env.h": "0.1.0",
+    "kgabis/parson": "1.4.0",
+    "stephenmathieson/trim.c": "0.0.2",
+    "clibs/rgba": "0.0.1",
+    "jwerle/fs.c": "0.2.0",
+    "clibs/buffer": "0.4.0",
+    "jwerle/strsplit.h": "0.1.1"
+  }
+}

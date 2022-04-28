@@ -1,0 +1,10 @@
+kfc
+*.a
+*.o
+bin
+deps
+tmp
+.attic
+.*.log
+include/embedded-palettes.h
+submodules
