@@ -1,0 +1,12 @@
+[submodule "submodules/cembed"]
+	path = submodules/cembed
+	url = https://github.com/rxi/cembed
+[submodule "submodules/tercontrol"]
+	path = submodules/tercontrol
+	url = https://github.com/ZackeryRSmith/tercontrol
+[submodule "submodules/ansicodes"]
+	path = submodules/ansicodes
+	url = https://github.com/mlabbe/ansicodes
+[submodule "submodules/dbg.h"]
+	path = submodules/dbg.h
+	url = https://github.com/leiless/dbg.h
