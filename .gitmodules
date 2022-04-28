@@ -10,3 +10,12 @@
 [submodule "submodules/dbg.h"]
 	path = submodules/dbg.h
 	url = https://github.com/leiless/dbg.h
+[submodule "submodules/debug_print_h"]
+	path = submodules/debug_print_h
+	url = git@github.com:binRick/debug_print_h.git
+[submodule "submodules/c_printf"]
+	path = submodules/c_printf
+	url = git@github.com:binRick/c_printf.git
+[submodule "submodules/generic-print"]
+	path = submodules/generic-print
+	url = https://github.com/exebook/generic-print.git

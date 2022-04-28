@@ -7,4 +7,3 @@ tmp
 .attic
 .*.log
 include/embedded-palettes.h
-submodules

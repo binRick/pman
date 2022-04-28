@@ -79,9 +79,10 @@ int get_palette_data_lines_qty(const char *name){
 
 char **get_palette_data_lines(const char *name){
   char *pd     = get_palette_data(name);
-  char **lines = malloc(strlen(name) + 1);
+  char **lines = malloc(1024 * 4);
   int  qty     = strsplit(pd, lines, "\n");
 
+  lines[qty] = NULL;
   fprintf(stderr, "name:%s|props qty:%d\n", name, qty);
   return(lines);
 }
@@ -110,7 +111,7 @@ char *get_palette_data(const char *name){
 
 
 int list_palette_names(){
-  palette_t *ptr = __embedded_table__;
+  palette_t *ptr = (palette_t *)__embedded_table__;
 
   for (int i = 0; (i < TEMPLATES_QTY && __embedded_table__[i].data); i++, ptr++ ) {
     printf(
@@ -152,6 +153,35 @@ int list_palettes(){
     char *d = get_palette_data(__embedded_table__[i].filename);
     printf("d=%s\n", d);
   }
+  return(0);
+}
+
+
+char **get_palette_data_properties(const char *name){
+  p("number:", 25, "fractional number:", 1.2345, "expression:", (2.0 + 5) / 3);
+  char **lines   = get_palette_data_lines(name);
+  char **props   = malloc(1024);
+  int  props_qty = 0;
+
+  for (int i = 0; lines[i]; i++) {
+    printf("#%d> line:%s\n", i, lines[i]);
+    char **eq_split   = malloc(strlen(lines[i]) + 8);
+    int  eq_split_qty = strsplit(lines[i], eq_split, "=");
+    if (eq_split_qty == 2) {
+      props[props_qty] = strdup(eq_split[0]);
+      props_qty++;
+    }
+    free(eq_split);
+  }
+  free(lines);
+  props[props_qty] = NULL;
+  return(props);
+}
+
+
+int print_default_palette_properties(){
+  dbg("ok123", % s);
+  get_palette_data_properties(DEFAULT_PALETTE);
   return(0);
 }
 

@@ -3,19 +3,20 @@
 #include "../src/includes.c"
 /**********************************************/
 struct mode_t modes[] = {
-  { .name = "debug_args",     .fxn = debug_args                   },
-  { .name = "test_hex1",      .fxn = test_hex1                    },
-  { .name = "list_palettes",  .fxn = list_palettes                },
-  { .name = "list_templates", .fxn = list_templates               },
-  { .name = "list_palettes",  .fxn = list_palettes                },
-  { .name = "list_modes",     .fxn = list_modes                   },
-  { .name = "palettes",       .fxn = list_palette_names           },
-  { .name = "view_palette",   .fxn = view_palette                 },
-  { .name = "default",        .fxn = view_default_palette         },
-  { .name = "cur",            .fxn = print_current_palette_colors },
-  { .name = "err",            .fxn = debug_error                  },
-  { .name = "msg",            .fxn = debug_msg                    },
-  { .name = "die",            .fxn = debug_die                    },
+  { .name = "debug_args",         .fxn = debug_args                       },
+  { .name = "test_hex1",          .fxn = test_hex1                        },
+  { .name = "list_palettes",      .fxn = list_palettes                    },
+  { .name = "list_templates",     .fxn = list_templates                   },
+  { .name = "list_palettes",      .fxn = list_palettes                    },
+  { .name = "list_modes",         .fxn = list_modes                       },
+  { .name = "palettes",           .fxn = list_palette_names               },
+  { .name = "view_palette",       .fxn = view_palette                     },
+  { .name = "default",            .fxn = view_default_palette             },
+  { .name = "default_properties", .fxn = print_default_palette_properties },
+  { .name = "cur",                .fxn = print_current_palette_colors     },
+  { .name = "err",                .fxn = debug_error                      },
+  { .name = "msg",                .fxn = debug_msg                        },
+  { .name = "die",                .fxn = debug_die                        },
   { NULL },
 }; const size_t MODES_QTY = LIST_QTY(modes);
 

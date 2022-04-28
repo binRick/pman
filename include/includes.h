@@ -39,5 +39,9 @@
 #include "../include/types.h"
 
 #include "../submodules/ansicodes/ansicodes.h"
+#include "../submodules/c_printf/sources/c_printf.h"
 #include "../submodules/dbg.h/dbg.h"
+#include "../submodules/generic-print/print.h"
 #include "../submodules/tercontrol/tercontrol.h"
+
+#define p    print

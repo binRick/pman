@@ -17,6 +17,7 @@ char *get_palette_property_value(const char *name, const char *property);
 int get_palette_data_lines_qty(const char *name);
 
 //    Mode Functions
+int print_default_palette_properties();
 int print_current_palette_colors();
 int view_default_palette();
 int debug();
