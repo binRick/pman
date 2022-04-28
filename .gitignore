@@ -7,3 +7,6 @@ tmp
 .attic
 .*.log
 include/embedded-palettes.h
+include/embedded-*
+etc/*.csv
+.modes.txt

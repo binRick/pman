@@ -19,3 +19,6 @@
 [submodule "submodules/generic-print"]
 	path = submodules/generic-print
 	url = https://github.com/exebook/generic-print.git
+[submodule "submodules/csv_parser"]
+	path = submodules/csv_parser
+	url = https://github.com/semitrivial/csv_parser

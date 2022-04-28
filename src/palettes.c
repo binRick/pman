@@ -83,7 +83,7 @@ char **get_palette_data_lines(const char *name){
   int  qty     = strsplit(pd, lines, "\n");
 
   lines[qty] = NULL;
-  fprintf(stderr, "name:%s|props qty:%d\n", name, qty);
+  //fprintf(stderr, "name:%s|props qty:%d\n", name, qty);
   return(lines);
 }
 
@@ -128,7 +128,7 @@ int list_templates(){
 
   for (int i = 0; (i < TEMPLATES_QTY && __embedded_table__[i].data); i++, ptr++ ) {
     printf(
-      AC_RESETALL AC_BRIGHT_YELLOW_BLACK "%s",
+      AC_RESETALL AC_BRIGHT_YELLOW_BLACK "%s\n",
       __embedded_table__[i].filename
       );
   }
@@ -157,31 +157,88 @@ int list_palettes(){
 }
 
 
-char **get_palette_data_properties(const char *name){
-  p("number:", 25, "fractional number:", 1.2345, "expression:", (2.0 + 5) / 3);
+int get_palette_data_properties_qty(const char *name){
   char **lines   = get_palette_data_lines(name);
   char **props   = malloc(1024);
   int  props_qty = 0;
 
   for (int i = 0; lines[i]; i++) {
-    printf("#%d> line:%s\n", i, lines[i]);
+    char **eq_split   = malloc(strlen(lines[i]) + 8);
+    int  eq_split_qty = strsplit(lines[i], eq_split, "=");
+    if (eq_split_qty == 2) {
+      props_qty++;
+    }
+  }
+  return(props_qty);
+}
+
+
+char **get_palette_data_properties(const char *name){
+  char **lines   = get_palette_data_lines(name);
+  char **props   = malloc(1024);
+  int  props_qty = 0;
+
+  for (int i = 0; lines[i]; i++) {
     char **eq_split   = malloc(strlen(lines[i]) + 8);
     int  eq_split_qty = strsplit(lines[i], eq_split, "=");
     if (eq_split_qty == 2) {
       props[props_qty] = strdup(eq_split[0]);
       props_qty++;
+#ifdef VERBOSE_DEBUG_MODE
+      printf(
+        AC_RESETALL "> Line #%d:  " AC_RESETALL AC_BRIGHT_YELLOW_BLACK AC_REVERSED "\"%s\"" AC_RESETALL
+        " "
+        AC_RESETALL "prop:%s"
+        " | "
+        AC_RESETALL "val:%s"
+        "\n",
+        i,
+        lines[i],
+        eq_split[0],
+        eq_split[1]
+        );
+#endif
     }
     free(eq_split);
   }
-  free(lines);
   props[props_qty] = NULL;
+  free(lines);
   return(props);
 }
 
 
+char *prepend_hash(const char *s){
+  char *s0 = malloc(strlen(s) + 1);
+
+  sprintf(s0, "#%s", s);
+  return(s0);
+}
+
+
 int print_default_palette_properties(){
-  dbg("ok123", % s);
-  get_palette_data_properties(DEFAULT_PALETTE);
+  char **props   = get_palette_data_properties(DEFAULT_PALETTE);
+  int  props_qty = get_palette_data_properties_qty(DEFAULT_PALETTE);
+
+  dbg(props_qty, % d);
+  p(DEFAULT_PALETTE, "has", props_qty, "properties");
+  for (int i = 0; i < props_qty; i++) {
+    char    *prop_val = get_palette_property_value(DEFAULT_PALETTE, props[i]);
+    short   prop_val_ok;
+    int32_t _r = rgba_from_string(prepend_hash(prop_val), &prop_val_ok);
+    assert(prop_val_ok);
+    rgba_t  prop_val_rgba  = rgba_new(_r);
+    char    *prop_val_name = malloc(1024);
+
+    rgba_to_string(prop_val_rgba, prop_val_name, 256);
+    int red   = (uint32_t)_r >> 24 & 0xff;
+    int green = (uint32_t)_r >> 16 & 0xff;
+    int blue  = (uint32_t)_r >> 8 & 0xff;
+    int alpha = (uint32_t)_r & 0xff;
+    p("  >Property #", i, ":", props[i], "->", prop_val, "->", prop_val_name, " : red:", red, "|green:", green, "blue:", blue, "alpha:", alpha);
+    //rgba_inspect(_r);
+    free(prop_val); free(prop_val_name);
+  }
+  free(props);
   return(0);
 }
 

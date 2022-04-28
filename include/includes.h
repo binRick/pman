@@ -12,6 +12,7 @@
 #include <unistd.h>
 
 #include "../include/defines.h"
+#include "../include/embedded-colornames.h"
 #include "../include/embedded-palettes.h"
 #include "../include/macros.h"
 
@@ -40,6 +41,7 @@
 
 #include "../submodules/ansicodes/ansicodes.h"
 #include "../submodules/c_printf/sources/c_printf.h"
+#include "../submodules/csv_parser/csv.h"
 #include "../submodules/dbg.h/dbg.h"
 #include "../submodules/generic-print/print.h"
 #include "../submodules/tercontrol/tercontrol.h"

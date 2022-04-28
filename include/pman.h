@@ -21,6 +21,8 @@ int print_default_palette_properties();
 int print_current_palette_colors();
 int view_default_palette();
 int debug();
+int list_color_names();
+int list_color_names_and_rgb();
 int view_palette();
 int list_palette_names();
 int iterate_templates();

@@ -2,7 +2,7 @@
 set - eou pipefail
 
 
-cd $(dirname "${BASH_SOURCE[0]}")
+cd $(cd "$(dirname "$ { BASH_SOURCE[0] } ")" && pwd)
 
 cd../.
   make test
