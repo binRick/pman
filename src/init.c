@@ -1,6 +1,4 @@
-#ifndef __KFC_INIT_C
-#define __KFC_INIT_C
-
+#pragma once
 #include "../src/includes.c"
 
 
@@ -33,6 +31,8 @@ bool initialize_args(){
 void pman_init() {
   tc_get_cols_rows(&cols, &rows);
   assert(initialize_args());
+  assert(isatty(STDOUT_FILENO));
+
 
   //printf(" cols: %d | rows: %d\n", cols, rows);
   //printf("qty templates: %lu\n", TEMPLATES_QTY);
@@ -40,5 +40,3 @@ void pman_init() {
   //list_palettes();
 }
 
-
-#endif

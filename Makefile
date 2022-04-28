@@ -59,9 +59,11 @@ test-pman:
 	@$(KFC) --mode msg;echo $?;echo
 	@echo Error | $(TEST_TITLE)
 	@$(KFC) --mode err;echo $?;echo
+	@echo Default Palette Colors | $(TEST_TITLE)
+	@$(KFC) --mode default;echo $?;echo
 
 clean-palette-include:
-	@rm -rf include/embedded-palettes.h
+	@truncate --size 0 include/embedded-palettes.h
 
 cembed-build:
 	@{ cd submodules/cembed && make; }
@@ -84,7 +86,7 @@ clear:
 	@clear
 
 tidy:
-	@uncrustify -c etc/uncrustify.cfg --replace src/*.c $(shell find include -type f -name "*.h"|grep -v '/embedded-'|tr '\n' ' ')
+	@uncrustify -c etc/uncrustify.cfg --replace src/*.c $(shell find include -type f -name "*.h"|grep -v '/embedded-'|tr '\n' ' ') scripts/*.sh
 	@find . -type f -name "*unc-back*"|xargs -I % unlink %
 
 dev:	

@@ -1,23 +1,5 @@
-#ifndef __KFC_C
-#define __KFC_C
-
+#pragma once
 #include "../src/includes.c"
-
-
-static char *__basename(const char *path){
-  const char *slash = strrchr(path, '/');
-
-  if (slash) {
-    path = slash + 1;
-  }
-#ifdef _WIN32
-  slash = strrchr(path, '\\');
-  if (slash) {
-    path = slash + 1;
-  }
-#endif
-  return(path);
-}
 
 
 static void select_palette(char *sel) {
@@ -106,4 +88,3 @@ static void print_palette(void) {
    */
 }
 #include "../src/main.c"
-#endif

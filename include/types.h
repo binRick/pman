@@ -1,8 +1,7 @@
-#ifndef __KFC_TYPES_H__
-#define __KFC_TYPES_H__
+#pragma once
 #include "../include/defines.h"
 
-#define palette_iterator    void (*iterate_palettes)(**PALETTE_t)
+#define PALETTE_ITERATOR    void (*iterate_palettes)(**PALETTE_t)
 #define PALETTE_PROPERTIES \
   char *filename;          \
   unsigned char *data;     \
@@ -14,14 +13,13 @@ typedef struct {
   bool       verbose;
 } args_t;
 
-struct mode_t {
+typedef struct             mode_t {
   char *name;
-  int  (*fxn)();
+  int (*fxn)();
 };
 
-typedef struct PALETTE_t PALETTE_t;
-struct PALETTE_t {
+typedef struct palette_t   palette_t;
+struct palette_t {
   PALETTE_PROPERTIES
 };
 
-#endif

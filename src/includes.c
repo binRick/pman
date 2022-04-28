@@ -1,9 +1,8 @@
-#ifndef __KFC_INCLUDES_C
-#define __KFC_INCLUDES_C
+#pragma once
 
 #include "../include/includes.h"
 
 #include "../src/globals.c"
 #include "../src/palettes.c"
+#include "../src/utils.c"
 
-#endif

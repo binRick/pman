@@ -1,21 +1,24 @@
-#ifndef __KFC_H__
-#define __KFC_H__
+#pragma once
 
 #include "../include/includes.h"
 
-static int pman_args(const int argc, const char **argv);
+//   pman Functions
 static void pman_init() __attribute__((constructor));
+static int pman_args(const int argc, const char **argv);
+
+//   Utility Functions
 static char *__basename(const char *);
 
-char *get_palette_data(char *name);
-
-void *get_palette_data_i(**PALETTE_t);
+//   Palette Functions
+char *get_palette_data(const char *name);
+void *get_palette_data_i(const char *name);
 char **get_palette_data_lines(const char *name);
 char *get_palette_property_value(const char *name, const char *property);
 int get_palette_data_lines_qty(const char *name);
 
-//    modes
+//    Mode Functions
 int print_current_palette_colors();
+int view_default_palette();
 int debug();
 int view_palette();
 int list_palette_names();
@@ -24,7 +27,8 @@ int list_palettes();
 int list_modes();
 int test_hex1();
 int debug_args();
+int debug_error();
+int debug_msg();
+int debug_die();
 int list_template();
 
-
-#endif

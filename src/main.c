@@ -1,6 +1,4 @@
-#ifndef __KFC_MAIN_C
-#define __KFC_MAIN_C
-
+#pragma once
 #include "../include/pman.h"
 #include "../src/args.c"
 #include "../src/globals.c"
@@ -11,12 +9,6 @@
 int main(const int argc, const char **argv) {
   assert(pman_args(argc, argv) == 0);
   return(run_mode(args->mode));
-
-  /*
-   * if (argc == 1) {
-   * fprintf(stderr, "No argument(s) provided\n");
-   * return(1);
-   * }*/
 
   /*
    * tmp = getenv("XDG_CONFIG_HOME");
@@ -95,4 +87,3 @@ int main(const int argc, const char **argv) {
   return(0);
 } /* main */
 
-#endif

@@ -1,38 +1,46 @@
-#ifndef __PALETTES_C
-#define __PALETTES_C
-
-#include "../include/includes.h"
-#include "../src/globals.c"
+#pragma once
 #include "../src/includes.c"
 
 
-int pc1(void){
-  int i, j, n;
+int view_palette(){
+  printf(
+    AC_RESETALL AC_BRIGHT_YELLOW AC_REVERSED "%s"
+    AC_RESETALL ":"
+    AC_RESETALL "(%d lines)"
+    AC_RESETALL " :: cursor=%s | color07=%s"
+    AC_RESETALL "\n"
+    AC_RESETALL AC_BOLD "%s"
+    AC_RESETALL "\n",
+    __basename((const char *)args->palette),
+    get_palette_data_lines_qty((const char *)args->palette),
+    get_palette_property_value((const char *)args->palette, "cursor"),
+    get_palette_property_value((const char *)args->palette, "color07"),
+    get_palette_data((const char *)args->palette)
+    );
+  palette_t *ptr = (palette_t *)__embedded_table__;
 
-  for (i = 0; i < 11; i++) {
-    for (j = 0; j < 10; j++) {
-      n = 10 * i + j;
-      if (n > 107) {
-        break;
-      }
-//            printf("\n  n:%d|j:%d|i:%d\n  -033[%dm %3d-033[m\n\n", n,j,i, n, n);
-      printf("\033[%dm %3d\033[m", n, n);
+  for (int i = 0; (i < TEMPLATES_QTY && __embedded_table__[i].data); i++, ptr++ ) {
+    if (strcmp(__basename(__embedded_table__[i].filename), args->palette) == 0) {
     }
-    printf("\n");
   }
   return(0);
 }
 
 
+int view_default_palette(){
+  args->palette = DEFAULT_PALETTE;
+  return(view_palette());
+}
+
+
 int print_current_palette_colors(){
-  printf("print_current_palette_colors>\n");
   printf(CURRENT_PALETTE);
-  //pc1();
+  return(0);
 }
 
 
 char *get_palette_property_value(const char *name, const char *property){
-  char *pd     = get_palette_data(name);
+  char *pd     = get_palette_data((char *)name);
   char **lines = malloc(16 * 24);
   int  qty     = strsplit(pd, lines, "\n");
 
@@ -51,7 +59,7 @@ char *get_palette_property_value(const char *name, const char *property){
 }
 
 
-void *get_palette_data_i(**PALETTE_t){
+void *get_palette_data_i(const char *name){
   char *dat = "ok123";
 
   return((void *)dat);
@@ -60,26 +68,27 @@ void *get_palette_data_i(**PALETTE_t){
 
 int get_palette_data_lines_qty(const char *name){
   char *pd     = get_palette_data(name);
-  char **lines = malloc(16 * 24);
+  char **lines = malloc(strlen(name) + 1);
   int  qty     = strsplit(pd, lines, "\n");
 
   free(lines);
+  free(pd);
   return(qty);
 }
 
 
 char **get_palette_data_lines(const char *name){
   char *pd     = get_palette_data(name);
-  char **lines = malloc(16 * 24);
+  char **lines = malloc(strlen(name) + 1);
   int  qty     = strsplit(pd, lines, "\n");
 
-  fprintf("name:%s|props qty:%d\n", name, qty);
+  fprintf(stderr, "name:%s|props qty:%d\n", name, qty);
   return(lines);
 }
 
 
-char *get_palette_data(char *name){
-  PALETTE_t *ptr = __embedded_table__;
+char *get_palette_data(const char *name){
+  palette_t *ptr = (palette_t *)__embedded_table__;
 
   // char *pd = (char*)get_palette_data_i(ptr);
 //    return(pd);
@@ -101,7 +110,7 @@ char *get_palette_data(char *name){
 
 
 int list_palette_names(){
-  PALETTE_t *ptr = __embedded_table__;
+  palette_t *ptr = __embedded_table__;
 
   for (int i = 0; (i < TEMPLATES_QTY && __embedded_table__[i].data); i++, ptr++ ) {
     printf(
@@ -114,7 +123,7 @@ int list_palette_names(){
 
 
 int list_templates(){
-  PALETTE_t *ptr = __embedded_table__;
+  palette_t *ptr = (palette_t *)__embedded_table__;
 
   for (int i = 0; (i < TEMPLATES_QTY && __embedded_table__[i].data); i++, ptr++ ) {
     printf(
@@ -127,13 +136,13 @@ int list_templates(){
 
 
 int list_palettes(){
-  PALETTE_t *ptr = __embedded_table__;
+  palette_t *ptr = (palette_t *)__embedded_table__;
 
   for (int i = 0; (i < TEMPLATES_QTY && __embedded_table__[i].data); i++, ptr++ ) {
     printf(
       AC_RESETALL AC_BRIGHT_YELLOW_BLACK "#%d"
       AC_RESETALL "/"
-      AC_RESETALL AC_BRIGHT_BLUE_BLACK "%d"
+      AC_RESETALL AC_BRIGHT_BLUE_BLACK "%lu"
       AC_RESETALL ">"
       AC_RESETALL ":: %s :: %db\n",
       i + 1, TEMPLATES_QTY,
@@ -146,4 +155,3 @@ int list_palettes(){
   return(0);
 }
 
-#endif

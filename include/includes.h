@@ -1,20 +1,18 @@
-#ifndef __KFC_INCLUDES_H__
-#define __KFC_INCLUDES_H__
+#pragma once
 
 #include <assert.h>
 #include <dirent.h>
 #include <getopt.h>
-#include <stdio.h>
+#include <glob.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdlib.h>
-#include <string.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <time.h>
 #include <unistd.h>
 
 #include "../include/defines.h"
+#include "../include/embedded-palettes.h"
 #include "../include/macros.h"
 
 #include "../deps/b64/b64.h"
@@ -38,11 +36,8 @@
 #include "../deps/tiny-regex-c/re.h"
 #include "../deps/trim/trim.h"
 
-#include "../include/embedded-palettes.h"
 #include "../include/types.h"
 
 #include "../submodules/ansicodes/ansicodes.h"
 #include "../submodules/dbg.h/dbg.h"
 #include "../submodules/tercontrol/tercontrol.h"
-
-#endif

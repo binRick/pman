@@ -1,8 +1,5 @@
-#ifndef __KFC_ARGS_C
-#define __KFC_ARGS_C
-
-#include "../include/includes.h"
-#include "../src/globals.c"
+#pragma once
+#include "../src/includes.c"
 
 
 int debug_args(){
@@ -20,9 +17,6 @@ int pman_args(int argc, const char **argv) {
   flag_bool(&args->verbose, "verbose", "Verbose Mode");
   flag_str(&args->palette, "palette", "Palette");
   flag_parse(argc, argv, VERSION);
-
   return(0);
 }
 
-
-#endif
