@@ -3,8 +3,11 @@
 
 CC = gcc
 CFLAGS += -std=gnu99 -O3
+CFLAGS += -lm
 PREFIX ?= /usr/local
 BINDIR ?= $(PREFIX)/bin
+
+VTERM_INCLUDES+=-lvterm
 
 INCLUDES+=./deps/flag/flag.c
 INCLUDES+=./deps/b64/*.c
@@ -189,11 +192,19 @@ nodemon: init cembed
 #	@make src/parse_color_names_csv
 #	@make src/pman
 __nodemon: 
-	@make -j 10 src/parse_color_names_csv src/pman
+	@make -j 10 srcs
 	@make test
+
+srcs: do-srcs
+
+do-srcs: 
+	make -j 10 src/pman src/parse_color_names_csv src/vterm
 
 dev:
 	@$(PASSH) -L .nodemon.log $(NODEMON) -w src -w . -w Makefile -i submodules -i deps -i 'include/embedded-*.h' -e sh,c,h,Makefile -x env -- bash -c 'make nodemon||true'
+
+src/vterm: src/vterm.c
+	$(CC) $(CFLAGS) -o ./bin/$(shell basename $@) $< $(LDFLAGS) $(INCLUDES) $(VTERM_INCLUDES)
 
 src/parse_color_names_csv: src/parse_color_names_csv.c
 	@make init
