@@ -5,7 +5,7 @@
 
 /**********************************/
 int view_palette(){
-#ifdef VEBOSE_DEBUG_MODE    
+#ifdef VEBOSE_DEBUG_MODE
   printf(
     AC_RESETALL AC_BRIGHT_YELLOW AC_REVERSED "%s"
     AC_RESETALL ":"
@@ -20,9 +20,9 @@ int view_palette(){
     get_palette_property_value((const char *)args->palette, "color07"),
     get_palette_data((const char *)args->palette)
     );
-#else  
+#else
   printf("%s\n", get_palette_data((const char *)args->palette));
-#endif  
+#endif
   return(0);
 }
 
@@ -84,7 +84,7 @@ char **get_palette_data_lines(const char *name){
 char *get_palette_data(const char *name){
   palette_t *ptr = (palette_t *)__embedded_table__;
 
-  for (int i = 0; i < TEMPLATES_QTY; i++, ptr++ ) {
+  for (int i = 0; i < PALETTES_QTY; i++, ptr++ ) {
     if (
       (__embedded_table__[i].data)
        && (
@@ -103,27 +103,29 @@ char *get_palette_data(const char *name){
 
 int list_palette_names(){
   palette_t *ptr = (palette_t *)__embedded_table__;
-  for (int i = 0; (i < TEMPLATES_QTY && __embedded_table__[i].data); i++, ptr++ ) {
-#ifdef VERBOSE_DEBUG_MODE      
+
+  for (int i = 0; (i < PALETTES_QTY && __embedded_table__[i].data); i++, ptr++ ) {
+#ifdef VERBOSE_DEBUG_MODE
     fprintf(stderr,
-      AC_RESETALL AC_BRIGHT_YELLOW_BLACK "#%d"
-      AC_RESETALL "/"
-      AC_RESETALL AC_BRIGHT_BLUE_BLACK "%lu"
-      AC_RESETALL ">"
-      AC_RESETALL ":: %s :: %db\n",
-      i + 1, TEMPLATES_QTY,
-      __embedded_table__[i].filename,
-      __embedded_table__[i].size
-      );
-#else    
+            AC_RESETALL AC_BRIGHT_YELLOW_BLACK "#%d"
+            AC_RESETALL "/"
+            AC_RESETALL AC_BRIGHT_BLUE_BLACK "%lu"
+            AC_RESETALL ">"
+            AC_RESETALL ":: %s :: %db\n",
+            i + 1, PALETTES_QTY,
+            __embedded_table__[i].filename,
+            __embedded_table__[i].size
+            );
+#else
     printf(
       "%s\n",
       __basename(__embedded_table__[i].filename)
       );
-#endif    
+#endif
   }
   return(0);
 }
+
 
 int get_palette_data_properties_qty(const char *name){
   char **lines   = get_palette_data_lines(name);
@@ -180,16 +182,20 @@ int print_default_palette_properties(){
   int  props_qty = get_palette_data_properties_qty(DEFAULT_PALETTE);
 
 #ifdef VERBOSE_DEBUG_MODE
-  dbg(props_qty, %d);
+  dbg(DEFAULT_PALETTE, % s);
+  dbg(props_qty, % d);
   p(DEFAULT_PALETTE, "has", props_qty, "properties");
 #endif
   for (int i = 0; i < props_qty; i++) {
     char    *prop_val = get_palette_property_value(DEFAULT_PALETTE, props[i]);
     short   prop_val_ok;
     int32_t _r = rgba_from_string(prop_val, &prop_val_ok);
-    assert(prop_val_ok);
-    rgba_t  prop_val_rgba  = rgba_new(_r);
-    char    *prop_val_name = malloc(1024);
+#ifdef VERBOSE_DEBUG_MODE
+    dbg(prop_val, % s);
+    dbg(prop_val_ok, % d);
+#endif
+    rgba_t prop_val_rgba  = rgba_new(_r);
+    char   *prop_val_name = malloc(1024);
 
     rgba_to_string(prop_val_rgba, prop_val_name, 256);
     int red   = (uint32_t)_r >> 24 & 0xff;
@@ -199,6 +205,7 @@ int print_default_palette_properties(){
 #ifdef VERBOSE_DEBUG_MODE
     p("  >Property #", i, ":", props[i], "->", prop_val, "->", prop_val_name, " : red:", red, "|green:", green, "blue:", blue, "alpha:", alpha);
 #endif
+    printf("%s:%s\n", props[i], prop_val);
     free(prop_val); free(prop_val_name);
   }
   free(props);

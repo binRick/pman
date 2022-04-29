@@ -1,6 +1,7 @@
 #pragma once
+///////////////////////////////////////////
 #include "../include/includes.h"
-
+///////////////////////////////////////////
 struct color_name_t *get_color_code_t_by_name(const char *rgb){
   struct color_name_t *cc;
   bool                found = false;

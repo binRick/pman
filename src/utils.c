@@ -50,8 +50,8 @@ int list_color_rgbs() {
 
 int list_color_names_and_rgbs() {
   for (int i = 0; i < COLOR_NAMES_QTY; i++) {
-    printf("%s:%s\n", COLOR_NAMES[i].name,COLOR_NAMES[i].rgb);
-#ifdef VERBOSE_DEBUG_MODE      
+    printf("%s:%s\n", COLOR_NAMES[i].name, COLOR_NAMES[i].rgb);
+#ifdef VERBOSE_DEBUG_MODE
     printf(
       AC_RESETALL AC_BRIGHT_YELLOW "name:%s" AC_RESETALL
       "|"
@@ -67,7 +67,7 @@ int list_color_names_and_rgbs() {
       COLOR_NAMES[i].rgba,
       COLOR_NAMES[i].hex
       );
-#endif    
+#endif
   }
   return(0);
 }
@@ -75,9 +75,9 @@ int list_color_names_and_rgbs() {
 
 int list_color_names() {
   for (int i = 0; i < COLOR_NAMES_QTY; i++) {
-    printf("%s\n"
-      ,COLOR_NAMES[i].name
-      );
+    printf("%s\n",
+           COLOR_NAMES[i].name
+           );
   }
   return(0);
 }

@@ -1,6 +1,6 @@
 #pragma once
-#define _POSIX_C_SOURCE                200809L
-#define VERSION                        "v1.0.0"
+#define _POSIX_C_SOURCE    200809L
+#define VERSION            "v1.0.0"
 #define DBG_H_DEF_ONCE
 #define DBG_H_NO_WARNING
 

@@ -1,4 +1,5 @@
-//#pragma once
+#ifndef PMAN_C
+#define PMAN_C
 ///////////////////////////
 #include "../src/includes.c"
 ///////////////////////////
@@ -90,3 +91,4 @@ static void print_palette(void) {
    */
 }
 #include "../src/main.c"
+#endif // PMAN_C

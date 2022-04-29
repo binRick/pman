@@ -10,6 +10,7 @@ bool initialize_args(){
   args->palette   = DEFAULT_PALETTE;
   args->colorcode = DEFAULT_COLORCODE;
 
+
   return(true);
 }
 

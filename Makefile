@@ -62,7 +62,7 @@ cembed_if_expired:
 
 all: init cembed src/pman clear test
 test: test-pman
-cembed: init clean-palette-include cembed-archive write_palette_files_hash #assemble-color-names
+cembed: init clean-palette-include cembed-archive write_palette_files_hash assemble-color-names
 
 PALETE_FILES_HASH_FILE=./tmp/palette_files_hash.txt
 
