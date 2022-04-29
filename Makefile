@@ -7,7 +7,7 @@ CFLAGS += -lm
 PREFIX ?= /usr/local
 BINDIR ?= $(PREFIX)/bin
 
-VTERM_INCLUDES+=./src/libtmt/tmt.c
+VTERM_INCLUDES+=./src/tmt.c
 
 INCLUDES+=./deps/flag/flag.c
 INCLUDES+=./deps/b64/*.c
