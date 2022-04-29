@@ -4,7 +4,7 @@
 
 
 int __view_colorcode(const char *name) {
-  struct color_names_t *cc = get_color_code_t_by_name(name);
+  color_name_t *cc = get_color_code_t_by_name(name);
 
   printf(
     AC_RESETALL AC_BRIGHT_YELLOW "name:%s|rgb:%s" AC_RESETALL
@@ -32,11 +32,13 @@ int list_color_rgbs() {
   for (int i = 0; i < COLOR_NAMES_QTY; i++) {
     printf(
       AC_RESETALL AC_BRIGHT_MAGENTA AC_UNDERLINE "RGB: %s\n" AC_RESETALL
-      AC_RESETALL AC_BRIGHT_BLUE AC_UNDERLINE "Color:" AC_RESETALL " " "%s" AC_RESETALL "\n"
-      AC_RESETALL AC_BRIGHT_BLUE AC_UNDERLINE "RGB Table:" AC_RESETALL "\n" "%s" "\n" AC_RESETALL
-      AC_RESETALL AC_BRIGHT_BLUE AC_UNDERLINE "Attributes Table:" AC_RESETALL "\n" "%s" "\n" AC_RESETALL
+      AC_RESETALL ""  AC_BRIGHT_BLUE AC_UNDERLINE "Name:" AC_RESETALL " " "%s" AC_RESETALL "\n"
+      AC_RESETALL ""  AC_BRIGHT_BLUE AC_UNDERLINE "Color:" AC_RESETALL " " "%s" AC_RESETALL "\n"
+      AC_RESETALL "\t"  AC_BRIGHT_BLUE AC_UNDERLINE "RGB Table:" AC_RESETALL "\n" "%s" "\n" AC_RESETALL
+      AC_RESETALL "\t"  AC_BRIGHT_BLUE AC_UNDERLINE "Attributes Table:" AC_RESETALL "\n" "%s" "\n" AC_RESETALL
       "\n=====================\n",
       rgbs[i],
+      get_color_code_name(rgbs[i]),
       get_color_code_yourcolor(rgbs[i]),
       get_color_code_rgb_table(rgbs[i]),
       get_color_code_attributes(rgbs[i])

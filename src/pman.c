@@ -1,4 +1,5 @@
 #pragma once
+#define DBG_H_DEF_ONCE
 #include "../src/includes.c"
 
 

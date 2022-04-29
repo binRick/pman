@@ -1,7 +1,9 @@
 #pragma once
+/**********************************/
 #include "../src/includes.c"
 
 
+/**********************************/
 int view_palette(){
   printf(
     AC_RESETALL AC_BRIGHT_YELLOW AC_REVERSED "%s"
@@ -91,8 +93,6 @@ char **get_palette_data_lines(const char *name){
 char *get_palette_data(const char *name){
   palette_t *ptr = (palette_t *)__embedded_table__;
 
-  // char *pd = (char*)get_palette_data_i(ptr);
-//    return(pd);
   for (int i = 0; i < TEMPLATES_QTY; i++, ptr++ ) {
     if (
       (__embedded_table__[i].data)
@@ -219,8 +219,10 @@ int print_default_palette_properties(){
   char **props   = get_palette_data_properties(DEFAULT_PALETTE);
   int  props_qty = get_palette_data_properties_qty(DEFAULT_PALETTE);
 
+#ifdef VERBOSE_DEBUG_MODE
   dbg(props_qty, % d);
   p(DEFAULT_PALETTE, "has", props_qty, "properties");
+#endif
   for (int i = 0; i < props_qty; i++) {
     char    *prop_val = get_palette_property_value(DEFAULT_PALETTE, props[i]);
     short   prop_val_ok;
@@ -234,7 +236,9 @@ int print_default_palette_properties(){
     int green = (uint32_t)_r >> 16 & 0xff;
     int blue  = (uint32_t)_r >> 8 & 0xff;
     int alpha = (uint32_t)_r & 0xff;
+#ifdef VERBOSE_DEBUG_MODE
     p("  >Property #", i, ":", props[i], "->", prop_val, "->", prop_val_name, " : red:", red, "|green:", green, "blue:", blue, "alpha:", alpha);
+#endif
     free(prop_val); free(prop_val_name);
   }
   free(props);

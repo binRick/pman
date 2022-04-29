@@ -34,10 +34,13 @@ INCLUDES+=-I submodules/c_string_buffer/include
 INCLUDES+=-I deps
 INCLUDES+=-I .
 
+##################################################
+EMBEDDED_PALETTES_FILE=./include/embedded-palettes.h
+EMBEDDED_COLORNAMES_FILE=./include/embedded-colornames.h
+COLORNAMES_CSV_FILE=./etc/colornames.csv
+##################################################
 CEMBED=./submodules/cembed/cembed
-CEMBED_FILE=./include/embedded-palettes.h
 EMBEDDED_TEMPLATES_TABLE_NAME=__embedded_table__
-COLOR_NAMES_FILE=./include/embedded-colornames.h
 PALETTE_FILES=
 PALETTE_FILES+=$(shell find palettes/dark -type f)
 PMAN=bin/pman
@@ -58,7 +61,7 @@ cembed_if_expired:
 
 all: init cembed src/pman clear test
 test: test-pman
-cembed: init clean-palette-include assemble-palettes cembed-archive write_palette_files_hash #assemble-color-names
+cembed: init clean-palette-include cembed-archive write_palette_files_hash #assemble-color-names
 
 PALETE_FILES_HASH_FILE=./tmp/palette_files_hash.txt
 
@@ -122,29 +125,34 @@ clean-palette-include:
 cembed-build:
 	@{ cd submodules/cembed && make; }
 
-assemble-palettes: init
-	@rm -rf tmp/palettes||true
-	@mkdir -p tmp/palettes
-	@cp -prf palettes tmp/palettes/pman
-
 unarchive-colornames:
 	@cd etc && [[ -f colornames.csv ]] || tar xf colornames.csv.tar.bz2
 	@true
 
-assemble-color-names: init unarchive-colornames src/parse_color_names_csv
-	@./test_parse_color_names.sh
-#	@cd ./etc/color-logs && ../../bin/parse_color_names_csv ../colornames.csv > ../../$(COLOR_NAMES_FILE)
+generate-colorname-logs:
+	@./etc/generate_color_logs.sh
 
-cembed-archive: assemble-palettes
-	@$(CEMBED) -t $(EMBEDDED_TEMPLATES_TABLE_NAME) -o $(CEMBED_FILE) $(PALETTE_FILES)
+do-assemble-color-names: init unarchive-colornames src/parse_color_names_csv generate-colorname-logs
+	@./bin/parse_color_names_csv $(COLORNAMES_CSV_FILE) |tee $(EMBEDDED_COLORNAMES_FILE)|pv -l >/dev/null
+
+nullify-colornames: 
+	@cat include/embedded-colornames-base.h > include/embedded-colornames.h
+
+assemble-color-names: init nullify-colornames do-assemble-color-names
+
+cembed-archive: init
+	@eval $(CEMBED) -t $(EMBEDDED_TEMPLATES_TABLE_NAME) -o $(EMBEDDED_PALETTES_FILE) $(PALETTE_FILES)
 
 init:
-	@mkdir -p bin tmp
+	@mkdir -p bin tmp etc/color-logs
 
 rm:
 	@rm -rf bin tmp
 
-clean: rm clean-palette-include
+rmrf: rm
+	@rm -rf etc/color-logs
+
+clean: rm clean-palette-include nullify-colornames
 
 clear:
 	@clear
@@ -170,13 +178,21 @@ fzf-modes:
 		--layout=reverse \
 		--preview "ansi --bold --bg-black --yellow '{}' && echo && eval $(PASSH) $(PMAN) --mode '{}'; echo;echo; ansi --bold --blue Exit Code: $$?"
 
-dev:	
-	@$(PASSH) -L .nodemon.log $(NODEMON) -w . -w Makefile -i submodules -i deps -i 'include/embedded-*.h' -e sh,c,h,Makefile -x sh -- -c 'make all test||true'
+nodemon: init
+	@make src/parse_color_names_csv
+	@make assemble-color-names 
+	@make cembed
+	@make all
+
+dev:
+	@$(PASSH) -L .nodemon.log $(NODEMON) -w src -w . -w Makefile -i submodules -i deps -i 'include/embedded-*.h' -e sh,c,h,Makefile -x env -- bash -c 'make nodemon||true'
 
 src/parse_color_names_csv: src/parse_color_names_csv.c
+	@make init
 	$(CC) $(CFLAGS) -o ./bin/$(shell basename $@) $< $(LDFLAGS) $(INCLUDES)
 
 src/pman: src/pman.c
+	@make init
 	$(CC) $(CFLAGS) -o ./bin/$(shell basename $@) $< $(LDFLAGS) $(INCLUDES)
 
 install: all

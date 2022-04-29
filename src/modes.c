@@ -7,7 +7,7 @@ int view_colorcode(){
   return(__view_colorcode(args->colorcode));
 }
 /**********************************************/
-struct mode_t modes[] = {
+struct pman_mode_t modes[] = {
   { .name = "debug_args",          .fxn = debug_args                       },
   { .name = "test_hex1",           .fxn = test_hex1                        },
   { .name = "list_palettes",       .fxn = list_palettes                    },

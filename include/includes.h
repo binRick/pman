@@ -4,6 +4,7 @@
 #include <dirent.h>
 #include <getopt.h>
 #include <glob.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,9 +13,14 @@
 #include <unistd.h>
 
 #include "../include/defines.h"
+/****************************************************/
 #include "../include/embedded-colornames.h"
+/****************************************************/
+#include "../include/embedded-colornames-base.h"
+/****************************************************/
 #include "../include/embedded-palettes.h"
 #include "../include/macros.h"
+#include "../include/types.h"
 
 #include "../deps/b64/b64.h"
 #include "../deps/buffer/buffer.h"
@@ -39,8 +45,6 @@
 #include "../deps/timestamp/timestamp.h"
 #include "../deps/tiny-regex-c/re.h"
 #include "../deps/trim/trim.h"
-
-#include "../include/types.h"
 
 #include "../submodules/ansicodes/ansicodes.h"
 #include "../submodules/c_printf/sources/c_printf.h"

@@ -9,9 +9,6 @@
 #define DEFAULT_COLORCODE              "72A0C1"
 
 #define DEFAULT_PALETTE_DATA           "\
-background=1e1e1e\
-foreground=d4d4d4\
-cursor=f44747\
 color00=1e1e1e\
 color01=f44747\
 color02=d7ba7d\
@@ -28,6 +25,9 @@ color12=569cd6\
 color13=4ec9b0\
 color14=c586c0\
 color15=d4d4d4\
+background=1e1e1e\
+foreground=d4d4d4\
+cursor=f44747\
 "
 
 #define SEQUENCE                       "printf \"\
@@ -53,15 +53,16 @@ color15=d4d4d4\
 \\033]708;#$(echo $border_background)\\033\\ \
 \\033[21D\""
 
+/**********************************************/
+#define CURRENT_PALETTE_LABEL_STYLE    AC_RESETALL AC_UNDERLINE AC_REVERSED AC_BOLD AC_BRIGHT_YELLOW_BLACK
+/**********************************************/
 #define LEFT_ARROW0                    "<=="
 #define PALETTE_ICON0                  "❽"
 #define PALETTE_ICON1                  "🏴"
 #define PALETTE_ICON2                  "☼"
 #define PALETTE_ICON3                  "❰⇄❱"
 #define PALETTE_ICON                   PALETTE_ICON1
-
-#define CURRENT_PALETTE_LABEL_STYLE    AC_RESETALL AC_UNDERLINE AC_REVERSED AC_BOLD AC_BRIGHT_YELLOW_BLACK
-
+/**********************************************/
 #define CURRENT_PALETTE                "\
 \n\t"                                        CURRENT_PALETTE_LABEL_STYLE " Foreground " AC_RESETALL ":\t" AC_RESETALL "\
 \033[48;5;0m   " PALETTE_ICON "  \033[0m\
@@ -82,14 +83,14 @@ color15=d4d4d4\
 \033[48;5;14m   " PALETTE_ICON "   \033[0m\
 \033[48;5;15m   " PALETTE_ICON "   \033[0m\
 "
-
-#define __MSG_PREFIX(...)      \
-  char *prefix = malloc(1024); \
-  sprintf(prefix, "<%d> %s", getpid(), __VA_ARGS__);
-
+/**********************************************/
+#define __MSG_PREFIX(...)                            \
+  char *prefix = malloc(1024);                       \
+  sprintf(prefix, "<%d> %s", getpid(), __VA_ARGS__); \
+/**********************************************/
 #define __MSG_SUFFIX \
-  free(prefix);
-
+  free(prefix);      \
+/**********************************************/
 #define DO_ERR(...)                                                    \
   do {                                                                 \
     __MSG_PREFIX(__VA_ARGS__)                                          \
@@ -109,4 +110,6 @@ color15=d4d4d4\
     DO_ERR(__VA_ARGS__); \
     exit(EXIT_FAILURE);  \
   } while (0)
-
+/***********************************/
+#define p    print
+/***********************************/

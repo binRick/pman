@@ -1,9 +1,9 @@
 #pragma once
 #include "../include/includes.h"
 
-struct color_names_t *get_color_code_t_by_name(const char *rgb){
-  struct color_names_t *cc;
-  bool                 found = false;
+struct color_name_t *get_color_code_t_by_name(const char *rgb){
+  struct color_name_t *cc;
+  bool                found = false;
 
   for (int i = 0; i < COLOR_NAMES_QTY; i++) {
     if (strcmp(rgb, COLOR_NAMES[i].rgb) == 0) {
@@ -23,7 +23,7 @@ struct color_names_t *get_color_code_t_by_name(const char *rgb){
 
 
 char *get_color_code_log(const char *rgb){
-  struct color_names_t *cc = get_color_code_t_by_name(rgb);
+  struct color_name_t *cc = get_color_code_t_by_name(rgb);
 
   assert(cc->encoded_log_bytes > 0);
   assert(cc->encoded_log);
@@ -32,6 +32,11 @@ char *get_color_code_log(const char *rgb){
   free(cclog);
   assert(strlen(cclog) > 0);
   return(cclog);
+}
+
+
+char *get_color_code_name(const char *rgb){
+  return(get_color_code_t_by_name(rgb)->name);
 }
 
 

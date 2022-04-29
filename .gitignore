@@ -11,3 +11,12 @@ include/embedded-*
 etc/*.csv
 .modes.txt
 etc/cmds.sh
+etc/.color-log-cmds.sh
+etc/.color-cmds.sh
+etc/color-names.json
+etc/colornames.json
+etc/colors.sh
+etc/go.sh
+etc/.color-cmds-hash.txt
+.attic
+etc/.color-*.txt
