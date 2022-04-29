@@ -7,7 +7,7 @@ CFLAGS += -lm
 PREFIX ?= /usr/local
 BINDIR ?= $(PREFIX)/bin
 
-VTERM_INCLUDES+=-lvterm
+VTERM_INCLUDES+=libtmt/tmt.c
 
 INCLUDES+=./deps/flag/flag.c
 INCLUDES+=./deps/b64/*.c
@@ -202,6 +202,9 @@ do-srcs:
 
 dev:
 	@$(PASSH) -L .nodemon.log $(NODEMON) -w src -w . -w Makefile -i submodules -i deps -i 'include/embedded-*.h' -e sh,c,h,Makefile -x env -- bash -c 'make nodemon||true'
+
+src/vt: src/vt.c
+	$(CC) $(CFLAGS) -o ./bin/$(shell basename $@) $< $(LDFLAGS) $(INCLUDES) $(VTERM_INCLUDES)
 
 src/vterm: src/vterm.c
 	$(CC) $(CFLAGS) -o ./bin/$(shell basename $@) $< $(LDFLAGS) $(INCLUDES) $(VTERM_INCLUDES)
