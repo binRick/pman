@@ -19,8 +19,5 @@ void pman_init() {
   assert(initialize_args());
   assert(isatty(STDOUT_FILENO));
   //printf(" cols: %d | rows: %d\n", cols, rows);
-  //printf("qty templates: %lu\n", TEMPLATES_QTY);
-  //test_hex1();
-  //list_palettes();
 }
 

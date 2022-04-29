@@ -1,12 +1,15 @@
 #pragma once
+////////////////////////////////////////////////
 #include "../include/defines.h"
-#include "../include/includes.h"
+////////////////////////////////////////////////
 
 typedef struct palette_t      palette_t;
 typedef struct color_name_t   color_name_t;
 typedef struct pman_mode_t    pman_mode_t;
 typedef struct pman_args_t    pman_args_t;
-
+///////////////////////////////////////////////////
+#include "../include/includes.h"
+////////////////////////////////////////////////
 struct pman_args_t {
   const char *mode;
   const char *palette;

@@ -9,14 +9,10 @@ int view_colorcode(){
 /**********************************************/
 struct pman_mode_t modes[] = {
   { .name = "debug_args",          .fxn = debug_args                       },
-  { .name = "test_hex1",           .fxn = test_hex1                        },
-  { .name = "list_palettes",       .fxn = list_palettes                    },
-  { .name = "list_templates",      .fxn = list_templates                   },
-  { .name = "list_palettes",       .fxn = list_palettes                    },
-  { .name = "list_modes",          .fxn = list_modes                       },
-  { .name = "list_names",          .fxn = list_color_names                 },
-  { .name = "list_names_and_rgbs", .fxn = list_color_names_and_rgbs        },
-  { .name = "list_names_rgbs",     .fxn = list_color_rgbs                  },
+  { .name = "modes",          .fxn = list_modes                       },
+  { .name = "color_names",          .fxn = list_color_names                 },
+  { .name = "list_color_names_and_rgbs", .fxn = list_color_names_and_rgbs        },
+  { .name = "show_color_name_tables",     .fxn = list_color_rgbs                  },
   { .name = "palettes",            .fxn = list_palette_names               },
   { .name = "view_palette",        .fxn = view_palette                     },
   { .name = "view_colorcode",      .fxn = view_colorcode                   },

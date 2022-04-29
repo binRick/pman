@@ -11,7 +11,6 @@ static char *__basename(const char *);
 
 //   Palette Functions
 char *get_palette_data(const char *name);
-void *get_palette_data_i(const char *name);
 char **get_palette_data_lines(const char *name);
 char *get_palette_property_value(const char *name, const char *property);
 int get_palette_data_lines_qty(const char *name);
@@ -26,14 +25,10 @@ int list_color_names_and_rgb();
 int list_color_rgbs();
 int view_palette();
 int list_palette_names();
-int iterate_templates();
-int list_palettes();
 int list_modes();
-int test_hex1();
 int debug_args();
 int debug_error();
 int debug_msg();
 int debug_die();
-int list_template();
 int view_colorcode();
 

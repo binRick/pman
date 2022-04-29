@@ -20,3 +20,5 @@ etc/go.sh
 etc/.color-cmds-hash.txt
 .attic
 etc/.color-*.txt
+*/*.wtf
+**/*.wtf

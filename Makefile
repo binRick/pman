@@ -46,15 +46,16 @@ PALETTE_FILES+=$(shell find palettes/dark -type f)
 PMAN=bin/pman
 TEST_TITLE=bline -a bold:underline:italic:yellow
 PASSH=$(shell command -v passh)
+SED=$(shell command -v gsed||command -v sed)
 PMAN=./bin/pman
 NODEMON=$(shell command -v nodemon)
 FZF=$(shell command -v fzf)
 
 get_modes:
-	@$(PASSH) $(PMAN) --mode list_modes
+	@$(PASSH) $(PMAN) --mode modes
 
 get_mode_cmds:
-	@$(PASSH) ./bin/pman --mode list_modes| xargs -I % echo -e "$(PASSH) ./bin/pman --mode %"
+	@$(PASSH) ./bin/pman --mode modes| xargs -I % echo -e "$(PASSH) ./bin/pman --mode %"
 
 cembed_if_expired:
 	@make palette_files_hash_not_expired 2>/dev/null || make cembed
@@ -117,7 +118,7 @@ test-pman: src/pman
 	@$(PMAN) --mode default_properties;echo $?;echo
 
 	@echo List Modes | $(TEST_TITLE)
-	@$(PMAN) --mode list_modes;echo
+	@$(PMAN) --mode modes;echo
 
 clean-palette-include:
 	@truncate --size 0 include/embedded-palettes.h
@@ -153,6 +154,8 @@ rmrf: rm
 	@rm -rf etc/color-logs
 
 clean: rm clean-palette-include nullify-colornames
+	@$(SED) -i 's|, % |, %|g' src/*.c
+
 
 clear:
 	@clear
@@ -178,11 +181,16 @@ fzf-modes:
 		--layout=reverse \
 		--preview "ansi --bold --bg-black --yellow '{}' && echo && eval $(PASSH) $(PMAN) --mode '{}'; echo;echo; ansi --bold --blue Exit Code: $$?"
 
-nodemon: init
-	@make src/parse_color_names_csv
-	@make assemble-color-names 
-	@make cembed
-	@make all
+nodemon: init cembed 
+	@make -j 10 __nodemon
+#	@make src/parse_color_names_csv
+#	@make assemble-color-names 
+#	@make cembed
+#	@make src/parse_color_names_csv
+#	@make src/pman
+__nodemon: 
+	@make -j 10 src/parse_color_names_csv src/pman
+	@make test
 
 dev:
 	@$(PASSH) -L .nodemon.log $(NODEMON) -w src -w . -w Makefile -i submodules -i deps -i 'include/embedded-*.h' -e sh,c,h,Makefile -x env -- bash -c 'make nodemon||true'

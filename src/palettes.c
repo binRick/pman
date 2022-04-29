@@ -5,6 +5,7 @@
 
 /**********************************/
 int view_palette(){
+#ifdef VEBOSE_DEBUG_MODE    
   printf(
     AC_RESETALL AC_BRIGHT_YELLOW AC_REVERSED "%s"
     AC_RESETALL ":"
@@ -19,12 +20,9 @@ int view_palette(){
     get_palette_property_value((const char *)args->palette, "color07"),
     get_palette_data((const char *)args->palette)
     );
-  palette_t *ptr = (palette_t *)__embedded_table__;
-
-  for (int i = 0; (i < TEMPLATES_QTY && __embedded_table__[i].data); i++, ptr++ ) {
-    if (strcmp(__basename(__embedded_table__[i].filename), args->palette) == 0) {
-    }
-  }
+#else  
+  printf("%s\n", get_palette_data((const char *)args->palette));
+#endif  
   return(0);
 }
 
@@ -58,13 +56,6 @@ char *get_palette_property_value(const char *name, const char *property){
     }
   }
   return(NULL);
-}
-
-
-void *get_palette_data_i(const char *name){
-  char *dat = "ok123";
-
-  return((void *)dat);
 }
 
 
@@ -112,35 +103,9 @@ char *get_palette_data(const char *name){
 
 int list_palette_names(){
   palette_t *ptr = (palette_t *)__embedded_table__;
-
   for (int i = 0; (i < TEMPLATES_QTY && __embedded_table__[i].data); i++, ptr++ ) {
-    printf(
-      "%s\n",
-      __basename(__embedded_table__[i].filename)
-      );
-  }
-  return(0);
-}
-
-
-int list_templates(){
-  palette_t *ptr = (palette_t *)__embedded_table__;
-
-  for (int i = 0; (i < TEMPLATES_QTY && __embedded_table__[i].data); i++, ptr++ ) {
-    printf(
-      AC_RESETALL AC_BRIGHT_YELLOW_BLACK "%s\n",
-      __embedded_table__[i].filename
-      );
-  }
-  return(0);
-}
-
-
-int list_palettes(){
-  palette_t *ptr = (palette_t *)__embedded_table__;
-
-  for (int i = 0; (i < TEMPLATES_QTY && __embedded_table__[i].data); i++, ptr++ ) {
-    printf(
+#ifdef VERBOSE_DEBUG_MODE      
+    fprintf(stderr,
       AC_RESETALL AC_BRIGHT_YELLOW_BLACK "#%d"
       AC_RESETALL "/"
       AC_RESETALL AC_BRIGHT_BLUE_BLACK "%lu"
@@ -150,12 +115,15 @@ int list_palettes(){
       __embedded_table__[i].filename,
       __embedded_table__[i].size
       );
-    char *d = get_palette_data(__embedded_table__[i].filename);
-    printf("d=%s\n", d);
+#else    
+    printf(
+      "%s\n",
+      __basename(__embedded_table__[i].filename)
+      );
+#endif    
   }
   return(0);
 }
-
 
 int get_palette_data_properties_qty(const char *name){
   char **lines   = get_palette_data_lines(name);
@@ -207,26 +175,18 @@ char **get_palette_data_properties(const char *name){
 }
 
 
-char *prepend_hash(const char *s){
-  char *s0 = malloc(strlen(s) + 1);
-
-  sprintf(s0, "#%s", s);
-  return(s0);
-}
-
-
 int print_default_palette_properties(){
   char **props   = get_palette_data_properties(DEFAULT_PALETTE);
   int  props_qty = get_palette_data_properties_qty(DEFAULT_PALETTE);
 
 #ifdef VERBOSE_DEBUG_MODE
-  dbg(props_qty, % d);
+  dbg(props_qty, %d);
   p(DEFAULT_PALETTE, "has", props_qty, "properties");
 #endif
   for (int i = 0; i < props_qty; i++) {
     char    *prop_val = get_palette_property_value(DEFAULT_PALETTE, props[i]);
     short   prop_val_ok;
-    int32_t _r = rgba_from_string(prepend_hash(prop_val), &prop_val_ok);
+    int32_t _r = rgba_from_string(prop_val, &prop_val_ok);
     assert(prop_val_ok);
     rgba_t  prop_val_rgba  = rgba_new(_r);
     char    *prop_val_name = malloc(1024);

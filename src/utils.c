@@ -50,6 +50,8 @@ int list_color_rgbs() {
 
 int list_color_names_and_rgbs() {
   for (int i = 0; i < COLOR_NAMES_QTY; i++) {
+    printf("%s:%s\n", COLOR_NAMES[i].name,COLOR_NAMES[i].rgb);
+#ifdef VERBOSE_DEBUG_MODE      
     printf(
       AC_RESETALL AC_BRIGHT_YELLOW "name:%s" AC_RESETALL
       "|"
@@ -65,6 +67,7 @@ int list_color_names_and_rgbs() {
       COLOR_NAMES[i].rgba,
       COLOR_NAMES[i].hex
       );
+#endif    
   }
   return(0);
 }
@@ -72,37 +75,10 @@ int list_color_names_and_rgbs() {
 
 int list_color_names() {
   for (int i = 0; i < COLOR_NAMES_QTY; i++) {
-    printf(
-      AC_RESETALL "%s" AC_RESETALL
-      "\n",
-      COLOR_NAMES[i].name
+    printf("%s\n"
+      ,COLOR_NAMES[i].name
       );
   }
-  return(0);
-}
-
-
-int test_hex1() {
-  short    ok;
-  uint32_t val  = rgba_from_string("#ff1e00", &ok);
-  uint32_t val1 = rgba_from_string("#ffffff", &ok);
-
-  assert(ok);
-  assert(0xff1e00ff == val);
-  rgba_t r0  = rgba_new(val);
-  rgba_t r1  = rgba_new(val1);
-  char   *s0 = malloc(1024);
-  char   *s1 = malloc(1024);
-
-  rgba_to_string(r0, s0, 256);
-  rgba_to_string(r1, s1, 256);
-
-  dbg(s0, % s);
-  rgba_inspect(val);
-
-  dbg(s1, % s);
-  rgba_inspect(val1);
-
   return(0);
 }
 

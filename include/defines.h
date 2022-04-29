@@ -2,8 +2,9 @@
 #define _POSIX_C_SOURCE                200809L
 #define VERSION                        "v1.0.0"
 #define DBG_H_DEF_ONCE
+#define DBG_H_NO_WARNING
 
-#define DEFAULT_MODE                   "list_palettes"
+#define DEFAULT_MODE                   "palettes"
 #define DEFAULT_PALETTE                "vscode"
 #define DEFAULT_VERBOSE                false
 #define DEFAULT_COLORCODE              "72A0C1"

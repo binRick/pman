@@ -1,6 +1,7 @@
-#pragma once
-#define DBG_H_DEF_ONCE
+//#pragma once
+///////////////////////////
 #include "../src/includes.c"
+///////////////////////////
 
 
 static void select_palette(char *sel) {
