@@ -1,6 +1,6 @@
 #define _XOPEN_SOURCE
 
-#include "libtmt/tmt.h"
+#include "../include/tmt.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
