@@ -23,6 +23,7 @@ int view_default_palette();
 int debug();
 int list_color_names();
 int list_color_names_and_rgb();
+int list_color_rgbs();
 int view_palette();
 int list_palette_names();
 int iterate_templates();
@@ -34,4 +35,5 @@ int debug_error();
 int debug_msg();
 int debug_die();
 int list_template();
+int view_colorcode();
 

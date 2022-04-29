@@ -22,3 +22,9 @@
 [submodule "submodules/csv_parser"]
 	path = submodules/csv_parser
 	url = https://github.com/semitrivial/csv_parser
+[submodule "submodules/colorcodeconverter"]
+	path = submodules/colorcodeconverter
+	url = https://github.com/zakarouf/colorcodeconverter
+[submodule "submodules/c_string_buffer"]
+	path = submodules/c_string_buffer
+	url = https://github.com/sagiegurari/c_string_buffer

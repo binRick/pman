@@ -10,6 +10,7 @@
 typedef struct {
   const char *mode;
   const char *palette;
+  const char *colorcode;
   bool       verbose;
 } args_t;
 

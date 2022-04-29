@@ -235,7 +235,6 @@ int print_default_palette_properties(){
     int blue  = (uint32_t)_r >> 8 & 0xff;
     int alpha = (uint32_t)_r & 0xff;
     p("  >Property #", i, ":", props[i], "->", prop_val, "->", prop_val_name, " : red:", red, "|green:", green, "blue:", blue, "alpha:", alpha);
-    //rgba_inspect(_r);
     free(prop_val); free(prop_val_name);
   }
   free(props);

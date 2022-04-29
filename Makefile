@@ -10,20 +10,27 @@ INCLUDES+=./deps/flag/flag.c
 INCLUDES+=./deps/b64/*.c
 INCLUDES+=./deps/timestamp/*.c
 INCLUDES+=./deps/trim/*.c
+INCLUDES+=./deps/fs/*.c
 INCLUDES+=./deps/list/*.c
 INCLUDES+=./deps/parson/parson.c
 INCLUDES+=./deps/bytes/bytes.c
 INCLUDES+=./deps/rhash_md5/*.c
 INCLUDES+=./deps/ms/ms.c
 INCLUDES+=./deps/rgba/rgba.c
+INCLUDES+=./deps/case/case.c
 INCLUDES+=./deps/strsplit/strsplit.c
+INCLUDES+=./deps/occurrences/occurrences.c
+INCLUDES+=./deps/str-replace/str-replace.c
+
 INCLUDES+=./submodules/csv_parser/csv.c
 INCLUDES+=./submodules/csv_parser/split.c
 INCLUDES+=./submodules/csv_parser/fread_csv_line.c
+INCLUDES+=./submodules/c_string_buffer/src/stringbuffer.c
 
 INCLUDES+=-I include
 INCLUDES+=-I src
 INCLUDES+=-I submodules
+INCLUDES+=-I submodules/c_string_buffer/include
 INCLUDES+=-I deps
 INCLUDES+=-I .
 
@@ -49,9 +56,9 @@ get_mode_cmds:
 cembed_if_expired:
 	@make palette_files_hash_not_expired 2>/dev/null || make cembed
 
-all: init cembed src/pman src/parse_color_names_csv clear test
+all: init cembed src/pman clear test
 test: test-pman
-cembed: init clean-palette-include assemble-palettes cembed-archive write_palette_files_hash assemble-color-names
+cembed: init clean-palette-include assemble-palettes cembed-archive write_palette_files_hash #assemble-color-names
 
 PALETE_FILES_HASH_FILE=./tmp/palette_files_hash.txt
 
@@ -125,7 +132,8 @@ unarchive-colornames:
 	@true
 
 assemble-color-names: init unarchive-colornames src/parse_color_names_csv
-	@./bin/parse_color_names_csv etc/colornames.csv > $(COLOR_NAMES_FILE)
+	@./test_parse_color_names.sh
+#	@cd ./etc/color-logs && ../../bin/parse_color_names_csv ../colornames.csv > ../../$(COLOR_NAMES_FILE)
 
 cembed-archive: assemble-palettes
 	@$(CEMBED) -t $(EMBEDDED_TEMPLATES_TABLE_NAME) -o $(CEMBED_FILE) $(PALETTE_FILES)

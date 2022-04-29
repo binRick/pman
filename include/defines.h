@@ -6,6 +6,7 @@
 #define DEFAULT_MODE                   "list_palettes"
 #define DEFAULT_PALETTE                "vscode"
 #define DEFAULT_VERBOSE                false
+#define DEFAULT_COLORCODE              "72A0C1"
 
 #define DEFAULT_PALETTE_DATA           "\
 background=1e1e1e\
@@ -52,6 +53,7 @@ color15=d4d4d4\
 \\033]708;#$(echo $border_background)\\033\\ \
 \\033[21D\""
 
+#define LEFT_ARROW0                    "<=="
 #define PALETTE_ICON0                  "❽"
 #define PALETTE_ICON1                  "🏴"
 #define PALETTE_ICON2                  "☼"

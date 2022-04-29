@@ -3,10 +3,11 @@
 
 
 bool initialize_args(){
-  args          = malloc(sizeof(args_t));
-  args->mode    = DEFAULT_MODE;
-  args->verbose = DEFAULT_VERBOSE;
-  args->palette = DEFAULT_PALETTE;
+  args            = malloc(sizeof(args_t));
+  args->mode      = DEFAULT_MODE;
+  args->verbose   = DEFAULT_VERBOSE;
+  args->palette   = DEFAULT_PALETTE;
+  args->colorcode = DEFAULT_COLORCODE;
   return(true);
 }
 

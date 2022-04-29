@@ -1,6 +1,11 @@
 #pragma once
 /**********************************************/
 #include "../src/includes.c"
+
+
+int view_colorcode(){
+  return(__view_colorcode(args->colorcode));
+}
 /**********************************************/
 struct mode_t modes[] = {
   { .name = "debug_args",          .fxn = debug_args                       },
@@ -11,8 +16,10 @@ struct mode_t modes[] = {
   { .name = "list_modes",          .fxn = list_modes                       },
   { .name = "list_names",          .fxn = list_color_names                 },
   { .name = "list_names_and_rgbs", .fxn = list_color_names_and_rgbs        },
+  { .name = "list_names_rgbs",     .fxn = list_color_rgbs                  },
   { .name = "palettes",            .fxn = list_palette_names               },
   { .name = "view_palette",        .fxn = view_palette                     },
+  { .name = "view_colorcode",      .fxn = view_colorcode                   },
   { .name = "default",             .fxn = view_default_palette             },
   { .name = "default_properties",  .fxn = print_default_palette_properties },
   { .name = "cur",                 .fxn = print_current_palette_colors     },
