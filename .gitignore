@@ -26,3 +26,4 @@ build
 .attic
 .venv
 submodules
+.installed-*.txt

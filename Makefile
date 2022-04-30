@@ -9,24 +9,24 @@ NODEMON=$(shell command -v nodemon)
 FZF=$(shell command -v fzf)
 
 default: all
-
 .PHONY: all
-
 all: build test
-
 .PHONY: .FORCE
 .FORCE:
 
 dependencies: base252 objectively
 
+clibs-cmds:
+	@./scripts/clib-cmds.sh
+
 submodules-cmds:
 	@./scripts/submodules.sh
 
-submodules-install:
-	@./scripts/submodules.sh|env bash
+clibs-install:
+	@./scripts/clib-cmds.sh|env bash
 
-clib-install:
-	@clib install -c || ./scripts/clib-install.sh
+submodules-install:
+	@./scripts/submodule-cmds.sh|env bash
 
 setup: clib-install submodules-install
 	@command -v nodemon || npm i nodemon -g
