@@ -27,3 +27,4 @@ build
 .venv
 submodules
 .installed-*.txt
+.cache

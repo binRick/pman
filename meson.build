@@ -81,7 +81,7 @@ srcs += template
 srcs += timestamp
 srcs += int
 #//***********************************************************/
-parse_color_names_csv0 = executable('parse_color_names_csv0',['bins/parse_color_names_csv0.c', files(srcs)], dependencies: [deps], include_directories: [incdir])
+pman = executable('pman',['bins/pman.c', files(srcs)], dependencies: [deps], include_directories: [incdir])
 #//***********************************************************/
 test_env = environment()
 test_env.set('__MESON_TEST_MODE__', '1')
@@ -91,7 +91,7 @@ test_env.set('__BD', meson.current_build_dir())
 test_env.set('__SD', meson.current_source_dir())
 #////////////////////////////////////////////////////
 embedded_tests = [
-  ['Parse Colors', parse_color_names_csv0],
+  ['Parse Colors', pman],
 ]
 foreach i : embedded_tests
 test(i[0], i[1], args: [
@@ -125,7 +125,7 @@ commander0 = executable('commander0',['bins/commander0.c',
      ], dependencies: [deps], include_directories: [incdir])
 spin0 = executable('spin0',['bins/spin0.c', files(srcs)], dependencies: [deps],include_directories: [incdir])
 _tests = [
-  ['parse_color_names_csv0', parse_color_names_csv0],
+  ['pman', pman],
 ]
 tests = [
   ['fort0', fort0, 'fort0.log'],

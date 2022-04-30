@@ -1,18 +1,52 @@
-BUILD_DIR = ./build
-GC = git clone --recurse-submodules
-GET_COMMIT = "git log -q |grep '^commit '|head -n1|cut -d' ' -f2"
-TEST_TITLE=bline -a bold:underline:italic:yellow
-PASSH=$(shell command -v passh)
-SED=$(shell command -v gsed||command -v sed)
-PMAN=./bin/pman
-NODEMON=$(shell command -v nodemon)
-FZF=$(shell command -v fzf)
-
 default: all
 .PHONY: all
 all: build test
 .PHONY: .FORCE
 .FORCE:
+BUILD_DIR = ./build
+
+GC = git clone --recurse-submodules
+GET_COMMIT = "git log -q |grep '^commit '|head -n1|cut -d' ' -f2"
+PASSH=$(shell command -v passh)
+SED=$(shell command -v gsed||command -v sed)
+PMAN=./bin/pman
+NODEMON=$(shell command -v nodemon)
+FZF=$(shell command -v fzf)
+BLINE=$(shell command -v bline)
+TEST_TITLE=$(BLINE) -a bold:underline:italic:yellow
+HELP_STYLE=$(BLINE) -H -a ff00ff
+DEV_MAKE_TARGETS = \
+				   all
+DEV_TEST_TARGETS = \
+				   pc
+PC=pman
+PC_CMD=$(BUILD_DIR)/$(PC)
+PC_HELP_CMD=$(PC_CMD) --help 
+DEV_CMD=\
+		$(PC_CMD) \
+		-t tmp/color-names0.tpl \
+		-i tmp/colornames.csv \
+		-o tmp/colornames.c \
+		-r -T -v
+
+
+pc-cmd:
+	@printf '%s\n' "$(DEV_CMD)"
+
+pc-help-cmd:
+	@printf '%s\n' "$(PC_HELP_CMD)"
+
+pc-help:
+	@$(PASSH) $(PC_HELP_CMD) | $(HELP_STYLE)
+
+pc: pc-cmd pc-help
+	@eval "$(DEV_CMD)"
+
+dev: 
+	@$(PASSH) -L .nodemon.log $(NODEMON) -I -V -w etc/tpl -w meson.build -w bins -w src -w Makefile -i build -i submodules -i deps -i 'include/embedded-*.h' -e tpl,build,sh,c,h,Makefile -x env -- bash -c 'make $(DEV_MAKE_TARGETS) $(DEV_TEST_TARGETS)||true'
+
+nodemon:
+	@$(PASSH) make
 
 dependencies: base252 objectively
 
@@ -28,11 +62,14 @@ clibs-install:
 submodules-install:
 	@./scripts/submodule-cmds.sh|env bash
 
-setup: clibs-install submodules-install
+setup: dependencies clibs-install submodules-install tools
+
+tools:
 	@command -v nodemon || npm i nodemon -g
 	@command -v meson || pip install meson
 
-build: dependencies
+build: 
+	@[[ -d deps && -d submodules && -d .venv ]] || make -J 10 setup
 	@test -d $(BUILD_DIR) && {  meson $(BUILD_DIR) --reconfigure; } || { meson $(BUILD_DIR); }
 	@ninja -C build
 
@@ -72,14 +109,7 @@ push: tidy git-commit
 	@git push
 
 
-
-nodemon:
-	@$(PASSH) make exec-bins-gccs-args
-
 do-bins: make-bins
-
-dev: 
-	@$(PASSH) -L .nodemon.log $(NODEMON) -V -w etc/tpl -w meson.build -w bins -w src -w Makefile -i build -i submodules -i deps -i 'include/embedded-*.h' -e tpl,build,sh,c,h,Makefile -x env -- bash -c 'make||true'
 
 tidy:
 	@uncrustify -c etc/uncrustify.cfg --replace bins/*.c src/*.c $(shell find include -type f -name "*.h"|grep -v '/embedded-'|tr '\n' ' ')
