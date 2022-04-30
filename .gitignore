@@ -24,3 +24,5 @@ etc/.color-*.txt
 **/*.wtf
 build
 .attic
+.venv
+submodules

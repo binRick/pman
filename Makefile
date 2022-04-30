@@ -19,11 +19,18 @@ all: build test
 
 dependencies: base252 objectively
 
-clib-install:
-	@clib install -c
-	#--ignore-errors -c
+submodules-cmds:
+	@./scripts/submodules.sh
 
-setup: clib-install
+submodules-install:
+	@./scripts/submodules.sh|env bash
+
+clib-install:
+	@clib install -c || ./scripts/clib-install.sh
+
+setup: clib-install submodules-install
+	@command -v nodemon || npm i nodemon -g
+	@command -v meson || pip install meson
 
 build: dependencies
 	@test -d $(BUILD_DIR) && {  meson $(BUILD_DIR) --reconfigure; } || { meson $(BUILD_DIR); }
