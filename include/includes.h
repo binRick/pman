@@ -1,5 +1,6 @@
 #pragma once
-
+#define ASSERTF_DEF_ONCE
+/////////////////////////////////////////////////////
 #include <assert.h>
 #include <dirent.h>
 #include <getopt.h>
@@ -11,47 +12,43 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <unistd.h>
-
-#include "../include/defines.h"
-/****************************************************/
-#include "../include/embedded-colornames.h"
-/****************************************************/
-#include "../include/embedded-colornames-base.h"
-/****************************************************/
-#include "../include/embedded-palettes.h"
+#include <errno.h>
+#include <time.h>
+#include <sysexits.h>
+/////////////////////////////////////////////////////
+static char *get_datetime();
+/////////////////////////////////////////////////////
+#include "../include/ansicodes.h"
+#include "../include/print.h"
+#include "../submodules/assertf.h/assertf.h"
+#include "../include/dbg.h"
+/////////////////////////////////////////////////////
 #include "../include/macros.h"
-#include "../include/types.h"
-
-#include "../deps/b64/b64.h"
-#include "../deps/buffer/buffer.h"
-#include "../deps/bytes/bytes.h"
-#include "../deps/case/case.h"
-#include "../deps/clibs/module/def.h"
-#include "../deps/clibs/module/module.h"
-#include "../deps/clibs/module/require.h"
-#include "../deps/env.h/env.h"
-#include "../deps/flag/flag.h"
-#include "../deps/fs/fs.h"
-#include "../deps/list/list.h"
-#include "../deps/ms/ms.h"
-#include "../deps/occurrences/occurrences.h"
-#include "../deps/parson/parson.h"
+/////////////////////////////////////////////////////
+#include "../submodules/env.h/env.h"
 #include "../deps/rgba/rgba.h"
-#include "../deps/rhash_md5/byte_order.h"
-#include "../deps/rhash_md5/md5.h"
-#include "../deps/rhash_md5/ustd.h"
-#include "../deps/str-replace/str-replace.h"
 #include "../deps/strsplit/strsplit.h"
-#include "../deps/timestamp/timestamp.h"
-#include "../deps/tiny-regex-c/re.h"
-#include "../deps/trim/trim.h"
-
-#include "../submodules/ansicodes/ansicodes.h"
-#include "../submodules/c_printf/sources/c_printf.h"
+#include "../deps/b64/b64.h"
+#include "../deps/str-replace/str-replace.h"
 #include "../submodules/c_string_buffer/include/stringbuffer.h"
+#include "../deps/fs/fs.h"
+#include "../include/fort.h"
+#include "../submodules/spin/spin.h"
+#include "../deps/commander/commander.h"
+#include "../deps/occurrences/occurrences.h"
+#include "../deps/case/case.h"
+#include "../deps/trim/trim.h"
+#include "../deps/field-range-parser/field-range-parser.h"
 #include "../submodules/csv_parser/csv.h"
-#include "../submodules/dbg.h/dbg.h"
-#include "../submodules/generic-print/print.h"
+#include "../deps/flag/flag.h"
 #include "../submodules/tercontrol/tercontrol.h"
-
-#define p    print
+#include "../deps/timestamp/timestamp.h"
+//////////////////////////////////////
+#include "../src/datetime.c"
+#include "../include/template/template.h"
+#include "../include/int.h"
+#include "../deps/is_number/is_number.h"
+//#include "../include/errnos.h"
+//#include "../include/utils.h"
+#include "../submodules/c_stringfn/include/stringfn.h"
+#include "../include/strconv.h"

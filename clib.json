@@ -12,7 +12,6 @@
   "install": "make install",
   "files": [],
   "dependencies": {
-    "clibs/module": "0.1.1",
     "flag": "0.0.1",
     "clibs/timestamp": "0.0.2",
     "ms": "0.0.4",
@@ -29,6 +28,13 @@
     "clibs/buffer": "0.4.0",
     "jwerle/strsplit.h": "0.1.1",
     "stephenmathieson/case.c": "0.2.0",
-    "stephenmathieson/str-replace.c": "0.0.6"
+    "stephenmathieson/str-replace.c": "0.0.6",
+    "jb55/field-range-parser.c": "0.0.2",
+    "binRick/commander": "1.3.2",
+    "4thel00z/cry.h": "0.1.2",
+    "binRick/c_scriptexec": "39a77c47f92d317e705cc28b30b594d9362c009c",
+    "jb55/is_number.c": "0.1",
+    "rikvdh/matching": "0.2.0",
+    "hkjels/slug.c": "0.0.1"
   }
 }

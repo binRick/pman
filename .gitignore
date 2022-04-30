@@ -22,3 +22,5 @@ etc/.color-cmds-hash.txt
 etc/.color-*.txt
 */*.wtf
 **/*.wtf
+build
+.attic

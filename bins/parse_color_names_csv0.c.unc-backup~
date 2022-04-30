@@ -1,0 +1,421 @@
+/***********************/
+#ifdef LOG_LEVEL
+#undef LOG_LEVEL
+#define LOG_LEVEL    DEBUG
+#endif
+#include "../include/includes.h"
+#include "../src/pman0-init.c"
+/***********************/
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <termios.h>
+/***********************/
+#define DEBUG_ARGUMENTS       true
+#define DEFAULT_QTY_LIMIT     10
+#define MAX_QTY_LIMIT         100
+#define VERBOSE_DEBUG_MODE    false
+#define PARSER_VERSION        "0.0.1"
+/***********************/
+#define streq(a, b)    (strcmp(a, b) == 0)
+/***********************/
+typedef struct parser_args_t parser_args_t;
+typedef struct render_t render_t;
+typedef struct StringFNStrings Strings;
+typedef struct StringBuffer StringBuffer;
+/***********************/
+struct parser_args_t {
+  char *mode;
+  FILE *input_fd;    FILE *output_fd;
+  char *input_file;  char *output_file; char *template;
+  bool verbose_mode; bool test_mode; bool render_template; 
+};
+struct render_t {
+    size_t in_bytes, out_bytes, template_bytes, rendered_bytes;
+    int in_exists, out_exists, template_exists;
+    size_t in_lines_qty, out_lines_qty, template_lines_qty, renderd_lines_qty;
+    char *in_content, *out_content, *template_content;
+    char *rendered; 
+    long long timestamp;
+    struct hashmap *hm, *in, *out, *stats, *template;
+    struct env *env;
+    Strings TemplateLines, InputLines, OutputLines;
+    StringBuffer *Template, *Input, *Output;
+};
+/***********************/
+const char           *DEFAULT_INPUT_FILE = "/tmp/colornames.csv";
+const char           *DEFAULT_OUTPUT_FILE = "/tmp/embedded-palettes.h";
+const char           *DEFAULT_COLOR_LOGS_DIRECTORY = "../etc/color-logs";
+const char           *DEFAULT_EXECUTION_MODE = "list_colors";
+const char           *DEFAULT_TEMPLATE = "color-names0.tpl";
+/***********************/
+render_t *ro; static parser_args_t *parser_args; 
+static bool prefix_ran = false, suffix_ran = false; size_t qty;
+/***********************/
+char *size_to_string(int i){
+    struct StringBuffer *sb = stringbuffer_new_with_options(1024, true);
+    assert_true(stringbuffer_is_empty(sb), %d);
+    dbg(i, %d);
+    assert_true(stringbuffer_append_int(sb, (size_t)i), %d);
+    char *_s = stringbuffer_to_string(sb);
+    dbg(_s, %s);
+    assert_ge(strlen(_s), 1, %lu);
+    stringbuffer_release(sb);
+    dbg("returning string:", %s);
+    dbg(_s, %s);
+//    print("returning string of", strlen(_s), "bytes:", _s);
+    return(_s);
+}
+/***********************/
+int do_render_template() {
+  //////////////////////////////////////////////////////////////////////////////
+  char *ts = malloc(128), *dt = malloc(128), *colors_qty = malloc(128); 
+  char *in_exists = malloc(8), *out_exists = malloc(8), *template_exists = malloc(8);
+  char *in_lines_qty = malloc(128);
+  char *in_lines = malloc(128), *out_lines = malloc(128);
+  char *in_bytes = malloc(128), *out_bytes = malloc(128), *template_bytes = malloc(128);
+  char *template_content = malloc(128);
+
+  assert_ge(strlen(parser_args->template), 1, %lu);
+  assert_ge(strlen(parser_args->output_file), 1, %lu);
+  assert_ge(strlen(parser_args->input_file), 1, %lu);
+
+      stringbuffer_append_string(ro->Input, fs_read(parser_args->input_file));
+      stringbuffer_append_string(ro->Template, fs_read(parser_args->template));
+
+  if(!fs_exists(parser_args->output_file)){ fs_write(parser_args->output_file, ""); }
+
+
+dbg(parser_args->template, %s);
+dbg(parser_args->output_file, %s);
+dbg(parser_args->input_file, %s);
+
+  assert_eq(fs_exists(parser_args->template),    0, %d);
+  assert_eq(fs_exists(parser_args->input_file),  0, %d);
+  assert_eq(fs_exists(parser_args->output_file), 0, %d);
+
+dbg(stringbuffer_get_content_size(ro->Template), %lu);
+dbg(stringbuffer_get_content_size(ro->Input), %lu);
+dbg(stringbuffer_get_content_size(ro->Output), %lu);
+
+  assert_ge(stringbuffer_get_content_size(ro->Template), 1, %lu);
+  assert_ge(stringbuffer_get_content_size(ro->Input),    1, %lu);
+  assert_eq(stringbuffer_get_content_size(ro->Output),   0, %lu);
+
+  ro->InputLines =       stringfn_split_lines_and_trim(stringbuffer_to_string(ro->Input));
+  ro->OutputLines =      stringfn_split_lines_and_trim(stringbuffer_to_string(ro->Output));
+  ro->TemplateLines =    stringfn_split_lines_and_trim(stringbuffer_to_string(ro->Template));
+
+  assert_ge(ro->TemplateLines.count, 1, %d);
+  assert_ge(ro->InputLines.count,    1, %d);
+  assert_eq(ro->OutputLines.count,   1, %d);
+
+dbg(ro->TemplateLines.count, %d);
+dbg(ro->InputLines.count,    %d);
+dbg(ro->OutputLines.count,   %d);
+  //////////////////////////////////////////////////////////////////////////////
+  sprintf(ts,"%lu", (long unsigned)timestamp());
+  sprintf(dt,"%s", (char *)get_datetime());
+  //////////////////////////////////////////////////////////////////////////////
+  char *input_lines_qty = malloc(1024), *template_lines_qty = malloc(1024), *input_bytes_qty = malloc(1024);
+  char *template_bytes_qty = malloc(1024), *output_bytes_qty = malloc(1024), *output_lines_qty = malloc(1024);
+  //////////////////////////////////////////////////////////////////////////////
+  sprintf(output_bytes_qty,   "%lu", stringbuffer_get_content_size(ro->Output));
+  sprintf(template_bytes_qty,"%lu", stringbuffer_get_content_size(ro->Template));
+  sprintf(input_bytes_qty,   "%lu", stringbuffer_get_content_size(ro->Input));
+  //////////////////////////////////////////////////////////////////////////////
+  sprintf(output_lines_qty,"%d", ro->OutputLines.count);
+  sprintf(input_lines_qty,"%d", ro->InputLines.count);
+  sprintf(template_lines_qty,"%d", ro->TemplateLines.count);
+  //////////////////////////////////////////////////////////////////////////////
+  dbg(input_lines_qty, %s);
+  dbg(ro->InputLines.count, %d);
+  //////////////////////////////////////////////////////////////////////////////
+  dbg(output_lines_qty, %s);
+  dbg(ro->OutputLines.count, %d);
+  //////////////////////////////////////////////////////////////////////////////
+  dbg(template_lines_qty, %s);
+  dbg(ro->TemplateLines.count, %d);
+  //////////////////////////////////////////////////////////////////////////////
+  hashmap_insert(ro->out,    "file",  parser_args->output_file);
+  hashmap_insert(ro->out,    "bytes", output_bytes_qty);
+  hashmap_insert(ro->out,    "lines", output_lines_qty);
+  //////////////////////////////////////////////////////////////////////////////
+  hashmap_insert(ro->in,    "file",  parser_args->input_file);
+  hashmap_insert(ro->in,    "bytes", input_bytes_qty);
+  hashmap_insert(ro->in,    "lines", input_lines_qty);
+  //////////////////////////////////////////////////////////////////////////////
+  hashmap_insert(ro->template,    "file",  parser_args->template);
+  hashmap_insert(ro->template,    "bytes", template_bytes_qty);
+  hashmap_insert(ro->template,    "lines", template_lines_qty);
+  //////////////////////////////////////////////////////////////////////////////
+  hashmap_insert(ro->stats,   "datetime", (char*)dt);
+  hashmap_insert(ro->stats,   "timestamp", (char*)ts);
+  hashmap_insert(ro->stats,   "colors_qty", (char*)colors_qty);
+  //////////////////////////////////////////////////////////////////////////////
+  hashmap_insert(ro->hm,   "template",  ro->template);
+  hashmap_insert(ro->hm,      "stats",  ro->stats);
+  hashmap_insert(ro->hm,        "out",  ro->out);
+  hashmap_insert(ro->hm,        "in",   ro->in);
+  //////////////////////////////////////////////////////////////////////////////
+  ro->rendered = template(ro->env, parser_args->template, ro->hm);
+  ro->rendered_bytes = strlen(ro->rendered);
+  //////////////////////////////////////////////////////////////////////////////
+  fprintf(stderr, "\n==================\n" 
+          AC_RESETALL AC_YELLOW AC_BOLD AC_REVERSED "%s" AC_RESETALL
+          "\n=======================\n"
+          , ro->rendered
+          );
+  print("rendered template of", ro->rendered_bytes, "bytes");
+  return(EXIT_SUCCESS);
+}
+
+
+static void set_execution_mode(command_t *self){
+  sprintf(parser_args->mode, "%s", self->arg);
+}
+
+
+static void enable_verbose_mode() {
+  parser_args->verbose_mode = true;
+}
+
+
+static void enable_test_mode(command_t *self){
+  parser_args->test_mode = true;
+}
+
+
+static void set_output_file(command_t *self){
+  if (strcmp(parser_args->output_file, "-") == 0) {
+    parser_args->output_file = "STDOUT";
+//    parser_args->output_fd = fopen(STDOUT_FILENO, "w");
+  }else{
+    parser_args->output_file = strdup(self->arg);
+    //   parser_args->output_fd = fopen(parser_args->output_fd, "w");
+  }
+}
+
+
+static void set_template_render(){
+  parser_args->render_template = true;
+}
+
+
+static void set_input_file(command_t *self){
+  if (strcmp(parser_args->output_file, "-") == 0) {
+    parser_args->input_file = "STDIN";
+//    parser_args->input_fd = fopen(STDIN_FILENO, "r");
+    char buf[1024];
+    while (fread(buf, 1, 1024, stdin) != 0) {
+      printf("read:%s\n", buf);
+    }
+  }else{
+    parser_args->input_file = strdup(self->arg);
+    parser_args->input_fd   = fopen(parser_args->input_file, "r");
+    //parser_args->input_fd = fopen(parser_args->input_fd, "r");
+  }
+}
+
+
+int init_parser_args(const int argc, const char **argv){
+  ////////////////////////////////////////////////////////////////
+  if (parser_args != NULL) {
+    return(0);
+  }
+  ////////////////////////////////////////////////////////////////
+  ro = malloc(sizeof(struct render_t));
+  ////////////////////////////////////////////////////////////////
+  ro->Template = stringbuffer_new_with_options(1024,true);
+  ro->Input = stringbuffer_new_with_options(1024,true);
+  ro->Output = stringbuffer_new_with_options(1024,true);
+//  ro->template_lines = malloc(sizeof(struct StringFNStrings));
+//  ro->in_lines = malloc(sizeof(struct StringFNStrings));
+//  ro->out_lines = malloc(sizeof(struct StringFNStrings));
+
+  ro->env  = env_new(env_get_or("TEMPLATE_PATH", "./etc/tpl"));
+  ro->hm = hashmap_new();
+  ro->stats = hashmap_new();
+  ro->template = hashmap_new();
+  ro->in = hashmap_new();
+  ro->out = hashmap_new();
+  ro->in_bytes = 0;
+  ro->out_bytes = 0;
+  ro->template_bytes = 0;
+  ro->in_content = malloc(1024*1024*4);
+  ro->out_content = malloc(1024*1024*4);
+  ro->template_content = malloc(1024*128);
+  ////////////////////////////////////////////////////////////////
+  parser_args                  = malloc(sizeof(parser_args_t));
+  ////////////////////////////////////////////////////////////////
+  parser_args->template       = malloc(1024);
+  parser_args->test_mode       = false;
+  parser_args->verbose_mode    = false;
+  parser_args->render_template = false;
+  parser_args->input_file      = malloc(1024);
+  parser_args->mode            = malloc(1024);
+  parser_args->output_file     = malloc(1024);
+  ////////////////////////////////////////////////////////////////
+  sprintf(parser_args->input_file, "%s", DEFAULT_INPUT_FILE);
+  sprintf(parser_args->output_file, "%s", DEFAULT_OUTPUT_FILE);
+  sprintf(parser_args->mode, "%s", DEFAULT_EXECUTION_MODE);
+  sprintf(parser_args->template, "%s", DEFAULT_TEMPLATE);
+  ////////////////////////////////////////////////////////////////
+  command_t cmd;
+  ////////////////////////////////////////////////////////////////
+  command_init(&cmd, argv[0], PARSER_VERSION);
+  command_option(&cmd, "-m", "--mode [mode]", "Set Execution Mode", set_execution_mode);
+  command_option(&cmd, "-i", "--input-file  [in-file]", "Input  Color File", set_input_file);
+  command_option(&cmd, "-o", "--output-file [out-file]", "Output Color File", set_output_file);
+  command_option(&cmd, "-r", "--render-template", "Enable Template Render", set_template_render);
+  command_option(&cmd, "-t", "--test-mode", "Enable Test Mode", enable_test_mode);
+  command_option(&cmd, "-v", "--verbose", "Enable Verbose Mode", enable_verbose_mode);
+  command_parse(&cmd, argc, (char **)argv);
+  ////////////////////////////////////////////////////////////////
+  fprintf(stderr, "Additional Args:\n");
+  for (int i = 0; i < cmd.argc; ++i) {
+    fprintf(stderr, "  - '%s'\n", cmd.argv[i]);
+  }
+  command_free(&cmd);
+  if (DEBUG_ARGUMENTS) {
+    fprintf(stderr, "================================\n");
+    fprintf(stderr, "Execution Mode:      %s\n", parser_args->mode);
+    fprintf(stderr, "Input  File:         %s\n", parser_args->input_file);
+    fprintf(stderr, "Output File:         %s\n", parser_args->output_file);
+    fprintf(stderr, "Render Template?     %s\n", parser_args->render_template    ? "Yes" : "No");
+    fprintf(stderr, "Test mode Enabled?   %s\n", parser_args->test_mode    ? "Yes" : "No");
+    fprintf(stderr, "Verbose   Enabled?   %s\n", parser_args->verbose_mode ? "Yes" : "No");
+    fprintf(stderr, "================================\n");
+  }
+  return(0);
+} /* init_parser_args */
+
+
+void print_prefix(){
+  fprintf(stderr, AC_RESETALL AC_YELLOW AC_REVERSED "..............prefix........................" AC_RESETALL "\n");
+  fprintf(stdout, "#pragma once");
+  fprintf(stdout, "\n#include \"../include/includes.h\"");
+  fprintf(stdout, "\n#include \"../include/types.h\"");
+  fprintf(stdout, "\n#ifndef COLOR_NAMES_DEFINED\n#define COLOR_NAMES_DEFINED\n");
+  fprintf(stdout, "\ncolor_name_t COLOR_NAMES[] = {\n");
+  prefix_ran = true;
+}
+
+
+void print_suffix(void){
+  if (prefix_ran) {
+    char *dt = get_datetime();
+    fprintf(stdout, "\t{ NULL },\n};\n\nconst size_t COLOR_NAMES_QTY = %lu;\nconst unsigned long created_ts = %lu;\nconst char *created_datetime = \"%s\";\n#endif\n", (unsigned long)qty, (unsigned long)timestamp(), dt);
+    suffix_ran = true;
+  }
+  fprintf(stderr, AC_RESETALL AC_YELLOW AC_REVERSED "..............suffix........................" AC_RESETALL "\n");
+}
+
+
+int main(const int argc, const char **argv) {
+  atexit(print_suffix);
+  int err, done;  short prop_val_ok;
+
+  meson_test_mode();
+  assert_eq(init_parser_args(argc, argv), 0, %d);
+  if (!meson_test_mode_enabled) {
+  }else{
+    exit(0);
+  }
+    if(parser_args->render_template){
+        return(do_render_template());
+    }
+
+  print_prefix();
+  int q          = 0;
+  ro->in_exists  = (int)fs_exists(parser_args->input_file);
+  ro->out_exists = (int)fs_exists(parser_args->output_file);
+  ro->template_exists = (int)fs_exists(parser_args->template);
+
+  //print("input file:", parser_args->input_file, "exists?", ro->in_exists == 0 ? "Yes" : "No", "output file:", parser_args->output_file, "out exists?", ro->out_exists == 0 ? "Yes" : "No");
+  if (ro->in_exists == 0) {
+    ro->in_bytes = fs_size(parser_args->input_file);
+    assert_ge(ro->in_bytes, 10, %lu);
+    ro->in_content  = (char*)fs_read(parser_args->input_file);
+    ro->in_bytes = (size_t)strlen(ro->in_content);
+    ro->in_lines_qty = occurrences("\n", ro->in_content);
+  //  print("    INPUT>", parser_args->input_file, "size:", ro->in_bytes, "lines:", in_lines_qty, "bytes:", strlen(in_content));
+  }
+  if (false) {
+    dbg(ro->out_exists, %d);
+    if (ro->out_exists == 0) {
+      ro->out_bytes = fs_size(parser_args->output_file);
+      dbg(ro->out_bytes, %lu);
+      if (parser_args->verbose_mode) {
+        fprintf(stderr, "> out log %s size:%lu\n", parser_args->output_file, ro->out_bytes);
+      }
+      assert_ge(ro->out_bytes, 10, %lu);
+    }
+  }
+  exit(0);
+
+  while (1 && (q <= MAX_QTY_LIMIT)) {
+    q++;
+    char *txt = fread_csv_line(parser_args->input_fd, 1024, &done, &err);
+    if (done == 1) {
+      break;
+    }
+    assert(err != CSV_ERR_NO_MEMORY);
+    assert(txt);
+    char **r = parse_csv(txt);
+    assert(r);
+
+    char *rgb_hex = case_upper(trim(r[1]));
+    char *rgb     = str_replace(rgb_hex, "#", "");
+    if (strlen(rgb) != 6) {
+      continue;
+    }
+
+    int32_t  _r = rgba_from_string(rgb_hex, &prop_val_ok);
+    assert(prop_val_ok);
+    rgba_t   prop_val_rgba = rgba_new(_r);
+
+    char     *name = trim(r[0]);
+    uint32_t red   = (uint32_t)_r >> 24 & 0xff;
+    uint32_t green = (uint32_t)_r >> 16 & 0xff;
+    uint32_t blue  = (uint32_t)_r >> 8 & 0xff;
+    uint32_t alpha = (uint32_t)_r & 0xff;
+    if (red < 0 || red > 256) {
+      continue;
+    }
+    if (green < 0 || green > 256) {
+      continue;
+    }
+    if (blue < 0 || blue > 256) {
+      continue;
+    }
+    if (alpha < 0 || alpha > 256) {
+      continue;
+    }
+    char *RGB = case_upper(rgb);
+
+
+    char *in_data  = fs_read(parser_args->input_file);
+    char *out_data = fs_read(parser_args->output_file);
+    assert_ge(strlen(in_data), 100, %lu);
+    assert_ge(strlen(out_data), 100, %lu);
+    char *in_encoded = (char *)b64_encode((const unsigned char *)in_data, strlen(in_data));
+    assert_ge(strlen(in_encoded), 100, %lu);
+
+    fprintf(stdout, "\t{ \"%s\", \"%s\", \"%s\", %d, %d, %d, %d, %lu, \"%s\", %lu },\n",
+            name,
+            rgb,
+            rgb_hex,
+            red, green, blue, alpha,
+            (unsigned long)0,
+            in_encoded,
+            strlen(in_encoded)
+            );
+
+    free(name);
+    free(txt);
+    qty++;
+  }
+  return(0);
+} /* main */

@@ -1,6 +1,8 @@
 #pragma once
 /**********************************/
 #include "../src/includes.c"
+/**********************************/
+#include "../src/pman0-args.c"
 
 
 /**********************************/
@@ -75,7 +77,7 @@ char **get_palette_data_lines(const char *name){
   char **lines = malloc(1024 * 4);
   int  qty     = strsplit(pd, lines, "\n");
 
-  lines[qty] = NULL;
+//  lines[qty] = NULL;
   //fprintf(stderr, "name:%s|props qty:%d\n", name, qty);
   return(lines);
 }
