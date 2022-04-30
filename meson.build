@@ -29,13 +29,12 @@ incdir = include_directories(
   './deps', 
   './src', 
   './include/template', 
-  './submodules/libvterm-cryptomilk',
-  './submodules/libvterm-cryptomilk/include',
-  './submodules/libvterm-cryptomilk/src',
+  './submodules/libvterm',
+  './submodules/libvterm/include',
+  './submodules/libvterm/src',
   './submodules/c_string_buffer/include',
   './submodules/c_stringfn/include',
   './submodules/c_stringfn/src',
-  './deps/cry.h',
 )
 
 install_headers([
@@ -61,8 +60,8 @@ timestamp = ['deps/timestamp/timestamp.c', 'src/datetime.c']
 csv = ['submodules/csv_parser/csv.c','submodules/csv_parser/split.c','submodules/csv_parser/fread_csv_line.c']
 occurrences = ['deps/occurrences/occurrences.c']
 b64 = ['deps/b64/buffer.c','deps/b64/decode.c','deps/b64/encode.c']
-vterm = ['submodules/libvterm-cryptomilk/src/vterm.c','submodules/libvterm-cryptomilk/src/pen.c','submodules/libvterm-cryptomilk/src/unicode.c',
-'submodules/libvterm-cryptomilk/src/parser.c', 'submodules/libvterm-cryptomilk/src/screen.c', 'submodules/libvterm-cryptomilk/src/state.c']
+vterm = ['submodules/libvterm/src/vterm.c','submodules/libvterm/src/pen.c','submodules/libvterm/src/unicode.c',
+'submodules/libvterm/src/parser.c', 'submodules/libvterm/src/screen.c', 'submodules/libvterm/src/state.c']
 #/////////////////////////////////
 template = ['src/template/template.c','src/template/hashmap.c','src/template/vector.c','src/template/mpc.c','include/template/template.h',
 'include/template/hashmap.h','include/template/vector.h','include/template/mpc.h']

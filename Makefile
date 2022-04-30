@@ -28,7 +28,7 @@ clibs-install:
 submodules-install:
 	@./scripts/submodule-cmds.sh|env bash
 
-setup: clib-install submodules-install
+setup: clibs-install submodules-install
 	@command -v nodemon || npm i nodemon -g
 	@command -v meson || pip install meson
 
