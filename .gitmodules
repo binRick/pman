@@ -49,3 +49,6 @@
 [submodule "submodules/env.h"]
 	path = submodules/env.h
 	url = https://github.com/4thel00z/env.h
+[submodule "submodules/cmake-modules"]
+	path = submodules/cmake-modules
+	url = https://github.com/sagiegurari/cmake-modules

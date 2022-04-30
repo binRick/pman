@@ -1,14 +1,23 @@
 #//***********************************************************/
 project('pman',          ['c'],         version : '0.0.1',         default_options : ['warning_level=0','c_std=gnu99'])
 #//***********************************************************/
+#if(NOT EXISTS "target/cmake-modules/src/utils.cmake")
+#  execute_process(COMMAND git clone https://github.com/sagiegurari/cmake-modules.git)
+#endif()
+#list(APPEND CMAKE_MODULE_PATH "./submodules/cmake-modules/src")
+#include(utils)
+#//***********************************************************/
 add_project_arguments('-D_GNU_SOURCE', language : 'c')
 #//***********************************************************/
 cmake = import('cmake')
 filesystem = import('fs')
+pkg = import('pkgconfig')
+#//***********************************************************/
 opts = cmake.subproject_options()
 opts.add_cmake_defines({'BUILD_SHARED_LIBS': false,'OLM_TESTS': false})
 #//opts.add_cmake_defines({'CMAKE_C_FLAGS':  '-O3 -std=gnu99 -Wall -fPIC -fno-plt -lm -lshmc'})
 #//add_global_arguments('-lm',language : 'c',)
+#//***********************************************************/
 thread_dep = dependency('threads')
 vterm_dep = dependency('vterm')
 opts.set_override_option('werror', 'false')
@@ -16,12 +25,16 @@ opts.set_override_option('warning_level', '0')
 host_system = host_machine.system()
 z_dep = dependency('zlib', required : true)
 cc = meson.get_compiler('c')
+#//***********************************************************/
 sh = find_program('sh', required : true)
 passh = find_program('passh', required : true)
-pkg = import('pkgconfig')
+#//***********************************************************/
 #//***********************************************************/
 test_deps = []
 deps = [thread_dep]
+#//***********************************************************/
+#c = run_command('./scripts/submodule-cmds.sh', check: true)
+#xxxxxxxxx = c.stdout().strip().split('\n')
 #//***********************************************************/
 incdir = include_directories(
   '.',
@@ -118,7 +131,6 @@ fort0 = executable('fort0',['bins/fort0.c', files(srcs),
      include_directories: [incdir])
 #////////////////////////////////////////////////////
 tmt0 = executable('tmt0',['bins/tmt0.c', files(srcs), files(tmt), ], dependencies: [deps], include_directories: [incdir])
-pman0 = executable('pman0',['bins/pman0.c', files(srcs), files(tmt), ], dependencies: [deps], include_directories: [incdir])
 #////////////////////////////////////////////////////
 commander0 = executable('commander0',['bins/commander0.c', 
       files(srcs),

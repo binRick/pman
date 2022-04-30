@@ -35,7 +35,7 @@ static void update_redraw_lines(struct terminal *terminal, int start_row, int en
 
 
 static void print_cell(VTermScreen *screen, VTermScreenCell *cell){
- // printf("print_cell> |chars: %d| ", (int)cell->chars);
+  // printf("print_cell> |chars: %d| ", (int)cell->chars);
 #ifdef VERBOSE_DEBUG_MODE
   printf("width: %d\n", cell->width);
   printf("bold: %d\n", cell->attrs.bold);

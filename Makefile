@@ -1,43 +1,50 @@
 default: all
-.PHONY: all
-all: build test
-.PHONY: .FORCE
-.FORCE:
-BUILD_DIR = ./build
-
-GC = git clone --recurse-submodules
-GET_COMMIT = "git log -q |grep '^commit '|head -n1|cut -d' ' -f2"
+##########################################################
+all: \
+	build \
+	test
+##########################################################
+PWD="$(shell pwd)"
+BUILD_DIR=$(PWD)/build
+##########################################################
+PMAN=$(BUILD_DIR)/pman
+##########################################################
+GC=$(GIT) clone --recurse-submodules
+GET_COMMIT=$(GIT) log -q |grep '^commit '|head -n1|cut -d' ' -f2
+##########################################################
 PASSH=$(shell command -v passh)
+GIT=$(shell command -v git)
 SED=$(shell command -v gsed||command -v sed)
-PMAN=./bin/pman
 NODEMON=$(shell command -v nodemon)
 FZF=$(shell command -v fzf)
 BLINE=$(shell command -v bline)
+##########################################################
 TEST_TITLE=$(BLINE) -a bold:underline:italic:yellow
 HELP_STYLE=$(BLINE) -H -a ff00ff
+##########################################################
 DEV_MAKE_TARGETS = \
 				   all
 DEV_TEST_TARGETS = \
 				   pc
-PC=pman
-PC_CMD=$(BUILD_DIR)/$(PC)
-PC_HELP_CMD=$(PC_CMD) --help 
+##########################################################
+PMAN_HELP_CMD=$(PMAN) --help 
 DEV_CMD=\
-		$(PC_CMD) \
+		$(PMAN) \
 		-t tmp/color-names0.tpl \
 		-i tmp/colornames.csv \
 		-o tmp/colornames.c \
 		-r -T -v
+##########################################################
 
 
 pc-cmd:
 	@printf '%s\n' "$(DEV_CMD)"
 
 pc-help-cmd:
-	@printf '%s\n' "$(PC_HELP_CMD)"
+	@printf '%s\n' "$(PMAN_HELP_CMD)"
 
 pc-help:
-	@$(PASSH) $(PC_HELP_CMD) | $(HELP_STYLE)
+	@$(PASSH) $(PMAN_HELP_CMD) | $(HELP_STYLE)
 
 pc: pc-cmd pc-help
 	@eval "$(DEV_CMD)"

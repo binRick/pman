@@ -25,6 +25,7 @@ etc/.color-*.txt
 build
 .attic
 .venv
-submodules
 .installed-*.txt
 .cache
+*unc-back*
+*.uncrustify
