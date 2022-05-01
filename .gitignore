@@ -2,7 +2,7 @@ kfc
 *.a
 *.o
 bin
-deps
+deps/**
 tmp
 .attic
 .*.log

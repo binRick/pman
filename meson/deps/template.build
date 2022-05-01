@@ -1,0 +1,7 @@
+__NAME___lib = library('__NAME__', '../../../deps/__NAME__/__NAME__.c', install: false, dependencies: [], 
+  include_directories: [
+    '../../../deps',
+  ]
+)
+__NAME___dep = declare_dependency(include_directories: [], link_with: __NAME___lib)
+deps += __NAME___dep

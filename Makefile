@@ -8,6 +8,7 @@ PWD="$(shell pwd)"
 BUILD_DIR=$(PWD)/build
 ##########################################################
 PMAN=$(BUILD_DIR)/pman
+FIELD_RANGE_PARSER=$(BUILD_DIR)/field-range-parser
 ##########################################################
 GC=$(GIT) clone --recurse-submodules
 GET_COMMIT=$(GIT) log -q |grep '^commit '|head -n1|cut -d' ' -f2
@@ -25,15 +26,26 @@ HELP_STYLE=$(BLINE) -H -a ff00ff
 DEV_MAKE_TARGETS = \
 				   all
 DEV_TEST_TARGETS = \
-				   pc
+				   pc 
+#\
+#				   field-range-parser \
+
+
 ##########################################################
 PMAN_HELP_CMD=$(PMAN) --help 
-DEV_CMD=\
+DEV_CMD =\
 		$(PMAN) \
 		-t $(PWD)/etc/tpl/color-names/color-names.tpl \
 		-i $(PWD)/etc/colornames.csv \
 		-o $(PWD)/tmp/colornames.c \
-		-r -T 
+		-c -T
+DEV_CMD_10=\
+		$(PMAN) \
+		-t $(PWD)/etc/tpl/color-names/color-names.tpl \
+		-i $(PWD)/etc/colornames-10.csv \
+		-o $(PWD)/tmp/colornames.c \
+		-c -T
+#r -T 
 ##########################################################
 
 
@@ -46,11 +58,15 @@ pc-help-cmd:
 pc-help:
 	@$(PASSH) $(PMAN_HELP_CMD) | $(HELP_STYLE)
 
+field-range-parser: 
+	@eval $(FIELD_RANGE_PARSER)
+
 pc: pc-cmd pc-help
+	@eval "$(DEV_CMD_10)"
 	@eval "$(DEV_CMD)"
 
 dev: 
-	@$(PASSH) -L .nodemon.log $(NODEMON) -I -V -w etc/tpl -w meson.build -w bins -w src -w Makefile -i build -i submodules -i deps -i 'include/embedded-*.h' -e tpl,build,sh,c,h,Makefile -x env -- bash -c 'make $(DEV_MAKE_TARGETS) $(DEV_TEST_TARGETS)||true'
+	@$(PASSH) -L .nodemon.log $(NODEMON) -I -V -w meson -w etc/tpl -w meson.build -w bins -w src -w Makefile -i build -i submodules -i deps -i 'include/embedded-*.h' -e tpl,build,sh,c,h,Makefile -x env -- bash -c 'make $(DEV_MAKE_TARGETS) $(DEV_TEST_TARGETS)||true'
 
 nodemon:
 	@$(PASSH) make

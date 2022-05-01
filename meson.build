@@ -1,13 +1,13 @@
-#//***********************************************************/
 project('pman',          ['c'],         version : '0.0.1',         default_options : ['warning_level=0','c_std=gnu99'])
-#//***********************************************************/
-#if(NOT EXISTS "target/cmake-modules/src/utils.cmake")
-#  execute_process(COMMAND git clone https://github.com/sagiegurari/cmake-modules.git)
-#endif()
-#list(APPEND CMAKE_MODULE_PATH "./submodules/cmake-modules/src")
-#include(utils)
-#//***********************************************************/
 add_project_arguments('-D_GNU_SOURCE', language : 'c')
+deps = []
+#//***********************************************************/
+pwd = run_command('pwd', check: true).stdout().strip()
+find_deps_cmd = 'find meson/deps -type f -name meson.build|xargs dirname'
+find_deps = run_command('env', 'bash', '-c', find_deps_cmd, check: true).stdout().strip().split('\n')
+foreach m : find_deps
+  subdir(m)
+endforeach
 #//***********************************************************/
 cmake = import('cmake')
 filesystem = import('fs')
@@ -31,9 +31,7 @@ passh = find_program('passh', required : true)
 #//***********************************************************/
 #//***********************************************************/
 test_deps = []
-deps = [thread_dep]
 #//***********************************************************/
-pwd = run_command('pwd', check: true).stdout().strip()
 #c = run_command('./scripts/submodule-cmds.sh', check: true)
 #xxxxxxxxx = c.stdout().strip().split('\n')
 #//***********************************************************/
@@ -51,49 +49,18 @@ incdir = include_directories(
   './submodules/c_stringfn/src',
 )
 
-install_headers([
-])
+install_headers([])
 
 #//////////////////////////////////////////////
 srcs = []
-fort = ['src/fort.c']
-tmt = ['src/tmt.c']
-flag = ['deps/flag/flag.c']
-commander = ['deps/commander/commander.c']
-rgba = ['deps/rgba/rgba.c']
-int = ['src/int.c']
-str = ['deps/str-replace/str-replace.c',
-  'submodules/c_string_buffer/src/stringbuffer.c',
-  'deps/strsplit/strsplit.c', 'deps/is_number/is_number.c', 'submodules/c_stringfn/src/stringfn.c',
-  #//  'src/utils.c',
-]
-fs = ['deps/fs/fs.c']
-case = ['deps/case/case.c']
-trim = ['deps/trim/trim.c']
-timestamp = ['deps/timestamp/timestamp.c', 'src/datetime.c']
 csv = ['submodules/csv_parser/csv.c','submodules/csv_parser/split.c','submodules/csv_parser/fread_csv_line.c']
-occurrences = ['deps/occurrences/occurrences.c']
-b64 = ['deps/b64/buffer.c','deps/b64/decode.c','deps/b64/encode.c']
 vterm = ['submodules/libvterm/src/vterm.c','submodules/libvterm/src/pen.c','submodules/libvterm/src/unicode.c',
 'submodules/libvterm/src/parser.c', 'submodules/libvterm/src/screen.c', 'submodules/libvterm/src/state.c']
 #/////////////////////////////////
-template = ['src/template/template.c','src/template/hashmap.c','src/template/vector.c','src/template/mpc.c','include/template/template.h',
-'include/template/hashmap.h','include/template/vector.h','include/template/mpc.h']
+template = ['src/template/template.c','src/template/hashmap.c','src/template/vector.c','src/template/mpc.c','include/template/template.h','include/template/hashmap.h','include/template/vector.h','include/template/mpc.h']
 #/////////////////////////////////
-srcs += flag
-srcs += fort
-srcs += commander
-srcs += fs
-srcs += str
-srcs += b64
-srcs += occurrences
 srcs += csv
-srcs += trim
-srcs += case
-srcs += rgba
 srcs += template
-srcs += timestamp
-srcs += int
 #//***********************************************************/
 pman = executable('pman',['bins/pman.c', files(srcs)], dependencies: [deps], include_directories: [incdir])
 #//***********************************************************/
@@ -120,41 +87,64 @@ fort0 = executable('fort0',['bins/fort0.c', files(srcs),
      ], dependencies: [deps],
      include_directories: [incdir])
 #////////////////////////////////////////////////////
-tmt0 = executable('tmt0',['bins/tmt0.c', files(srcs), files(tmt), ], dependencies: [deps], include_directories: [incdir])
+tmt0 = executable('tmt0',['bins/tmt0.c', files(srcs), ], dependencies: [deps], include_directories: [incdir])
 #////////////////////////////////////////////////////
 commander0 = executable('commander0',['bins/commander0.c', 
       files(srcs),
      ], dependencies: [deps], include_directories: [incdir])
 spin0 = executable('spin0',['bins/spin0.c', files(srcs)], dependencies: [deps],include_directories: [incdir])
-_tests = [
-  ['pman', pman],
-]
-tests = [
-  ['fort0', fort0, 'fort0.log'],
-  ['assert0', assert0, 'assert0.log'],
-  ['spin0', spin0, 'spin0.log'],
-  ['tmt0', tmt0, 'tmt0.log'],
-  ['commander0', commander0, 'commander0.log'],
-  #  ['template0', template0],
-  ['vterm0', vterm0],
-]
 #//***********************************************************/
-
-#//***********************************************************/
-foreach i : tests
-test(i[0], i[1], args: ['--test'], env: test_env)
-endforeach
+#_tests = [
+#  ['pman', pman],
+#]
+#__tests = [
+#  ['fort0', fort0, 'fort0.log'],
+#  ['assert0', assert0, 'assert0.log'],
+#  ['spin0', spin0, 'spin0.log'],
+#  ['tmt0', tmt0, 'tmt0.log'],
+#  ['commander0', commander0, 'commander0.log'],
+#  #  ['template0', template0],
+#  ['vterm0', vterm0],
+#]
 #//***********************************************************/
 
 
 #////////////////////////////////////////////////////
-embedded_tests = [
-  ['Parse Colors', pman],
+pman_test_env = environment()
+pman_test_env.set('__MESON_TEST_MODE__', '1')
+test_env.set('TEMPLATE_PATH', pwd + '/etc/tpl/color-names')
+#[
+#  '-i', 'etc/colornames.csv', '-t', 'etc/tpl/color-names/color-names.tpl', '-o', '/tmp/out0', 
+#  '--test-mode', 
+#  '--mode',  'read_test',
+#  ],env: test_env)
+#endforeach
+#//***********************************************************/
+field_range_parser = executable('field-range-parser',
+     ['bins/field-range-parser.c', files(srcs),  ], 
+     dependencies: [deps],
+     include_directories: [incdir])
+#//***********************************************************/
+bin_tests = [
+  ['field-range-parser', field_range_parser],
 ]
-foreach i : embedded_tests
-test(i[0], i[1], args: [
-  '-i', 'etc/colornames.csv', '-t', 'etc/tpl/color-names/color-names.tpl', '-o', '/tmp/out0', 
-  '--test-mode', 
-  '--mode',  'read_test',
-  ],env: test_env)
+#//***********************************************************/
+foreach i : bin_tests
+  test(i[0], i[1], args: ['--test'], env: test_env)
 endforeach
+#//***********************************************************/
+pman_tests = [
+  ['Spinner #0', spin0,  test_env, []],
+  ['Parse Colors', pman,  pman_test_env, ['-i', pwd + '/etc/colornames.csv', '-t', pwd + '/etc/tpl/color-names/color-names.tpl', '-c']],
+    #  ['Parse 10 Colors', pman,  pman_test_env, ['-i', pwd + '/etc/colornames-10.csv', '-t', pwd + '/etc/tpl/color-names/color-names.tpl', '-c', '-v'],
+    #],
+    #['Parse Color Names', pman,  pman_test_env,
+    # ['-v', '-c', '-t'], #'-i', pwd + '/etc/colornames.csv', '-t', pwd + '/etc/tpl/color-names/color-names.tpl', '-r', '--parse-color-names'],
+    #],
+]
+#//***********************************************************/
+foreach t : pman_tests
+  test(t[0], t[1], args: t[3], env: t[2])
+endforeach
+#//***********************************************************/
+

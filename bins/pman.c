@@ -34,7 +34,11 @@ struct pman_args_t {
   char *input_file;
   char *output_file;
   char *template_file;
-  bool verbose_mode, test_mode, render_template, pretty_print_colors_mode;
+  ///////////////////////////
+  /////////////// MODES
+  bool verbose_mode, test_mode;
+  bool render_template, pretty_print_colors_mode, parse_color_names_mode;
+  ///////////////////////////
 };
 struct render_t {
   size_t         in_bytes, out_bytes, template_bytes, rendered_bytes;
@@ -111,13 +115,13 @@ ColorsListResult *get_colors_list(char *data){
   StringBuffer *_sb       = stringbuffer_new_with_options(1024, true);
   Strings      Lines      = stringfn_split_lines_and_trim(data);
 
-  tq_set_unit(tq_MILLISECONDS);
+  tq_set_unit(tq_MICROSECONDS);
   tq_start(NULL);
   for (int i = 0; i < Lines.count; i++) {
     size_t split_comma_qty = occurrences(",", Lines.strings[i]);
     size_t split_hash_qty  = occurrences("#", Lines.strings[i]);
     if (split_comma_qty == 1 && split_hash_qty == 1) {
-      char **_ss = malloc(strlen(Lines.strings[i] + 8));
+      char **_ss = malloc(strlen(Lines.strings[i]) + 8);
       int  _qty  = strsplit(Lines.strings[i], _ss, ",");
       if (_qty == 2 && strlen(trim(_ss[1])) == 7 && stringfn_starts_with(trim(_ss[1]), "#")) {
         char *ns = stringfn_replace(trim(_ss[1]), '#', ' ');
@@ -182,23 +186,44 @@ ColorsListResult *get_colors_list(char *data){
     }
   }
   Strings _S = stringfn_split_lines_and_trim(stringbuffer_to_string(_sb));
-
   stringbuffer_release(_sb);
   stringfn_release_strings_struct(Lines);
-  char *ms = tq_stop("get_colors_list_dur");
+  char *ns_s = tq_stop("get_colors_list_dur");
+  char **ns_items = malloc(strlen(ns_s)+8); 
+  char **_ns_items = malloc(strlen(ns_s)+8);
+  int colon_split_qty = strsplit(ns_s, ns_items, ":");
+  dbg(colon_split_qty, %d);
+  assert_eq(colon_split_qty, 2, %d);
+  dbg(ns_items[1], %s);
+  int period_split_qty = strsplit(ns_items[1], _ns_items, ".");
+  dbg(period_split_qty, %d);
+  assert_eq(period_split_qty, 2, %d);
+  dbg(_ns_items[0], %s);
+  char *ns_str = strdup(_ns_items[0]);
+  free(ns_s);
+  free(_ns_items);
+  free(ns_items);
 
-  dbg(ms, %s);
+  int ns_is_num = is_number(ns_str, strlen(ns_str));
+  dbg(ns_is_num, %d);
+  assert_eq(ns_is_num, 1, %d);
+  int dur_ns_int = atoi(ns_str);
+  dbg(dur_ns_int, %d);
+  assert_ge(dur_ns_int, 10, %d);
+  char *dur_msg = malloc(1024);
+  
+
   ColorsListResult *clr = malloc(sizeof(ColorsListResult));
-
   clr->Lines = _S;
-
   dbg(clr->Lines.count, %d);
+
+  sprintf(dur_msg,"Processed %d Colors in %d milliseconds", clr->Lines.count, dur_ns_int/1000);
+  dbg(dur_msg, %s);
 
   return(clr);
 } /* get_colors_list */
 
-
-int do_render_template() {
+int __ORIG__do_render_template() {
   //////////////////////////////////////////////////////////////////////////////
   //ro->env              = env_new("./etc/tpl");
   ro->env      = env_new("/Users/rick/repos/pman-gh/etc/tpl/color-names");
@@ -370,6 +395,14 @@ int do_render_template() {
 } /* do_render_template */
 
 
+int do_render_template() {
+  stringbuffer_append_string(ro->Input, fs_read(parser_args->input_file));
+  ColorsListResult *CLR = get_colors_list(stringbuffer_to_string(ro->Input));
+  exit(0);
+  return(EXIT_SUCCESS);
+} /* do_render_template */
+
+
 ////////////////////////////////////////////////////////////////////////
 
 
@@ -383,9 +416,11 @@ static void set_execution_mode(command_t *self){
 
 static void set_template_file(command_t *self){
   sprintf(parser_args->template_file, "%s", self->arg);
-  dbg(parser_args->template_file, %s);
-
-  //assert_eq(fs_exists(parser_args->template_file), 0, %d);
+  if(parser_args->verbose_mode){
+      dbg(parser_args->template_file, %s);
+      dbg(fs_exists(parser_args->template_file), %d);
+  }
+  assert_eq(fs_exists(parser_args->template_file), 0, %d);
 }
 
 
@@ -401,6 +436,10 @@ static void enable_pretty_print_colors_mode() {
 
 static void enable_test_mode(command_t *self){
   parser_args->test_mode = true;
+}
+
+static void set_parse_color_names_mode(){
+  parser_args->parse_color_names_mode = true;
 }
 
 
@@ -464,6 +503,7 @@ int init_parser_args(const int argc, const char **argv){
   parser_args->test_mode       = false;
   parser_args->verbose_mode    = false;
   parser_args->render_template = false;
+  parser_args->parse_color_names_mode = false;
   parser_args->input_file      = malloc(1024);
   parser_args->mode            = malloc(1024);
   parser_args->output_file     = malloc(1024);
@@ -477,14 +517,15 @@ int init_parser_args(const int argc, const char **argv){
 
   ////////////////////////////////////////////////////////////////
   command_init(&cmd, argv[0], PARSER_VERSION);
+  command_option(&cmd, "-v", "--verbose", "Enable Verbose Mode", enable_verbose_mode);
+  command_option(&cmd, "-T", "--test-mode", "Enable Test Mode", enable_test_mode);
   command_option(&cmd, "-m", "--mode [mode]", "Set Execution Mode", set_execution_mode);
   command_option(&cmd, "-t", "--template [template]", "Set Template File", set_template_file);
   command_option(&cmd, "-i", "--input-file  [in-file]", "Input  Color File", set_input_file);
   command_option(&cmd, "-o", "--output-file [out-file]", "Output Color File", set_output_file);
   command_option(&cmd, "-r", "--render-template", "Enable Template Render", set_template_render);
+  command_option(&cmd, "-c", "--parse-color-names", "Parse Color Names", set_parse_color_names_mode);
   command_option(&cmd, "-p", "--pretty-print-colors", "Pretty Print Colors", enable_pretty_print_colors_mode);
-  command_option(&cmd, "-T", "--test-mode", "Enable Test Mode", enable_test_mode);
-  command_option(&cmd, "-v", "--verbose", "Enable Verbose Mode", enable_verbose_mode);
   command_parse(&cmd, argc, (char **)argv);
   ////////////////////////////////////////////////////////////////
   fprintf(stderr, "Additional Args:\n");
@@ -499,9 +540,10 @@ int init_parser_args(const int argc, const char **argv){
     fprintf(stderr, "Output File:            %s\n", parser_args->output_file);
     fprintf(stderr, "Tempplate File:         %s\n", parser_args->template_file);
     fprintf(stderr, "Render Template?        %s\n", parser_args->render_template    ? "Yes" : "No");
+    fprintf(stderr, "Parse Color Names?      %s\n", parser_args->parse_color_names_mode    ? "Yes" : "No");
     fprintf(stderr, "Test mode Enabled?      %s\n", parser_args->test_mode    ? "Yes" : "No");
     fprintf(stderr, "Pretty Print Enabled?   %s\n", parser_args->pretty_print_colors_mode    ? "Yes" : "No");
-    fprintf(stderr, "Verbose   Enabled?      %s\n", parser_args->verbose_mode ? "Yes" : "No");
+    fprintf(stderr, "Verbose Enabled?      %s\n", parser_args->verbose_mode ? "Yes" : "No");
     fprintf(stderr, "================================\n");
   }
   return(0);
@@ -539,22 +581,35 @@ void print_suffix(void){
 ///////////////////////////////////////////////////////////////////////////////////////////
 int main(const int argc, const char **argv) {
   int q, err, done;  short prop_val_ok;
-
   assert_eq(init_parser_args(argc, argv), 0, %d);
   if (!meson_test_mode_enabled) {
   }else{
     meson_test_mode();
     exit(0);
   }
+  dbg(parser_args->parse_color_names_mode ? "Yes" : "No", %s);
+  dbg(parser_args->parse_color_names_mode, %d);
+  dbg(parser_args->render_template, %d);
+
   if (parser_args->pretty_print_colors_mode) {
     return(pretty_print_colors());
 
     return(0);
   }
+
+  if (parser_args->parse_color_names_mode) {
+    stringbuffer_append_string(ro->Input, fs_read(parser_args->input_file));
+    ColorsListResult *CLR = get_colors_list(stringbuffer_to_string(ro->Input));
+    exit(0);
+  }
+
+  exit(1);
+
   if (parser_args->render_template) {
     return(do_render_template());
   }
 
+  exit(1);
   print_prefix();
   atexit(print_suffix);
 
