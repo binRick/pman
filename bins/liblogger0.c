@@ -1,7 +1,7 @@
 #include "../include/includes.h"
 
 
-int main(int argc, char **argv)    {
+int main(int argc, char **argv) {
   log_init(stdout);
   log(LOG_INFO,
       log_string("msg", "records added successfully"),

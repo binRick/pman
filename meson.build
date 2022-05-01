@@ -126,6 +126,18 @@ bin_tests = [
         dependencies: [deps],
         include_directories: [incdir]
   )],
+  ['regex0', executable('regex0',['bins/regex0.c', files(srcs),  ], 
+        dependencies: [deps],
+        include_directories: [incdir]
+  )],
+  ['conf0', executable('conf0',['bins/conf0.c', files(srcs),  ], 
+        dependencies: [deps],
+        include_directories: [incdir]
+  )],
+  ['wildcardcmp0', executable('wildcardcmp0',['bins/wildcardcmp0.c', files(srcs),  ], 
+        dependencies: [deps],
+        include_directories: [incdir]
+  )],
 ]  
 #//***********************************************************/
 pman_tests = [
