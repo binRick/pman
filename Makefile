@@ -71,7 +71,8 @@ dev:
 nodemon:
 	@$(PASSH) make
 
-dependencies: base252 objectively
+#dependencies:
+#base252 objectively
 
 clibs-cmds:
 	@./scripts/clib-cmds.sh
@@ -85,7 +86,7 @@ clibs-install:
 submodules-install:
 	@./scripts/submodule-cmds.sh|env bash
 
-setup: dependencies clibs-install submodules-install tools
+setup: clibs-install submodules-install tools
 
 tools:
 	@command -v nodemon || npm i nodemon -g

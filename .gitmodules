@@ -55,3 +55,30 @@
 [submodule "submodules/timequick"]
 	path = submodules/timequick
 	url = https://github.com/mbarbar/timequick
+[submodule "submodules/subprocess.h"]
+	path = submodules/subprocess.h
+	url = https://github.com/sheredom/subprocess.h
+[submodule "bins/submodules/libansilove"]
+	path = bins/submodules/libansilove
+	url = https://github.com/ansilove/libansilove
+[submodule "submodules/httpserver.h"]
+	path = submodules/httpserver.h
+	url = https://github.com/jeremycw/httpserver.h
+[submodule "submodules/tiny-AES-c"]
+	path = submodules/tiny-AES-c
+	url = https://github.com/kokke/tiny-AES-c
+[submodule "submodules/libansilove"]
+	path = submodules/libansilove
+	url = https://github.com/ansilove/libansilove
+[submodule "submodules/libterminput"]
+	path = submodules/libterminput
+	url = https://github.com/maandree/libterminput
+[submodule "submodules/tkvdb"]
+	path = submodules/tkvdb
+	url = https://github.com/vmxdev/tkvdb
+[submodule "submodules/subhook"]
+	path = submodules/subhook
+	url = https://github.com/Zeex/subhook
+[submodule "submodules/bestline"]
+	path = submodules/bestline
+	url = https://github.com/jart/bestline

@@ -78,7 +78,7 @@ bin_tests = [
         dependencies: [deps],
         include_directories: [incdir]
   )],
-  ['assert0', executable('assret0',['bins/assert0.c', files(srcs),  ], 
+  ['assert0', executable('assert0',['bins/assert0.c', files(srcs),  ], 
         dependencies: [deps],
         include_directories: [incdir]
   )],
@@ -95,6 +95,26 @@ bin_tests = [
         include_directories: [incdir]
   )],
   ['commander0', executable('commander0',['bins/commander0.c', files(srcs),  ], 
+        dependencies: [deps],
+        include_directories: [incdir]
+  )],
+  ['subprocess0', executable('subprocess0',['bins/subprocess0.c', files(srcs),  ], 
+        dependencies: [deps],
+        include_directories: [incdir]
+  )],
+  ['json0', executable('json0',['bins/json0.c', files(srcs),  ], 
+        dependencies: [deps],
+        include_directories: [incdir]
+  )],
+  ['terminput0', executable('terminput0',['bins/terminput0.c', files(srcs),  ], 
+        dependencies: [deps],
+        include_directories: [incdir]
+  )],
+  ['bestline0', executable('bestline0',['bins/bestline0.c', files(srcs),  ], 
+        dependencies: [deps],
+        include_directories: [incdir]
+  )],
+  ['tkvdb0', executable('tkvdb0',['bins/tkvdb0.c', files(srcs),  ], 
         dependencies: [deps],
         include_directories: [incdir]
   )],
