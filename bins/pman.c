@@ -186,42 +186,50 @@ ColorsListResult *get_colors_list(char *data){
     }
   }
   Strings _S = stringfn_split_lines_and_trim(stringbuffer_to_string(_sb));
+
   stringbuffer_release(_sb);
   stringfn_release_strings_struct(Lines);
-  char *ns_s = tq_stop("get_colors_list_dur");
-  char **ns_items = malloc(strlen(ns_s)+8); 
-  char **_ns_items = malloc(strlen(ns_s)+8);
-  int colon_split_qty = strsplit(ns_s, ns_items, ":");
+  char *ns_s           = tq_stop("get_colors_list_dur");
+  char **ns_items      = malloc(strlen(ns_s) + 8);
+  char **_ns_items     = malloc(strlen(ns_s) + 8);
+  int  colon_split_qty = strsplit(ns_s, ns_items, ":");
+
   dbg(colon_split_qty, %d);
   assert_eq(colon_split_qty, 2, %d);
   dbg(ns_items[1], %s);
   int period_split_qty = strsplit(ns_items[1], _ns_items, ".");
+
   dbg(period_split_qty, %d);
   assert_eq(period_split_qty, 2, %d);
   dbg(_ns_items[0], %s);
   char *ns_str = strdup(_ns_items[0]);
+
   free(ns_s);
   free(_ns_items);
   free(ns_items);
 
   int ns_is_num = is_number(ns_str, strlen(ns_str));
+
   dbg(ns_is_num, %d);
   assert_eq(ns_is_num, 1, %d);
   int dur_ns_int = atoi(ns_str);
+
   dbg(dur_ns_int, %d);
   assert_ge(dur_ns_int, 10, %d);
   char *dur_msg = malloc(1024);
-  
+
 
   ColorsListResult *clr = malloc(sizeof(ColorsListResult));
+
   clr->Lines = _S;
   dbg(clr->Lines.count, %d);
 
-  sprintf(dur_msg,"Processed %d Colors in %d milliseconds", clr->Lines.count, dur_ns_int/1000);
+  sprintf(dur_msg, "Processed %d Colors in %d milliseconds", clr->Lines.count, dur_ns_int / 1000);
   dbg(dur_msg, %s);
 
   return(clr);
 } /* get_colors_list */
+
 
 int __ORIG__do_render_template() {
   //////////////////////////////////////////////////////////////////////////////
@@ -398,6 +406,7 @@ int __ORIG__do_render_template() {
 int do_render_template() {
   stringbuffer_append_string(ro->Input, fs_read(parser_args->input_file));
   ColorsListResult *CLR = get_colors_list(stringbuffer_to_string(ro->Input));
+
   exit(0);
   return(EXIT_SUCCESS);
 } /* do_render_template */
@@ -416,9 +425,9 @@ static void set_execution_mode(command_t *self){
 
 static void set_template_file(command_t *self){
   sprintf(parser_args->template_file, "%s", self->arg);
-  if(parser_args->verbose_mode){
-      dbg(parser_args->template_file, %s);
-      dbg(fs_exists(parser_args->template_file), %d);
+  if (parser_args->verbose_mode) {
+    dbg(parser_args->template_file, %s);
+    dbg(fs_exists(parser_args->template_file), %d);
   }
   assert_eq(fs_exists(parser_args->template_file), 0, %d);
 }
@@ -437,6 +446,7 @@ static void enable_pretty_print_colors_mode() {
 static void enable_test_mode(command_t *self){
   parser_args->test_mode = true;
 }
+
 
 static void set_parse_color_names_mode(){
   parser_args->parse_color_names_mode = true;
@@ -499,14 +509,14 @@ int init_parser_args(const int argc, const char **argv){
   ////////////////////////////////////////////////////////////////
   parser_args = malloc(sizeof(pman_args_t));
   ////////////////////////////////////////////////////////////////
-  parser_args->template_file   = malloc(1024);
-  parser_args->test_mode       = false;
-  parser_args->verbose_mode    = false;
-  parser_args->render_template = false;
+  parser_args->template_file          = malloc(1024);
+  parser_args->test_mode              = false;
+  parser_args->verbose_mode           = false;
+  parser_args->render_template        = false;
   parser_args->parse_color_names_mode = false;
-  parser_args->input_file      = malloc(1024);
-  parser_args->mode            = malloc(1024);
-  parser_args->output_file     = malloc(1024);
+  parser_args->input_file             = malloc(1024);
+  parser_args->mode                   = malloc(1024);
+  parser_args->output_file            = malloc(1024);
   ////////////////////////////////////////////////////////////////
   sprintf(parser_args->input_file, "%s", DEFAULT_INPUT_FILE);
   sprintf(parser_args->output_file, "%s", DEFAULT_OUTPUT_FILE);
@@ -581,6 +591,7 @@ void print_suffix(void){
 ///////////////////////////////////////////////////////////////////////////////////////////
 int main(const int argc, const char **argv) {
   int q, err, done;  short prop_val_ok;
+
   assert_eq(init_parser_args(argc, argv), 0, %d);
   if (!meson_test_mode_enabled) {
   }else{
