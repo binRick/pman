@@ -1,0 +1,9 @@
+libconfuse_lib = library('libconfuse', 
+  '../../../submodules/libconfuse/src/confuse.c', 
+  install: false, dependencies: [], 
+  include_directories: [
+    '../../../submodules/libconfuse/src',
+  ]
+)
+libconfuse_dep = declare_dependency(include_directories: ['../../../submodules/libconfuse'], link_with: libconfuse_lib)
+deps += libconfuse_dep

@@ -1,0 +1,7 @@
+liblogger_lib = library('liblogger', '../../../submodules/liblogger/logger.h', install: false, dependencies: [], 
+  include_directories: [
+    '../../../submodules/liblogger',
+  ]
+)
+liblogger_dep = declare_dependency(include_directories: ['../../../submodules/liblogger'], link_with: liblogger_lib)
+deps += liblogger_dep

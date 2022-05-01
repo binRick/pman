@@ -1,0 +1,7 @@
+modest_html_lib = library('modest_html', '../../../submodules/modest_html/modest_html.c', install: false, dependencies: [], 
+  include_directories: [
+    '../../../submodules/modest_html',
+  ]
+)
+modest_html_dep = declare_dependency(include_directories: ['../../../submodules/modest_html'], link_with: modest_html_lib)
+deps += modest_html_dep

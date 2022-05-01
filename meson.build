@@ -7,7 +7,7 @@ srcs = []
 pman_test_env = environment()
 test_env = environment()
 #//***********************************************************/
-find_deps_cmd = 'find meson/deps -type f -name meson.build|xargs dirname'
+find_deps_cmd = 'find meson/deps -type f -name meson.build|xargs dirname|sort -u'
 csv = ['submodules/csv_parser/csv.c','submodules/csv_parser/split.c','submodules/csv_parser/fread_csv_line.c']
 vterm = ['submodules/libvterm/src/vterm.c','submodules/libvterm/src/pen.c','submodules/libvterm/src/unicode.c',
 'submodules/libvterm/src/parser.c', 'submodules/libvterm/src/screen.c', 'submodules/libvterm/src/state.c']
@@ -115,6 +115,14 @@ bin_tests = [
         include_directories: [incdir]
   )],
   ['tkvdb0', executable('tkvdb0',['bins/tkvdb0.c', files(srcs),  ], 
+        dependencies: [deps],
+        include_directories: [incdir]
+  )],
+  ['scriptexec0', executable('scriptexec0',['bins/scriptexec0.c', files(srcs),  ], 
+        dependencies: [deps],
+        include_directories: [incdir]
+  )],
+  ['dotenv0', executable('dotenv0',['bins/dotenv0.c', files(srcs),  ], 
         dependencies: [deps],
         include_directories: [incdir]
   )],

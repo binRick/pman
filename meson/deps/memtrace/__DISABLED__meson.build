@@ -1,0 +1,10 @@
+memtrace_lib = library('memtrace', 
+'../../../submodules/memtrace/src/memtrace.c', 
+'../../../submodules/memtrace/src/memtrace_print_quoted_string.c',
+install: false, dependencies: [], 
+  include_directories: [
+    '../../../submodules/memtrace',
+  ]
+)
+memtrace_dep = declare_dependency(include_directories: ['../../../submodules/memtrace'], link_with: memtrace_lib)
+deps += memtrace_dep

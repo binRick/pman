@@ -82,3 +82,24 @@
 [submodule "submodules/bestline"]
 	path = submodules/bestline
 	url = https://github.com/jart/bestline
+[submodule "submodules/scriptexec"]
+	path = submodules/scriptexec
+	url = https://github.com/sagiegurari/c_scriptexec
+[submodule "submodules/fsio"]
+	path = submodules/fsio
+	url = https://github.com/sagiegurari/c_fsio
+[submodule "submodules/memtrace"]
+	path = submodules/memtrace
+	url = https://github.com/mfederczuk/memtrace
+[submodule "submodules/libconfuse"]
+	path = submodules/libconfuse
+	url = https://github.com/libconfuse/libconfuse
+[submodule "submodules/liblogger"]
+	path = submodules/liblogger
+	url = https://github.com/briandowns/liblogger
+[submodule "submodules/modest_html"]
+	path = submodules/modest_html
+	url = https://github.com/f34nk/modest_html
+[submodule "submodules/libdotenv"]
+	path = submodules/libdotenv
+	url = https://github.com/briandowns/libdotenv
