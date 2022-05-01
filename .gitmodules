@@ -115,3 +115,9 @@
 [submodule "submodules/wildcardcmp"]
 	path = submodules/wildcardcmp
 	url = https://github.com/clibs/wildcardcmp
+[submodule "submodules/uptime"]
+	path = submodules/uptime
+	url = https://github.com/qwercik/uptime
+[submodule "submodules/tempdir"]
+	path = submodules/tempdir
+	url = https://github.com/stephenmathieson/tempdir.c

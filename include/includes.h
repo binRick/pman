@@ -56,6 +56,7 @@ static char *get_datetime();
 #include "../submodules/simpleconf/simpleconf.h"
 #include "../submodules/spin/spin.h"
 #include "../submodules/wildcardcmp/wildcardcmp.h"
+#include "../submodules/uptime/include/uptime/uptime.h"
 #include "../submodules/tiny-regex-c/re.h"
 //#include "../submodules/liblogger/logger.h"
 #include "../submodules/subprocess.h/subprocess.h"

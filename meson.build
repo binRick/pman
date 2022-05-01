@@ -138,6 +138,10 @@ bin_tests = [
         dependencies: [deps],
         include_directories: [incdir]
   )],
+  ['uptime0', executable('uptime0',['bins/uptime0.c', files(srcs),  ], 
+        dependencies: [deps],
+        include_directories: [incdir]
+  )],
 ]  
 #//***********************************************************/
 pman_tests = [
