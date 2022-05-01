@@ -7,7 +7,7 @@
 #ifndef COLOR_NAMES_DEFINED
 #define COLOR_NAMES_DEFINED
 
-struct color_name_t COLOR_NAMES[] = { NULL };
-const size_t COLOR_NAMES_QTY = 0;
+struct color_name_t COLOR_NAMES[]   = { NULL };
+const size_t        COLOR_NAMES_QTY = 0;
 
 #endif

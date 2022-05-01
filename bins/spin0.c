@@ -1,6 +1,6 @@
 #include "../include/includes.h"
 
-const int big_number = 1000;
+const int big_number = 10000;
 
 
 int main(const int argc, const char **argv){

@@ -3,8 +3,11 @@
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
+
+
 const char *bname_b49cf5f69111(const char *path){
   const char *p;
+
   p = strrchr(path, '/');
   return(p != NULL ? p + 1 : path);
 }
@@ -15,10 +18,10 @@ const char *bname_b49cf5f69111(const char *path){
 #define COL_EXPR    "\x1b[36m"
 #define COL_VAL     "\x1b[01m"
 #define COL_TYPE    "\x1b[32m"
-#define DBG_H_COL(out, col)    (col)
+#define DBG_H_COL(out, col)           (col)
 #ifndef xstr
-#define xstr0(x)    #x
-#define xstr(x)     xstr0(x)
+#define xstr0(x)                      #x
+#define xstr(x)                       xstr0(x)
 #endif
 #define DBG_H_FILE    __BASE_FILE__
 #define x_dbg_ac3a2859(out, x, fs)    ({                            \

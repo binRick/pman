@@ -33,21 +33,21 @@ read_u64_le(unsigned char *);
 // write
 
 void
-write_u16_be(unsigned char *, uint16_t);
+  write_u16_be(unsigned char *, uint16_t);
 
 void
-write_u16_le(unsigned char *, uint16_t);
+  write_u16_le(unsigned char *, uint16_t);
 
 void
-write_u32_be(unsigned char *, uint32_t);
+  write_u32_be(unsigned char *, uint32_t);
 
 void
-write_u32_le(unsigned char *, uint32_t);
+  write_u32_le(unsigned char *, uint32_t);
 
 void
-write_u64_be(unsigned char *, uint64_t);
+  write_u64_be(unsigned char *, uint64_t);
 
 void
-write_u64_le(unsigned char *, uint64_t);
+  write_u64_le(unsigned char *, uint64_t);
 
 #endif

@@ -1,13 +1,13 @@
 #define _UTILS_H
 
-#include <strings.h>
-#include <stdbool.h>
-#include <sys/types.h>
-#include <limits.h>
-#include <sys/stat.h>
-#include <sys/types.h>
 #include <err.h>
 #include <errno.h>
+#include <limits.h>
+#include <stdbool.h>
+#include <strings.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/types.h>
 //#include "../include/errnos.h"
 
 #define VLA_MAXLEN    (50 * sizeof(void *))

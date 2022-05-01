@@ -52,3 +52,6 @@
 [submodule "submodules/cmake-modules"]
 	path = submodules/cmake-modules
 	url = https://github.com/sagiegurari/cmake-modules
+[submodule "submodules/timequick"]
+	path = submodules/timequick
+	url = https://github.com/mbarbar/timequick

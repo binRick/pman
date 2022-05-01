@@ -11,7 +11,7 @@ typedef struct pman_args_t    pman_args_t;
 ///////////////////////////////////////////////////
 #include "../include/includes.h"
 ////////////////////////////////////////////////
-struct pman_args_t {
+struct _pman_args_t {
   const char *mode;
   const char *palette;
   const char *colorcode;
@@ -30,14 +30,14 @@ struct palette_t {
 };
 
 struct color_name_t {
-  char     *name;
-  char     *rgb;
-  char     *hex;
-  uint32_t red;
-  uint32_t green;
-  uint32_t blue;
-  uint32_t alpha;
+  char               *name;
+  char               *rgb;
+  char               *hex;
+  uint32_t           red;
+  uint32_t           green;
+  uint32_t           blue;
+  uint32_t           alpha;
   unsigned long long rgba;
-  char     *encoded_log;
-  size_t   encoded_log_bytes;
+  char               *encoded_log;
+  size_t             encoded_log_bytes;
 };

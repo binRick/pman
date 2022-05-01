@@ -30,10 +30,10 @@ DEV_TEST_TARGETS = \
 PMAN_HELP_CMD=$(PMAN) --help 
 DEV_CMD=\
 		$(PMAN) \
-		-t tmp/color-names0.tpl \
-		-i tmp/colornames.csv \
-		-o tmp/colornames.c \
-		-r -T -v
+		-t $(PWD)/etc/tpl/color-names/color-names.tpl \
+		-i $(PWD)/etc/colornames.csv \
+		-o $(PWD)/tmp/colornames.c \
+		-r -T 
 ##########################################################
 
 
@@ -118,8 +118,23 @@ push: tidy git-commit
 
 do-bins: make-bins
 
-tidy:
-	@uncrustify -c etc/uncrustify.cfg --replace bins/*.c src/*.c $(shell find include -type f -name "*.h"|grep -v '/embedded-'|tr '\n' ' ')
+
+uncrustify:
+	@uncrustify -c etc/uncrustify.cfg --replace bins/*.c include/*.h src/*.c||true
 	@shfmt -w scripts/*.sh
+#src/*.c $(shell find include -type f -name "*.h"|grep -v tmt|grep -v '/embedded-'|tr '\n' ' ')
+	
+uncrustify-clean:	
 	@find . -type f -name "*unc-back*"|xargs -I % unlink %
 
+fix-dbg:
+	@gsed 's|, % s);|, %s);|g' -i bins/*.c
+	#src/*.c include/*.h
+	@gsed 's|, % lu);|, %lu);|g' -i bins/*.c
+	#src/*.c include/*.h
+	@gsed 's|, % d);|, %d);|g' -i bins/*.c
+	#src/*.c include/*.h
+	@gsed 's|, % zu);|, %zu);|g' -i bins/*.c
+	#src/*.c include/*.h
+
+tidy: uncrustify fix-dbg uncrustify-clean

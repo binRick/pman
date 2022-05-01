@@ -33,6 +33,7 @@ passh = find_program('passh', required : true)
 test_deps = []
 deps = [thread_dep]
 #//***********************************************************/
+pwd = run_command('pwd', check: true).stdout().strip()
 #c = run_command('./scripts/submodule-cmds.sh', check: true)
 #xxxxxxxxx = c.stdout().strip().split('\n')
 #//***********************************************************/
@@ -99,20 +100,9 @@ pman = executable('pman',['bins/pman.c', files(srcs)], dependencies: [deps], inc
 test_env = environment()
 test_env.set('__MESON_TEST_MODE__', '1')
 test_env.set('__SH', sh.full_path())
-test_env.set('TEMPLATE_PATH', '../etc/tpl')
+test_env.set('TEMPLATE_PATH', pwd + '/etc/tpl/color-names')
 test_env.set('__BD', meson.current_build_dir())
 test_env.set('__SD', meson.current_source_dir())
-#////////////////////////////////////////////////////
-embedded_tests = [
-  ['Parse Colors', pman],
-]
-foreach i : embedded_tests
-test(i[0], i[1], args: [
-  '-i', '/tmp/in0', '-o', '/tmp/out0', 
-  '--verbose',  '--test-mode', 
-  '--mode',  'read_test',
-  ],env: test_env)
-endforeach
 #//***********************************************************/
 template0 = executable('template0',
      ['bins/template0.c', files(template),  ], 
@@ -145,7 +135,7 @@ tests = [
   ['spin0', spin0, 'spin0.log'],
   ['tmt0', tmt0, 'tmt0.log'],
   ['commander0', commander0, 'commander0.log'],
-  ['template0', template0],
+  #  ['template0', template0],
   ['vterm0', vterm0],
 ]
 #//***********************************************************/
@@ -157,3 +147,14 @@ endforeach
 #//***********************************************************/
 
 
+#////////////////////////////////////////////////////
+embedded_tests = [
+  ['Parse Colors', pman],
+]
+foreach i : embedded_tests
+test(i[0], i[1], args: [
+  '-i', 'etc/colornames.csv', '-t', 'etc/tpl/color-names/color-names.tpl', '-o', '/tmp/out0', 
+  '--test-mode', 
+  '--mode',  'read_test',
+  ],env: test_env)
+endforeach
