@@ -1,23 +1,25 @@
 #include "../include/includes.h"
-#define VERBOSE      false
-#define WIDTH        "120"
-#define BAT_STYLE    "header,numbers,rule"
-#define SRC_FILE     "../bins/libansilove0.c"
-#define PNG_FILE     "/tmp/ansilove.png"
-#define FILE_NAME    "source.c"
+// MESON_BIN_ENABLED=true
 
-#define CMD_TEMPLATE  "bat --file-name '%s' --italic-text always \
-    --terminal-width " WIDTH " --paging never --force-colorization \
+#define VERBOSE         false
+#define WIDTH           "120"
+#define BAT_STYLE       "header,numbers,rule"
+#define SRC_FILE        "../bins/libansilove0.c"
+#define PNG_FILE        "/tmp/ansilove.png"
+#define FILE_NAME       "source.c"
+
+#define CMD_TEMPLATE    "bat --file-name '%s' --italic-text always \
+    --terminal-width "                         WIDTH " --paging never --force-colorization \
     --style=" BAT_STYLE " --theme=ansi '" SRC_FILE "'"
 
-int                     res; 
-char *src_dirname, *src_basename, *cmd, *bat_content;
+int res;
+char                    *src_dirname, *src_basename, *cmd, *bat_content;
 struct ansilove_ctx     ctx;
 struct ansilove_options options, png_options = {
-  .dos          = false,
-  .diz          = false,
+  .dos = false,
+  .diz = false,
 //  .mode         = ANSILOVE_MODE_TRANSPARENT,
- // .font         = ANSILOVE_FONT_TERMINUS,
+// .font         = ANSILOVE_FONT_TERMINUS,
   .truecolor    = true,
   .icecolors    = true,
   .scale_factor = 2,
@@ -55,18 +57,20 @@ int main(const int argc, const char **argv){
   res = ansilove_savefile(&ctx, PNG_FILE);
   assert_eq(res, 0, %d);
   size_t file_size = fs_size(PNG_FILE);
+
   assert_ge(file_size, 0, %lu);
   ansilove_clean(&ctx);
   char *dur = tq_stop(AC_RESETALL AC_BLUE AC_REVERSED "Total Duration");
-  printf( AC_GREEN_BLACK AC_BOLD 
-          "Wrote %lu bytes to file %s :: %s" 
-          AC_RESETALL "\n"
-          , file_size
-          , PNG_FILE
-          , dur
-          );
+
+  printf(AC_GREEN_BLACK AC_BOLD
+         "Wrote %lu bytes to file %s :: %s"
+         AC_RESETALL "\n",
+         file_size,
+         PNG_FILE,
+         dur
+         );
   return(0);
-}
+} /* main */
 
 
 int bat(){

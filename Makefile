@@ -48,6 +48,8 @@ DEV_CMD_10=\
 #r -T 
 ##########################################################
 
+enabled-bins:
+	@grep 'MESON_BIN_ENABLED=true' bins/*.c|cut -d: -f1|sort -u|xargs -I % basename % .c
 
 pc-cmd:
 	@printf '%s\n' "$(DEV_CMD)"
@@ -137,8 +139,10 @@ do-bins: make-bins
 
 
 uncrustify:
-	@uncrustify -c etc/uncrustify.cfg --replace bins/*.c include/*.h src/*.c||true
+	@uncrustify -c etc/uncrustify.cfg --replace bins/*.c
 	@shfmt -w scripts/*.sh
+
+#	include/*.h src/*.c||true
 #src/*.c $(shell find include -type f -name "*.h"|grep -v tmt|grep -v '/embedded-'|tr '\n' ' ')
 	
 uncrustify-clean:	
@@ -146,12 +150,8 @@ uncrustify-clean:
 
 fix-dbg:
 	@gsed 's|, % s);|, %s);|g' -i bins/*.c
-	#src/*.c include/*.h
 	@gsed 's|, % lu);|, %lu);|g' -i bins/*.c
-	#src/*.c include/*.h
 	@gsed 's|, % d);|, %d);|g' -i bins/*.c
-	#src/*.c include/*.h
 	@gsed 's|, % zu);|, %zu);|g' -i bins/*.c
-	#src/*.c include/*.h
 
 tidy: uncrustify fix-dbg uncrustify-clean

@@ -1,4 +1,5 @@
 #include "../include/includes.h"
+// MESON_BIN_ENABLED=true
 
 #define OK     ((char *)1)
 #define NOK    ((char *)0)

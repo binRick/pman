@@ -1,6 +1,7 @@
 #ifndef VTERM0_C
 #define VTERM0_C
 #include "../include/includes.h"
+// MESON_BIN_ENABLED=false
 //#include "../../libvterms/cryptomilk
 #include "include/vterm.h"
 #include "include/vterm_keycodes.h"

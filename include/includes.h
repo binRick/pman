@@ -76,6 +76,7 @@ static char *get_datetime();
 #include "../submodules/tkvdb/tkvdb.h"
 //////////////////////////////////////
 #include "../deps/is_number/is_number.h"
+#include "../deps/list/list.h"
 #include "../include/int.h"
 #include "../include/template/template.h"
 #include "../src/datetime.c"
@@ -83,8 +84,10 @@ static char *get_datetime();
 //#include "../include/utils.h"
 #include "../include/strconv.h"
 #include "../submodules/c_stringfn/include/stringfn.h"
+#include "../deps/rhash_md5/md5.h"
+#include "../deps/rhash_md5/md5.h"
 
-#define OK(MSG){ printf("\n  \e[32m\u2713 \e[90mOK- %s\e[0m\n\n", MSG); }
+#define OK(MSG){ fprintf(stderr, "\n  \e[32m\u2713 \e[90mOK- %s\e[0m\n\n", MSG); }
 
 
 

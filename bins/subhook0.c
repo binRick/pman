@@ -1,3 +1,5 @@
+#include "../include/includes.h"
+// MESON_BIN_ENABLED=false
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

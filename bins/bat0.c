@@ -1,4 +1,5 @@
 #include "../include/includes.h"
+// MESON_BIN_ENABLED=true
 
 #define CMD    "env sh -c 'bat --force-colorization --style=plain --theme=ansi /tmp/test.c > /tmp/test-bat.c'"
 

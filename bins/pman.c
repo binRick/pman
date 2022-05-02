@@ -1,5 +1,5 @@
-/***********************/
 #include "../include/includes.h"
+// MESON_BIN_ENABLED=true
 /***********************/
 #include "../include/includes-pman.h"
 /***********************/
@@ -528,7 +528,7 @@ int init_parser_args(const int argc, const char **argv){
   ////////////////////////////////////////////////////////////////
   command_init(&cmd, argv[0], PARSER_VERSION);
   command_option(&cmd, "-v", "--verbose", "Enable Verbose Mode", enable_verbose_mode);
-  command_option(&cmd, "-T", "--test-mode", "Enable Test Mode", enable_test_mode);
+  command_option(&cmd, "-T", "--test", "Enable Test Mode", enable_test_mode);
   command_option(&cmd, "-m", "--mode [mode]", "Set Execution Mode", set_execution_mode);
   command_option(&cmd, "-t", "--template [template]", "Set Template File", set_template_file);
   command_option(&cmd, "-i", "--input-file  [in-file]", "Input  Color File", set_input_file);

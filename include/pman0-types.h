@@ -40,4 +40,28 @@ struct color_name_t {
   unsigned long long rgba;
   char               *encoded_log;
   size_t             encoded_log_bytes;
+  char               *unique;
+  char               *ansi;
+  char               *encoded_ansi_code;
 };
+
+#ifndef DEV_COLOR_NAME_STRUCT_DEFINED
+#define DEV_COLOR_NAME_STRUCT_DEFINED
+typedef struct _dev_color_name_t _dev_color_name_t;
+struct _dev_color_name_t {
+    unsigned long      id;
+    char               hex[7];
+    uint32_t           red, green, blue, alpha;
+    char               name[32];
+};
+#endif
+
+void _change_terminal_color(uint8_t r, uint8_t g, uint8_t b){
+      wprintf(COLOR_RGB, r, g, b);
+}
+void _reset_terminal_to_default_color() {
+      wprintf(L"%ls", COLOR_RESET_TO_DEFAULT);
+}
+void _change_terminal_color_name(_dev_color_name_t *cn){
+    _change_terminal_color(cn->red,cn->green,cn->blue);
+}

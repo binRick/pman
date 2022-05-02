@@ -1,4 +1,5 @@
 #include "../include/includes.h"
+// MESON_BIN_ENABLED=true
 
 const int big_number = 10000;
 

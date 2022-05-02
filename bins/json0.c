@@ -1,4 +1,5 @@
 #include "../src/includes.c"
+// MESON_BIN_ENABLED=true
 
 
 void persistence_example(const char *name) {

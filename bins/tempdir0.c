@@ -1,4 +1,5 @@
 #include "../include/includes.h"
+// MESON_BIN_ENABLED=true
 
 
 #define CLEAR_ENV_VARS                            \

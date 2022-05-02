@@ -1,4 +1,5 @@
 #include "../include/includes.h"
+// MESON_BIN_ENABLED=false
 
 
 int main(int argc, char **argv) {
