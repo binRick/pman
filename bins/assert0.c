@@ -1,3 +1,4 @@
+// MESON_BIN_ENABLED=true
 #include "../src/includes.c"
 
 

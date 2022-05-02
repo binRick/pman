@@ -9,7 +9,7 @@
 static int freeProxyCalls = 0;
 
 
-void freeProxy(void *val)      {
+void freeProxy(void *val) {
   ++freeProxyCalls;
   free(val);
 }
@@ -19,7 +19,7 @@ typedef struct {
 } User;
 
 
-static int User_equal(User *a, User *b)            {
+static int User_equal(User *a, User *b) {
   return(0 == strcmp(a->name, b->name));
 }
 
@@ -27,7 +27,7 @@ static int User_equal(User *a, User *b)            {
 // Tests
 
 
-static void test_list_node_new()             {
+static void test_list_node_new() {
   char        *val  = "some value";
   list_node_t *node = list_node_new(val);
 
@@ -36,7 +36,7 @@ static void test_list_node_new()             {
 }
 
 
-static void test_list_rpush()             {
+static void test_list_rpush() {
   // Setup
   list_t      *list = list_new();
   list_node_t *a    = list_node_new("a");
@@ -63,7 +63,7 @@ static void test_list_rpush()             {
 }
 
 
-static void test_list_lpush()             {
+static void test_list_lpush() {
   // Setup
   list_t      *list = list_new();
   list_node_t *a    = list_node_new("a");
@@ -90,7 +90,7 @@ static void test_list_lpush()             {
 }
 
 
-static void test_list_at()             {
+static void test_list_at() {
   // Setup
   list_t      *list = list_new();
   list_node_t *a    = list_node_new("a");
@@ -117,7 +117,7 @@ static void test_list_at()             {
 }
 
 
-static void test_list_destroy()             {
+static void test_list_destroy() {
   // Setup
   list_t *a = list_new();
 
@@ -143,7 +143,7 @@ static void test_list_destroy()             {
 }
 
 
-static void test_list_find()             {
+static void test_list_find() {
   // Setup
   list_t      *langs = list_new();
   list_node_t *js    = list_rpush(langs, list_node_new("js"));
@@ -180,7 +180,7 @@ static void test_list_find()             {
 }
 
 
-static void test_list_remove()             {
+static void test_list_remove() {
   // Setup
   list_t      *list = list_new();
   list_node_t *a    = list_rpush(list, list_node_new("a"));
@@ -215,7 +215,7 @@ static void test_list_remove()             {
 }
 
 
-static void test_list_rpop()             {
+static void test_list_rpop() {
   // Setup
   list_t      *list = list_new();
   list_node_t *a    = list_rpush(list, list_node_new("a"));
@@ -257,7 +257,7 @@ static void test_list_rpop()             {
 }
 
 
-static void test_list_lpop()             {
+static void test_list_lpop() {
   // Setup
   list_t      *list = list_new();
   list_node_t *a    = list_rpush(list, list_node_new("a"));
@@ -295,7 +295,7 @@ static void test_list_lpop()             {
 }
 
 
-static void test_list_iterator_t()             {
+static void test_list_iterator_t() {
   // Setup
   list_t      *list   = list_new();
   list_node_t *tj     = list_node_new("tj");
@@ -340,7 +340,7 @@ static void test_list_iterator_t()             {
 } /* test_list_iterator_t */
 
 
-int main(void)     {
+int main(void) {
   printf("\nlist_t: %ld\n", sizeof(list_t));
   printf("list_node_t: %ld\n", sizeof(list_node_t));
   printf("list_iterator_t: %ld\n\n", sizeof(list_iterator_t));

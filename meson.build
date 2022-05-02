@@ -59,6 +59,8 @@ install_headers([])
 #/////////////////////////////////
 srcs += csv
 srcs += template
+srcs += vterm
+deps += vterm_dep
 #//***********************************************************/
 #pman = executable('pman',['bins/pman.c', files(srcs)], dependencies: [deps], include_directories: [incdir])
 #//***********************************************************/

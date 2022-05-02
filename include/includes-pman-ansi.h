@@ -8,6 +8,7 @@
 #define TRUECOLOR_BG_CODE         "\x1b[48;2;%d;%d;%dm"
 #define RESET_CODE                "\x1b[0m"
 #define COLOR_RGB                 L"\033[38;2;%u;%u;%um"
+#define COLOR_FG_RGB              L"\033[48;2;%u;%u;%um"
 #define COLOR_RESET_TO_DEFAULT    L"\033[0m"
 /***********************/// HEX COLOR CONSTANTS
 #define HEX_LEN                   6

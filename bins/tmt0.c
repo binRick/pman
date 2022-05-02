@@ -1,3 +1,4 @@
+// MESON_BIN_ENABLED=true
 #define _XOPEN_SOURCE
 #include "../include/includes.h"
 #include "../include/tmt.h"

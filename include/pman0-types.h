@@ -47,8 +47,8 @@ struct color_name_t {
 
 #ifndef DEV_COLOR_NAME_STRUCT_DEFINED
 #define DEV_COLOR_NAME_STRUCT_DEFINED
-typedef struct _dev_color_name_t _dev_color_name_t;
-struct _dev_color_name_t {
+typedef struct dev_color_name_t dev_color_name_t;
+struct dev_color_name_t {
     unsigned long      id;
     char               hex[7];
     uint32_t           red, green, blue, alpha;
@@ -56,12 +56,18 @@ struct _dev_color_name_t {
 };
 #endif
 
+void _change_terminal_color_fg(uint8_t r, uint8_t g, uint8_t b){
+      wprintf(COLOR_FG_RGB, r, g, b);
+}
 void _change_terminal_color(uint8_t r, uint8_t g, uint8_t b){
       wprintf(COLOR_RGB, r, g, b);
 }
 void _reset_terminal_to_default_color() {
       wprintf(L"%ls", COLOR_RESET_TO_DEFAULT);
 }
-void _change_terminal_color_name(_dev_color_name_t *cn){
+void _change_terminal_color_name_fg(dev_color_name_t *cn){
+    _change_terminal_color_fg(cn->red,cn->green,cn->blue);
+}
+void _change_terminal_color_name(dev_color_name_t *cn){
     _change_terminal_color(cn->red,cn->green,cn->blue);
 }
