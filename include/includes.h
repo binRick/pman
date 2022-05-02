@@ -83,3 +83,12 @@ static char *get_datetime();
 //#include "../include/utils.h"
 #include "../include/strconv.h"
 #include "../submodules/c_stringfn/include/stringfn.h"
+
+#define OK(MSG){ printf("\n  \e[32m\u2713 \e[90mOK- %s\e[0m\n\n", MSG); }
+
+
+
+
+
+
+

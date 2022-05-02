@@ -154,6 +154,10 @@ bin_tests = [
         dependencies: [deps],
         include_directories: [incdir]
   )],
+  ['csv0', executable('csv0',['bins/csv0.c', files(srcs),  ], 
+        dependencies: [deps],
+        include_directories: [incdir]
+  )],
 ]  
 #//***********************************************************/
 pman_tests = [
