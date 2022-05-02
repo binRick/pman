@@ -1,4 +1,5 @@
 #pragma once
+#define _DEFAULT_SOURCE
 #define ASSERTF_DEF_ONCE
 /////////////////////////////////////////////////////
 #include <assert.h>
@@ -6,15 +7,25 @@
 #include <errno.h>
 #include <getopt.h>
 #include <glob.h>
+#include <inttypes.h>
+#include <libgen.h>
+#include <locale.h>
+#include <locale.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <sysexits.h>
 #include <time.h>
 #include <time.h>
 #include <unistd.h>
+#include <unistd.h>
+#include <unistd.h>
+#include <wchar.h>
+#include <wctype.h>
 /////////////////////////////////////////////////////
 #include "../include/includes-pman-ansi.h"
 /////////////////////////////////////////////////////
@@ -49,15 +60,16 @@ static char *get_datetime();
 #include "../submodules/csv_parser/csv.h"
 #include "../submodules/env.h/env.h"
 #include "../submodules/fsio/include/fsio.h"
+#include "../submodules/libansilove/include/ansilove.h"
 #include "../submodules/libconfuse/src/confuse.h"
 #include "../submodules/libdotenv/dot_env.h"
 #include "../submodules/libterminput/libterminput.h"
 #include "../submodules/scriptexec/include/scriptexec.h"
 #include "../submodules/simpleconf/simpleconf.h"
 #include "../submodules/spin/spin.h"
-#include "../submodules/wildcardcmp/wildcardcmp.h"
-#include "../submodules/uptime/include/uptime/uptime.h"
 #include "../submodules/tiny-regex-c/re.h"
+#include "../submodules/uptime/include/uptime/uptime.h"
+#include "../submodules/wildcardcmp/wildcardcmp.h"
 //#include "../submodules/liblogger/logger.h"
 #include "../submodules/subprocess.h/subprocess.h"
 #include "../submodules/tercontrol/tercontrol.h"

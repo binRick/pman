@@ -1,9 +1,7 @@
 #include "../include/includes.h"
 
 
-
 int main(const int argc, const char **argv){
-
   // positive
   assert(1 == wildcardcmp("foo*", "foo"));
   assert(1 == wildcardcmp("foobar", "foobar"));
@@ -24,6 +22,7 @@ int main(const int argc, const char **argv){
   assert(0 == wildcardcmp("foobar", NULL));
   // the whole point of this lib
   char *DEBUG = "clib:*";
+
   assert(1 == wildcardcmp(DEBUG, "clib:package"));
   assert(1 == wildcardcmp(DEBUG, "clib:install"));
   assert(1 == wildcardcmp(DEBUG, "clib:search"));

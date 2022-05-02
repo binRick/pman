@@ -1,34 +1,23 @@
-/* calculate words frequency */
-#include <errno.h>
-#include <inttypes.h>
-#include <locale.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <wchar.h>
-#include <wctype.h>
-
+#include "../include/includes.h"
+/* calculate words frequency
+ */
 #include "tkvdb.h"
-
 /* min transaction buffer size */
 #define MIN_TR_SIZE    100000
 
 /* transaction size, 100M by default */
 static size_t   trsize = 100 * 1024 * 1024;
-static char     *db_file = "words.tkvdb";
-static int      verbose = 1;
+static char     *db_file = "../etc/words0.tkvdb";
+static int      verbose = 0;
 static uint64_t nwords_total = 0, nwords_db = 0, nlines = 1;
 
 
 static void debug_commit_msg() {
-  if (verbose) {
-    fprintf(stderr, "Flushing transaction"
-            ", lines of text %" PRIu64
-            ", words %" PRIu64
-            ", words in database %" PRIu64 "\n",
-            nlines, nwords_total, nwords_db);
-  }
+  fprintf(stdout, "Flushing transaction"
+          ", lines of text %" PRIu64
+          ", words %" PRIu64
+          ", words in database %" PRIu64 "\n",
+          nlines, nwords_total, nwords_db);
 }
 
 
@@ -72,9 +61,7 @@ static int add_word(tkvdb_tr *tr, tkvdb_datum *dtk) {
   }
 
   /* not found, try to add new word */
-  if (verbose > 1) {
-    fprintf(stderr, "Adding word '%ls'\n", (wchar_t *)dtk->data);
-  }
+  fprintf(stderr, "Adding word '%ls'\n", (wchar_t *)dtk->data);
 
   rc = tr->put(tr, dtk, &one);
   if (rc == TKVDB_ENOMEM) {

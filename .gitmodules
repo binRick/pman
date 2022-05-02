@@ -121,3 +121,9 @@
 [submodule "submodules/tempdir"]
 	path = submodules/tempdir
 	url = https://github.com/stephenmathieson/tempdir.c
+[submodule "submodules/path_module"]
+	path = submodules/path_module
+	url = https://github.com/PrajwalCH/path_module
+[submodule "submodules/dirname"]
+	path = submodules/dirname
+	url = https://github.com/prodisDown/dirname

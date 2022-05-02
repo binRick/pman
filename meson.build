@@ -6,6 +6,7 @@ test_deps = []
 srcs = []
 pman_test_env = environment()
 test_env = environment()
+cc = meson.get_compiler('c')
 #//***********************************************************/
 find_deps_cmd = 'find meson/deps -type f -name meson.build|xargs dirname|sort -u'
 csv = ['submodules/csv_parser/csv.c','submodules/csv_parser/split.c','submodules/csv_parser/fread_csv_line.c']
@@ -38,7 +39,6 @@ vterm_dep = dependency('vterm', required : true)
 #//***********************************************************/
 opts.set_override_option('werror', 'false')
 opts.set_override_option('warning_level', '1')
-cc = meson.get_compiler('c')
 #//***********************************************************/
 incdir = include_directories(
   '.',
@@ -118,6 +118,10 @@ bin_tests = [
         dependencies: [deps],
         include_directories: [incdir]
   )],
+  ['tkvdb1', executable('tkvdb1',['bins/tkvdb1.c', files(srcs),  ], 
+        dependencies: [deps],
+        include_directories: [incdir]
+  )],
   ['scriptexec0', executable('scriptexec0',['bins/scriptexec0.c', files(srcs),  ], 
         dependencies: [deps],
         include_directories: [incdir]
@@ -139,6 +143,14 @@ bin_tests = [
         include_directories: [incdir]
   )],
   ['uptime0', executable('uptime0',['bins/uptime0.c', files(srcs),  ], 
+        dependencies: [deps],
+        include_directories: [incdir]
+  )],
+  ['libansilove0', executable('libansilove0',['bins/libansilove0.c', files(srcs),  ], 
+        dependencies: [deps],
+        include_directories: [incdir]
+  )],
+  ['bat0', executable('bat0',['bins/bat0.c', files(srcs),  ], 
         dependencies: [deps],
         include_directories: [incdir]
   )],
