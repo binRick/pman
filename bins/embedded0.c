@@ -27,14 +27,21 @@ void ansi_bar(dev_color_name_t *cn){
 int main(const int argc, const char **argv){
   for (int i = 0; i < COLOR_NAMES_QTY; i++) {
     if ((i < 10) || (i > (COLOR_NAMES_QTY - 10))) {
-      ansi_bar(&COLOR_NAMES[i]);
-      continue;
+      if ((argc == 2) && (strcmp(argv[1], "--test") == 0)) {
+        if (i >= 10) {
+          exit(0);
+        }
+      }
       _change_terminal_color_name(&COLOR_NAMES[i]);
-      printf("%s|%s\n",
+      printf("|%s|%s|%lubyte image|%s|\n",
              COLOR_NAMES[i].name,
-             COLOR_NAMES[i].hex
+             COLOR_NAMES[i].hex,
+             COLOR_NAMES[i].path_size,
+             COLOR_NAMES[i].encoded_path_contents
              );
       _reset_terminal_to_default_color();
+
+      //ansi_bar(&COLOR_NAMES[i]);
     }
   }
   dbg(COLOR_NAMES_QTY, %lu);

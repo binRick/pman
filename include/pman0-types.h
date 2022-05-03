@@ -50,10 +50,13 @@ struct color_name_t {
 typedef struct dev_color_name_t dev_color_name_t;
 struct dev_color_name_t {
     unsigned long      id;
-    char               hex[7];
     uint32_t           red, green, blue, alpha;
-    char               name[32];
+    char               hex[7], name[32], path[256], encoded_path_contents[1024];
+    bool               exists;
+    size_t             path_size;
 };
+const size_t COLOR_NAMES_QTY = 0;
+dev_color_name_t COLOR_NAMES[] = { };
 #endif
 
 void _change_terminal_color_fg(uint8_t r, uint8_t g, uint8_t b){

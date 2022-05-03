@@ -85,20 +85,6 @@ foreach b : enabled_bins
         )
       }
 endforeach
-#//***********************************************************/
-#pman_tests = [
-#  ['Parse Colors', pman,  pman_test_env, ['-i', pwd + '/etc/colornames.csv', '-t', pwd + '/etc/tpl/color-names/color-names.tpl', '-c']],
-#]
-#//***********************************************************/
 foreach b : bins
   test(b['name'], b['executable'], args: ['--test'], env: test_env)
 endforeach
-#foreach i : bin_tests
-#  test(i[0], i[1], args: ['--test'], env: test_env)
-#endforeach
-#//***********************************************************/
-#foreach t : pman_tests
-#  test(t[0], t[1], args: t[3], env: t[2])
-#endforeach
-#//***********************************************************/
-

@@ -1,11 +1,14 @@
 #include "../src/includes.c"
 // MESON_BIN_ENABLED=true
 #define RESIZE_SCRIPT_TEMPLATE    "env RESIZE_WIDTH=%u RESIZE_HEIGHT=%u ../../ansi/get_rgb_image.sh %u %u %u"
-#define VERBOSE_MODE false
-#define COLOR_BOUNDARY            8
+#define VERBOSE_MODE              false
+#define COLOR_BOUNDARY            1
 #define WIDTH                     40
 #define HEIGHT                    20
-#define IMAGES_QTY                (256 / COLOR_BOUNDARY) * (256 / COLOR_BOUNDARY) * (256 / COLOR_BOUNDARY)
+#define RED_LIMIT                 10
+#define GREEN_LIMIT               10
+#define BLUE_LIMIT                10
+#define IMAGES_QTY                (RED_LIMIT / COLOR_BOUNDARY) * (GREEN_LIMIT / COLOR_BOUNDARY) * (BLUE_LIMIT / COLOR_BOUNDARY)
 
 typedef struct resize_request resize_request;
 struct resize_request {
@@ -23,17 +26,18 @@ struct subprocess_s subprocess;
 int resize();
 
 
-int main(const int argc, const char **argv){    
+int main(const int argc, const char **argv){
   int qty = 0;
+
   if ((argc == 2) && (strcmp(argv[1], "--test") == 0)) {
     OK("Test Mode");
     return(0);
   }
 
   printf("Generating %d Images\n", IMAGES_QTY);
-  for (int red = 0; red < 256; red += COLOR_BOUNDARY) {
-    for (int green = 0; green < 256; green += COLOR_BOUNDARY) {
-      for (int blue = 0; blue < 256; blue += COLOR_BOUNDARY) {
+  for (int red = 0; red < RED_LIMIT; red += COLOR_BOUNDARY) {
+    for (int green = 0; green < GREEN_LIMIT; green += COLOR_BOUNDARY) {
+      for (int blue = 0; blue < BLUE_LIMIT; blue += COLOR_BOUNDARY) {
         qty++;
         resize_request r = {
           .width     = WIDTH,
@@ -62,8 +66,9 @@ int resize(resize_request *r){
   char *cmd = malloc(strlen(RESIZE_SCRIPT_TEMPLATE) + 32);
 
   sprintf(cmd, RESIZE_SCRIPT_TEMPLATE, r->width, r->height, r->red, r->green, r->blue);
-    if(VERBOSE_MODE)
-  dbg(cmd, %s);
+  if (VERBOSE_MODE) {
+    dbg(cmd, %s);
+  }
 
   const char *command_line[] = { "/bin/sh", "-c", cmd, NULL };
 
@@ -74,16 +79,18 @@ int resize(resize_request *r){
     FILE *p_stderr = subprocess_stdout(&subprocess);
     char *err      = malloc(1024);
     fgets(err, 1024 * 16, p_stderr);
-    if(VERBOSE_MODE)
-    dbg(err, %s);
+    if (VERBOSE_MODE) {
+      dbg(err, %s);
+    }
     free(err);
   }else{
     assert_eq(result, 0, %d);
     FILE *p_stdout = subprocess_stdout(&subprocess);
     char *out      = malloc(1024);
     fgets(out, 1024, p_stdout);
-    if(VERBOSE_MODE)
-    dbg(r->exit_code, %d);
+    if (VERBOSE_MODE) {
+      dbg(r->exit_code, %d);
+    }
     r->path = trim(out);
     free(out);
   }

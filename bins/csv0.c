@@ -2,35 +2,37 @@
 // MESON_BIN_ENABLED=true
 /***********************/
 #include "../src/pman-init.c"
+#define COLOR_IMAGE_PATH_TEMPLATE    "../../ansi/pngs/color-resized-%u-%u-%u-40x20.png"
 /***********************/
-#define DEBUG_ARGUMENTS           false
+#define DEBUG_ARGUMENTS              false
 /***********************/
-#define DEFAULT_QTY_LIMIT         10
+#define DEFAULT_QTY_LIMIT            10
 //#define MAX_QTY_LIMIT                     35000
-#define MAX_QTY_LIMIT             100
-#define VERBOSE_DEBUG_MODE        false
-#define MAX_FILE_SIZE             128
-#define PARSER_VERSION            "0.0.1"
-#define MD5_LEN                   16
-#define DEBUG_COLORS              false
-#define DEFAULT_INPUT_FILE        "../etc/colornames.csv"
-#define DEFAULT_OUTPUT_FILE       "/dev/null"
-#define DEFAULT_COLORS_QTY        10
-#define MAX_COLORS_QTY            100000
-#define MAX_NAME_LENGTH           32
-#define ANSI_TEMPLATE             "38;2;%u;%u;%u"
-#define ANSI_TEMPLATE_PREFIX      "\033"
-#define ANSI_TEMPLATE_SUFFIX      "m"
-#define COLOR_RESET_TO_DEFAULT    L"\033[0m"
-#define COLOR_NAME_T_STRUCT       "\
+#define MAX_QTY_LIMIT                100
+#define VERBOSE_DEBUG_MODE           false
+#define MAX_FILE_SIZE                128
+#define PARSER_VERSION               "0.0.1"
+#define MD5_LEN                      16
+#define DEBUG_COLORS                 false
+#define DEFAULT_INPUT_FILE           "../etc/colornames.csv"
+#define DEFAULT_OUTPUT_FILE          "/dev/null"
+#define DEFAULT_COLORS_QTY           10
+#define MAX_COLORS_QTY               100000
+#define MAX_NAME_LENGTH              32
+#define ANSI_TEMPLATE                "38;2;%u;%u;%u"
+#define ANSI_TEMPLATE_PREFIX         "\033"
+#define ANSI_TEMPLATE_SUFFIX         "m"
+#define COLOR_RESET_TO_DEFAULT       L"\033[0m"
+#define COLOR_NAME_T_STRUCT          "\
 #include <stdio.h>\n\
 #include <stdlib.h>\n\
 typedef struct dev_color_name_t dev_color_name_t;\n\
 struct dev_color_name_t {\n\
   unsigned long      id;\n\
-  char               hex[7];\n\
   uint32_t           red, green, blue, alpha;\n\
-  char               name[32];\n\
+  char               hex[7], name[32], path[256], encoded_path_contents[1024];\n\
+  bool               exists;\n\
+  size_t             path_size;\n\
 };"
 /***********************/// ANSI Structs
 /***********************/
@@ -48,6 +50,7 @@ struct pman_args_t {
 struct render_t {
   list_t       *unique_list;
   StringBuffer *out_buffer;
+  size_t       processed_qty;
   size_t       in_bytes;
   int          in_exists;
   size_t       in_lines_qty;
@@ -158,10 +161,9 @@ int init_parser_args(const int argc, const char **argv){
 
 
 int main(const int argc, const char **argv) {
-  size_t qty;
-  char   *dur_msg = malloc(1024);
-  short  prop_val_ok;
-  char   **s = malloc(1024);
+  char  *dur_msg = malloc(1024);
+  short prop_val_ok;
+  char  **s = malloc(1024);
 
   tq_set_unit(tq_MILLISECONDS);
   tq_start(NULL);
@@ -240,8 +242,26 @@ int main(const int argc, const char **argv) {
     list_lpush(ro->unique_list, item);
     list_iterator_destroy(it);
 
-    char *__dat = malloc(1024 * 2);
 
+    char *PATH = malloc(1024 * 2);
+
+    sprintf(PATH, COLOR_IMAGE_PATH_TEMPLATE,
+            cn->red, cn->green, cn->blue
+            );
+
+    bool exists = (bool)((fs_exists(PATH) == 0) ? true : false);
+
+    if (!exists) {
+      continue;
+    }
+
+    size_t SIZE                   = (size_t)(exists ? fs_size(PATH) : 0);
+    char   *encoded_path_contents = (char *)(b64_encode((const unsigned char *)fsio_read_binary_file(PATH), SIZE));
+    // sprintf(encoded_path_contents, "%s", encoded_path_contents);
+///    encoded_path_contents[strlen(encoded_path_contents)] = NULL;
+
+
+    char *__dat = malloc(1024 * 2);
     sprintf(
       __dat,
       "  "
@@ -250,32 +270,38 @@ int main(const int argc, const char **argv) {
       ".hex = \"%s\", "
       ".red = %d, .green = %d, .blue = %d, .alpha = %d, "
       ".name = \"%.32s\", "
+      ".path = \"%s\", "
+      ".exists = %d, "
+      ".path_size = %lu, "
+      ".encoded_path_contents = \"%s\", "
       "},\n",
-      qty,
+      ro->processed_qty,
       cn->hex,
       cn->red,
       cn->green,
       cn->blue,
       cn->alpha,
-      cn->name
+      cn->name,
+      PATH,
+      exists,
+      SIZE,
+      encoded_path_contents
       );
+    //(exists ? fs_size(PATH) : 0)
     stringbuffer_append_string(ro->out_buffer, __dat);
+    ro->processed_qty++;
     if (parser_args->verbose_mode) {
-      _change_terminal_color_name(cn);
-      fprintf(stdout, "%s", __dat);
-      _reset_terminal_to_default_color();
+      // _change_terminal_color_name(cn);
+      // fprintf(stdout, "%s", __dat);
+      // _reset_terminal_to_default_color();
     }
 
     free(__dat);
-    qty++;
-    if (qty >= ro->InputLines.count) {
-      break;
-    }
   }
   char *dur = tq_stop("Duration");
 
   stringbuffer_append_string(ro->out_buffer, "};\nconst size_t COLOR_NAMES_QTY = ");
-  stringbuffer_append_int(ro->out_buffer, qty);
+  stringbuffer_append_unsigned_long(ro->out_buffer, ro->processed_qty);
   stringbuffer_append_string(ro->out_buffer, ";\n");
   stringbuffer_append_string(ro->out_buffer, "#endif\n");
   fs_write(parser_args->output_file, stringbuffer_to_string(ro->out_buffer));
@@ -283,7 +309,7 @@ int main(const int argc, const char **argv) {
   sprintf(dur_msg,
           "Processed %lu Colors from %lu byte file with %d lines :: %s"
           "\nWrote %lu bytes to %s",
-          qty,
+          ro->processed_qty,
           ro->in_bytes,
           ro->InputLines.count,
           dur,
