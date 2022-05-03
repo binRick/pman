@@ -1,5 +1,5 @@
-#include "../src/includes.c"
 // MESON_BIN_ENABLED=true
+#include "../include/includes.h"
 
 int                 exited, result;
 struct subprocess_s subprocess;
@@ -37,6 +37,7 @@ int main(void){
   assert_eq(result, 0, %d);
   dbg(exited, %d);
   assert_eq(exited, 1, %d);
+
 
   return(0);
 }

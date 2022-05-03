@@ -4,7 +4,7 @@
 
 int main(const int argc, const char **argv){
   // positive
-  assert(1 == wildcardcmp("foo*", "foo"));
+  assert_eq(1, wildcardcmp("foo*", "foo"), %d);
   assert(1 == wildcardcmp("foobar", "foobar"));
   assert(1 == wildcardcmp("*", "foobar"));
   assert(1 == wildcardcmp("foo*", "foobar"));
