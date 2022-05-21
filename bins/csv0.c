@@ -30,18 +30,18 @@ int main(const int argc, const char **argv) {\n\
 }\n\
 "
 #define COLOR_NAME_T_STRUCT              "\
-\#include <stdio.h>\n\
-\#include <stdlib.h>\n\
-\#include <stdbool.h>\n\
+#include <stdio.h>\n\
+#include <stdlib.h>\n\
+#include <stdbool.h>\n\
 \#ifndef COLOR_NAME_STRUCT_DEFINED\n\
-\#define COLOR_NAME_STRUCT_DEFINED\n\
+#define COLOR_NAME_STRUCT_DEFINED\n\
 typedef struct color_name_t {\n\
   unsigned long      id;\n\
   uint32_t           red, green, blue, alpha;\n\
   bool               exists;\n\
   size_t             path_size;\n\
   char               hex[7], name[64], path[256], encoded_path_contents[1024];\n\
-} color_name_t;"
+} color_name_t;\n"
 /***********************/// ANSI Structs
 typedef struct test_struct {
   int a;
