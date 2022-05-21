@@ -30,9 +30,9 @@ int main(const int argc, const char **argv) {\n\
 }\n\
 "
 #define COLOR_NAME_T_STRUCT              "\
-#include <stdio.h>\n\
-#include <stdlib.h>\n\
-#include <stdbool.h>\n\
+\#include <stdio.h>\n\
+\#include <stdlib.h>\n\
+\#include <stdbool.h>\n\
 \#ifndef COLOR_NAME_STRUCT_DEFINED\n\
 \#define COLOR_NAME_STRUCT_DEFINED\n\
 typedef struct color_name_t {\n\
@@ -43,6 +43,10 @@ typedef struct color_name_t {\n\
   char               hex[7], name[64], path[256], encoded_path_contents[1024];\n\
 } color_name_t;"
 /***********************/// ANSI Structs
+typedef struct test_struct {
+  int a;
+  int b;
+} test_struct;
 /***********************/
 typedef struct render_t          render_t;
 typedef struct StringFNStrings   Strings;
@@ -67,8 +71,10 @@ struct render_t {
   Strings      InputLines;
   StringBuffer *Input;
 };
+test_struct         *test0;
+struct djbhash_node *item;
 /***********************/
-render_t *ro; static pman_args_t *parser_args;
+render_t            *ro; static pman_args_t *parser_args;
 
 
 char *encoded_hash(const char *str){
@@ -123,6 +129,7 @@ int init_parser_args(const int argc, const char **argv){
   if (parser_args != NULL) {
     return(0);
   }
+  ////////////////////////////////////////////////////////////////
   ro = malloc(sizeof(struct render_t));
   ////////////////////////////////////////////////////////////////
   ro->in_bytes   = 0;
@@ -169,10 +176,14 @@ int init_parser_args(const int argc, const char **argv){
 
 
 int main(const int argc, const char **argv) {
-  ////////////////////////////////////////////////////////
   assert_eq(init_parser_args(argc, argv), 0, %d);
   tq_set_unit(tq_MILLISECONDS);
   tq_start(NULL);
+  ////////////////////////////////////////////////////////////////
+  struct djbhash *djb__hash;
+
+  djb__hash = malloc(sizeof(struct djbhash));
+  djbhash_init(djb__hash);
   ////////////////////////////////////////////////////////
 
   ////////////////////////////////////////////////////////
@@ -208,7 +219,9 @@ int main(const int argc, const char **argv) {
   ////////////////////////////////////////////////////////
 
 
-  for (int i = 0; (ro->processed_qty < parser_args->colors_qty) && (ro->processed_qty <= MAX_COLORS_QTY); i++) {
+  for (int i = 0; (i < ro->InputLines.count) && (ro->processed_qty < parser_args->colors_qty) && (ro->processed_qty <= MAX_COLORS_QTY); i++) {
+    ro->processed_qty++;
+
     if (strlen(ro->InputLines.strings[i]) < 3 || strsplit(ro->InputLines.strings[i], s, ",") != 2) {
       continue;
     }
@@ -232,6 +245,7 @@ int main(const int argc, const char **argv) {
     cn->ansi              = malloc(1024);
     cn->encoded_ansi_code = malloc(1024);
     char *encoded_ansi_code = malloc(1024);
+
     if (cn->red < 0 || cn->red > 256 || cn->green < 0 || cn->green > 256 || cn->blue < 0 || cn->blue > 256 || cn->alpha < 0 || cn->alpha > 256) {
       continue;
     }
@@ -240,21 +254,15 @@ int main(const int argc, const char **argv) {
     sprintf(encoded_ansi_code, "%s%s%s", ANSI_TEMPLATE_PREFIX, cn->ansi, ANSI_TEMPLATE_SUFFIX);
     sprintf(cn->encoded_ansi_code, "%s", (char *)b64_encode((const unsigned char *)encoded_ansi_code, strlen(encoded_ansi_code)));
 
-    list_node_t     *item = list_node_new(cn->hex);
-    list_node_t     *node;
-    bool            found = false;
-    list_iterator_t *it   = list_iterator_new(ro->unique_list, LIST_HEAD);
-    while ((node = list_iterator_next(it))) {
-      if (strcmp(cn->hex, (char *)node->val) == 0) {
-        found = true;
-        break;
-      }
-    }
-    if (found) {
+    list_node_t *item = list_node_new(cn->hex);
+    list_node_t *node;
+    tq_start(NULL);
+
+    if (djbhash_find(djb__hash, cn->hex) != NULL) {
       continue;
     }
-    list_lpush(ro->unique_list, item);
-    list_iterator_destroy(it);
+
+    djbhash_set(djb__hash, cn->hex, item, DJBHASH_OTHER);
 
 
     char *PATH = malloc(1024 * 2);
@@ -272,8 +280,6 @@ int main(const int argc, const char **argv) {
     size_t path_size = (size_t)(exists ? fs_size(PATH) : 0);
     path_size_sum += path_size;
     char   *encoded_path_contents = (char *)(b64_encode((const unsigned char *)fsio_read_binary_file(PATH), path_size));
-    // sprintf(encoded_path_contents, "%s", encoded_path_contents);
-///    encoded_path_contents[strlen(encoded_path_contents)] = NULL;
 
 
     char *__dat = malloc(1024 * 2);
@@ -313,7 +319,6 @@ int main(const int argc, const char **argv) {
       _reset_terminal_to_default_color();
     }
 
-    ro->processed_qty++;
     free(__dat);
   }
   char *dur = tq_stop("Duration");

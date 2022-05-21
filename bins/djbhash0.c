@@ -6,26 +6,26 @@ typedef struct test_struct {
   int b;
 } test_struct;
 
-int temp = 10, temp_arr[] = { 8, 6, 7, 5, 3, 0, 9 };
-double temp2 = 3.14159;
-char temp3 = 'a', *mystr0 = "abc123", *missing = "missing key", _msg[1024], *msg = (char*)(&_msg);
-test_struct test = {
-      .a = 10,
-      .b = 20,
+int                 temp = 10, temp_arr[] = { 8, 6, 7, 5, 3, 0, 9 };
+double              temp2 = 3.14159;
+char                temp3 = 'a', *mystr0 = "abc123", *missing = "missing key", _msg[1024], *msg = (char *)(&_msg);
+test_struct         test = {
+  .a = 10,
+  .b = 20,
 };
-test_struct *test0;
+test_struct         *test0;
 struct djbhash_node *item;
 
+
 int main(int argc, char *argv[]){
-  struct djbhash      hash, temp_hash = { NULL };
+  struct djbhash hash, temp_hash = { NULL };
 
   djbhash_init(&hash);
   djbhash_init(&temp_hash);
 
-  test0 = calloc(1, sizeof(test_struct));
+  test0    = calloc(1, sizeof(test_struct));
   test0->a = 101;
   test0->b = 666;
-
 
   djbhash_set(&hash, "int", &temp, DJBHASH_INT);
   djbhash_set(&hash, "double", &temp2, DJBHASH_DOUBLE);
@@ -76,20 +76,20 @@ int main(int argc, char *argv[]){
 
   item = djbhash_find(&hash, "other");
   assert_nonnull(item);
-  printf(" test.a: %d\n", (*((test_struct*)(item->value))).a);
-  printf(" test.b: %d\n", (*((test_struct*)(item->value))).b);
+  printf(" test.a: %d\n", (*((test_struct *)(item->value))).a);
+  printf(" test.b: %d\n", (*((test_struct *)(item->value))).b);
 
   item = djbhash_find(&hash, "test0");
   assert_nonnull(item);
-  printf(" test0->a: %d\n", ((test_struct*)(item->value))->a);
-  printf(" test0->b: %d\n", ((test_struct*)(item->value))->b);
+  printf(" test0->a: %d\n", ((test_struct *)(item->value))->a);
+  printf(" test0->b: %d\n", ((test_struct *)(item->value))->b);
 
   if (djbhash_find(&hash, "int") != NULL) {
-      OK("Removing key \"int\"...");
-      djbhash_remove(&hash, "int");
-      if (djbhash_find(&hash, "int") == NULL) {
-        OK("int removed");
-      }
+    OK("Removing key \"int\"...");
+    djbhash_remove(&hash, "int");
+    if (djbhash_find(&hash, "int") == NULL) {
+      OK("int removed");
+    }
   }
 
   // Print all items.
@@ -98,12 +98,16 @@ int main(int argc, char *argv[]){
 
   // Iterate through items.
   OK("Iterating...");
-  unsigned int qty=0;
+  unsigned int qty = 0;
+
   for (item = djbhash_iterate(&hash); item != NULL; item = djbhash_iterate(&hash), qty++) {
-    printf("Item #%d- ", qty);
+    printf("Item #%d |\n", qty);
+    printf("       count:   %20d |\n", item->count);
+    printf("       key:     %20s |\n", item->key);
+    printf("       type:    %20d |\n", item->data_type);
+    printf("       active:  %20d |\n", hash.active_count);
     djbhash_print(item);
   }
-  // Reset the iterator.
   djbhash_reset_iterator(&hash);
 
 
@@ -116,7 +120,10 @@ int main(int argc, char *argv[]){
     OK(msg);
   }
 
-  sprintf(msg, "Hash to json: %s", (char*)(djbhash_to_json(&hash)));
+  sprintf(msg, "temp_hash to json: %s", (char *)(djbhash_to_json(&temp_hash)));
+  OK(msg);
+
+  sprintf(msg, "hash to json: %s", (char *)(djbhash_to_json(&hash)));
   OK(msg);
 
   // Remove all items and free memory.

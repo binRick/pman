@@ -379,7 +379,7 @@ static const char *zShellStatic = 0;
 
 static void shellstaticFunc(sqlite3_context *context,
                             int             argc,
-                            sqlite3_value   **argv)                       {
+                            sqlite3_value   **argv) {
   assert(0 == argc);
   assert(zShellStatic);
   UNUSED_PARAMETER(argc);
@@ -1029,7 +1029,7 @@ static int shell_callback(void *pArg, int nArg, char **azArg, char **azCol, int 
   }
   } /* switch */
   return(0);
-} /* shell_callback */
+}   /* shell_callback */
 
 
 /*
@@ -1709,7 +1709,7 @@ static int dump_callback(void *pArg, int nArg, char **azArg, char **azCol){
 ** "ORDER BY rowid DESC" to the end.
 */
 static int run_schema_dump_query(ShellState *p,
-                                 const char *zQuery)                     {
+                                 const char *zQuery) {
   int  rc;
   char *zErr = 0;
 
@@ -1820,7 +1820,7 @@ static int process_input(ShellState *p, FILE *in);
 */
 static void readfileFunc(sqlite3_context *context,
                          int             argc,
-                         sqlite3_value   **argv)                       {
+                         sqlite3_value   **argv) {
   const char *zName;
   FILE       *in;
   long       nIn;
@@ -1855,7 +1855,7 @@ static void readfileFunc(sqlite3_context *context,
 */
 static void writefileFunc(sqlite3_context *context,
                           int             argc,
-                          sqlite3_value   **argv)                       {
+                          sqlite3_value   **argv) {
   FILE          *out;
   const char    *z;
   sqlite3_int64 rc;
@@ -2234,7 +2234,7 @@ static char *csv_read_one_field(CSVReader *p){
 */
 static void tryToCloneData(ShellState *p,
                            sqlite3    *newDb,
-                           const char *zTable)                     {
+                           const char *zTable) {
   sqlite3_stmt *pQuery  = 0;
   sqlite3_stmt *pInsert = 0;
   char         *zQuery  = 0;
@@ -2348,7 +2348,7 @@ end_data_xfer:
 static void tryToCloneSchema(ShellState *p,
                              sqlite3 *newDb,
                              const char *zWhere,
-                             void ( *xForEach )(ShellState *, sqlite3 *, const char *))                                                    {
+                             void ( *xForEach )(ShellState *, sqlite3 *, const char *)) {
   sqlite3_stmt        *pQuery = 0;
   char                *zQuery = 0;
   int                 rc;
