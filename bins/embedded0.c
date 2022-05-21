@@ -1,22 +1,22 @@
 // MESON_BIN_ENABLED=true
-#include "../include/includes.h"
+////////////////////////////////////////////////////
+#include "../src/includes.c"
 ////////////////////////////////////////////////////
 #include "../include/embedded-colornames-dev.h"
-////////////////////////////////////////////////////
 #include "../include/pman0-types.h"
 
 
 ////////////////////////////////////////////////////
 
 
-void ansi_bar_fg(dev_color_name_t *cn){
+void ansi_bar_fg(color_name_t *cn){
   _change_terminal_color_name(cn);
   printf("##################################################\n");
   _reset_terminal_to_default_color();
 }
 
 
-void ansi_bar(dev_color_name_t *cn){
+void ansi_bar(color_name_t *cn){
   _change_terminal_color_name_fg(cn);
   //printf("##################################################\n");
   printf("                                                  \n");

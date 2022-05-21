@@ -95,7 +95,7 @@ void callback(tmt_msg_t m, TMT *vt, const void *a, void *p){
       );
     break;
   } /* switch */
-} /* callback */
+}   /* callback */
 
 
 void printTerminal(TMT *vt){

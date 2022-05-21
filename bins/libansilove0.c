@@ -1,16 +1,26 @@
-#include "../include/includes.h"
 // MESON_BIN_ENABLED=true
+#include "../src/includes.c"
 
 #define VERBOSE         false
-#define WIDTH           "120"
+#define WIDTH           "50"
 #define BAT_STYLE       "header,numbers,rule"
-#define SRC_FILE        "../bins/libansilove0.c"
 #define PNG_FILE        "/tmp/ansilove.png"
 #define FILE_NAME       "source.c"
 
-#define CMD_TEMPLATE    "bat --file-name '%s' --italic-text always \
-    --terminal-width "                         WIDTH " --paging never --force-colorization \
-    --style=" BAT_STYLE " --theme=ansi '" SRC_FILE "'"
+#define SRC_FILE1       "../bins/libansilove0.c"
+#define SRC_FILE        "../../c_timer/bins/timer2.c"
+
+#define CMD_TEMPLATE    "bat"             \
+  " "                                     \
+  "--file-name '%s' --italic-text always" \
+  " "                                     \
+  "--terminal-width"                      \
+  " "                                     \
+  WIDTH                                   \
+  " "                                     \
+  "--paging never --force-colorization"   \
+  " "                                     \
+  "--style=" BAT_STYLE " --theme=ansi '" SRC_FILE "'"
 
 int res;
 char                    *src_dirname, *src_basename, *cmd, *bat_content;
@@ -19,10 +29,10 @@ struct ansilove_options options, png_options = {
   .dos = false,
   .diz = false,
 //  .mode         = ANSILOVE_MODE_TRANSPARENT,
-// .font         = ANSILOVE_FONT_TERMINUS,
-  .truecolor    = true,
-  .icecolors    = true,
-  .scale_factor = 2,
+//  .font         = ANSILOVE_FONT_TERMINUS,
+  .truecolor = true,
+  .icecolors = true,
+  // .scale_factor = 2,
 };
 
 int init();
@@ -31,6 +41,9 @@ int load_buffer();
 
 
 int main(const int argc, const char **argv){
+  if (argc > 1) {
+//    strcpy(SRC_FILE, argv[1]);
+  }
   tq_start(NULL);
   res = init();
   assert_eq(res, 0, %d);
@@ -98,17 +111,23 @@ int bat(){
 
 
 int init(){
+  //SRC_FILE = malloc(1024);
+//  strcpy(SRC_FILE, "../bins/libansilove0.c");
   if (fsio_file_exists(PNG_FILE)) {
     fsio_remove(PNG_FILE);
   }
   assert_eq(fsio_file_exists(PNG_FILE), 0, %d);
+
   assert_eq(fsio_file_exists(SRC_FILE), -1, %d);
+
   src_dirname  = malloc(strlen(SRC_FILE));
   cmd          = malloc(strlen(strdup(CMD_TEMPLATE)) + 1024);
   src_basename = malloc(strlen(SRC_FILE));
   src_dirname  = dirname(SRC_FILE);
+
   assert_eq(fsio_dir_exists(src_dirname), -1, %d);
   src_basename = basename(SRC_FILE);
+
   sprintf(cmd, CMD_TEMPLATE, src_basename);
   if (VERBOSE) {
     dbg(cmd, %s);

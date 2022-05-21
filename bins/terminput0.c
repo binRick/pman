@@ -1,5 +1,5 @@
-#include "../../include/includes.h"
 // MESON_BIN_ENABLED=true
+#include "../../src/includes.c"
 
 
 static const struct keypress {

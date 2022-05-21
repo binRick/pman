@@ -145,3 +145,6 @@
 [submodule "submodules/c_eventemitter"]
 	path = submodules/c_eventemitter
 	url = https://github.com/sagiegurari/c_eventemitter
+[submodule "submodules/djbhash"]
+	path = submodules/djbhash
+	url = https://github.com/gdi/djbhash

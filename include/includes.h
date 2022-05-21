@@ -33,6 +33,8 @@ static char *get_datetime();
 #include "../include/ansicodes.h"
 #include "../include/tmt.h"
 #include "../include/dbg.h"
+#include "../deps/sqlite/sqlite3ext.h"
+#include "../submodules/djbhash/src/djbhash.h"
 #include "../include/print.h"
 #include "../include/timequick.h"
 #include "../submodules/assertf.h/assertf.h"
@@ -90,7 +92,7 @@ static char *get_datetime();
 #include "../deps/rhash_md5/md5.h"
 #include "../deps/rhash_md5/md5.h"
 
-#define OK(MSG){ fprintf(stderr, "\n  \e[32m\u2713 \e[90mOK- %s\e[0m\n\n", MSG); }
+#define OK(MSG){ fprintf(stderr, "  \e[32m\u2713 \e[90mOK- %s\e[0m\n", MSG); }
 
 
 

@@ -5,13 +5,12 @@
 ////////////////////////////////////////////////
 
 typedef struct palette_t      palette_t;
-typedef struct color_name_t   color_name_t;
 typedef struct pman_mode_t    pman_mode_t;
 typedef struct pman_args_t    pman_args_t;
 ///////////////////////////////////////////////////
 #include "../include/includes.h"
 ////////////////////////////////////////////////
-struct _pman_args_t {
+struct __pman_args_t {
   const char *mode;
   const char *palette;
   const char *colorcode;
@@ -29,7 +28,9 @@ struct palette_t {
   int           size;
 };
 
-struct color_name_t {
+#ifndef COLOR_NAME_STRUCT_DEFINED
+#define COLOR_NAME_STRUCT_DEFINED 
+typedef struct color_name_t {
   char               *name;
   char               *rgb;
   char               *hex;
@@ -43,10 +44,8 @@ struct color_name_t {
   char               *unique;
   char               *ansi;
   char               *encoded_ansi_code;
-};
+} color_name_t;
 
-#ifndef DEV_COLOR_NAME_STRUCT_DEFINED
-#define DEV_COLOR_NAME_STRUCT_DEFINED
 typedef struct dev_color_name_t dev_color_name_t;
 struct dev_color_name_t {
     unsigned long      id;
@@ -68,9 +67,10 @@ void _change_terminal_color(uint8_t r, uint8_t g, uint8_t b){
 void _reset_terminal_to_default_color() {
       wprintf(L"%ls", COLOR_RESET_TO_DEFAULT);
 }
-void _change_terminal_color_name_fg(dev_color_name_t *cn){
+void _change_terminal_color_name_fg(color_name_t *cn){
     _change_terminal_color_fg(cn->red,cn->green,cn->blue);
 }
-void _change_terminal_color_name(dev_color_name_t *cn){
+
+void _change_terminal_color_name(color_name_t *cn){
     _change_terminal_color(cn->red,cn->green,cn->blue);
 }
