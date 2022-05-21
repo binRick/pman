@@ -1,14 +1,16 @@
 // MESON_BIN_ENABLED=true
 #include "../include/includes.h"
+#define BUFFER_LEN    1024
 
 int                 exited, result;
 struct subprocess_s subprocess;
 
-const char          *cmd1[]      = { "find", "../bins", "-type", "f", "-name", "*.c", NULL };
-const char          *cmd_xargs[] = { "xargs", "-I", "%", "basename", "%", NULL };
+const char          *cmd1[]          = { "find", "../bins", "-type", "f", "-name", "*.c", NULL };
+const char          *cmd_xargs[]     = { "xargs", "-I", "%", "basename", "%", NULL };
+unsigned int        subprocesses_qty = 0;
 
 
-void find_xargs(void){
+int find_xargs(void){
   tq_start(NULL);
   struct subprocess_s xsubprocess;
   int                 result = subprocess_create(cmd1, subprocess_option_search_user_path, &subprocess);
@@ -16,21 +18,21 @@ void find_xargs(void){
   assert_eq(result, 0, %d);
   FILE                *p_stdout = subprocess_stdout(&subprocess);
   FILE                *p_stderr = subprocess_stderr(&subprocess);
-  int                 LEN       = 1024;
-  struct StringBuffer *sb       = stringbuffer_new_with_options(1024, true);
-  struct StringBuffer *sb_err   = stringbuffer_new_with_options(1024, true);
-  char                *err      = malloc(LEN);
-  char                *out      = malloc(LEN);
+  struct StringBuffer *sb       = stringbuffer_new_with_options(BUFFER_LEN, true);
+  struct StringBuffer *sb_err   = stringbuffer_new_with_options(BUFFER_LEN, true);
+  char                *err      = malloc(BUFFER_LEN);
+  char                *out      = malloc(BUFFER_LEN);
 
-  while (fgets(out, LEN, p_stdout) != NULL) {
+  while (fgets(out, BUFFER_LEN, p_stdout) != NULL) {
     stringbuffer_append_string(sb, out);
   }
-  while (fgets(err, LEN, p_stderr) != NULL) {
+  while (fgets(err, BUFFER_LEN, p_stderr) != NULL) {
     stringbuffer_append_string(sb_err, err);
   }
   result = subprocess_join(&subprocess, &exited);
   assert_eq(result, 0, %d);
-  assert_ge(exited, 0, %d);
+  assert_eq(exited, 0, %d);
+  subprocesses_qty++;
 
   char                   *r_err = stringfn_trim(stringbuffer_to_string(sb_err));
   struct StringFNStrings Stderr = stringfn_split_lines_and_trim(r_err);
@@ -74,13 +76,14 @@ void find_xargs(void){
   result = subprocess_join(&xsubprocess, &exited);
   assert_eq(result, 0, %d);
   assert_eq(exited, 0, %d);
+  subprocesses_qty++;
 
   char                *xdur = tq_stop("Find");
+  char                *xout = malloc(BUFFER_LEN);
 
-  char                *xout = malloc(LEN);
-  struct StringBuffer *xb   = stringbuffer_new_with_options(1024, true);
+  struct StringBuffer *xb = stringbuffer_new_with_options(BUFFER_LEN, true);
 
-  while (fgets(xout, LEN, xp_stdout) != NULL) {
+  while (fgets(xout, BUFFER_LEN, xp_stdout) != NULL) {
     stringbuffer_append_string(xb, xout);
   }
   struct StringFNStrings xStdout = stringfn_split_lines_and_trim(stringbuffer_to_string(xb));
@@ -91,15 +94,13 @@ void find_xargs(void){
   }
   printf(">Exited %d :: %s\n", exited, xdur);
   printf(">Read %d lines from stdout :: %lu bytes\n", Stdout.count, strlen(xr));
+  printf("># Subprocesses:  %d\n", subprocesses_qty);
 
-
-  stringfn_release_strings_struct(xStdout);
-  free(r);
-  free(xr); free(xdur); free(xout);
+  stringfn_release_strings_struct(xStdout); free(r); free(xr); free(xdur); free(xout);
+  return(exited);
 } /* find_xargs */
 
 
 int main(void){
-  find_xargs();
-  return(0);
+  return(find_xargs());
 }

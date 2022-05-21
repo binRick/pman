@@ -26,9 +26,12 @@
 #include "../include/includes-pman-ansi.h"
 /////////////////////////////////////////////////////
 static char *get_datetime();
-
 /////////////////////////////////////////////////////
+#include "../include/pman.h"
+#include "../include/vterm.h"
+#include "../include/vterm_keycodes.h"
 #include "../include/ansicodes.h"
+#include "../include/tmt.h"
 #include "../include/dbg.h"
 #include "../include/print.h"
 #include "../include/timequick.h"
@@ -67,14 +70,18 @@ static char *get_datetime();
 #include "../submodules/uptime/include/uptime/uptime.h"
 #include "../submodules/wildcardcmp/wildcardcmp.h"
 //#include "../submodules/liblogger/logger.h"
+#include "../submodules/libusb/libusb/libusb.h"
 #include "../submodules/subprocess.h/subprocess.h"
 #include "../submodules/tercontrol/tercontrol.h"
 #include "../submodules/tkvdb/tkvdb.h"
+//#include "../submodules/c_vector/include/vector.h"
+#include "../include/template/template.h"
+//#include "../submodules/c_eventemitter/include/eventemitter.h"
+#include "../submodules/c_forever/include/forever.h"
 //////////////////////////////////////
 #include "../deps/is_number/is_number.h"
 #include "../deps/list/list.h"
 #include "../include/int.h"
-#include "../include/template/template.h"
 #include "../src/datetime.c"
 //#include "../include/errnos.h"
 //#include "../include/utils.h"

@@ -1,5 +1,5 @@
-#include "../include/includes.h"
 // MESON_BIN_ENABLED=true
+#include "../include/includes.h"
 /***********************/
 #include "../include/includes-pman.h"
 /***********************/
@@ -593,10 +593,9 @@ int main(const int argc, const char **argv) {
   int q, err, done;  short prop_val_ok;
 
   assert_eq(init_parser_args(argc, argv), 0, %d);
-  if (!meson_test_mode_enabled) {
-  }else{
+  if (meson_test_mode_enabled) {
     meson_test_mode();
-    exit(0);
+    return(0);
   }
   dbg(parser_args->parse_color_names_mode ? "Yes" : "No", %s);
   dbg(parser_args->parse_color_names_mode, %d);
@@ -604,23 +603,22 @@ int main(const int argc, const char **argv) {
 
   if (parser_args->pretty_print_colors_mode) {
     return(pretty_print_colors());
-
-    return(0);
   }
 
   if (parser_args->parse_color_names_mode) {
     stringbuffer_append_string(ro->Input, fs_read(parser_args->input_file));
     ColorsListResult *CLR = get_colors_list(stringbuffer_to_string(ro->Input));
-    exit(0);
+    return(0);
   }
 
-  exit(1);
+  return(1);
 
   if (parser_args->render_template) {
     return(do_render_template());
   }
 
-  exit(1);
+  return(1);
+
   print_prefix();
   atexit(print_suffix);
 
@@ -647,7 +645,7 @@ int main(const int argc, const char **argv) {
       assert_ge(ro->out_bytes, 10, %lu);
     }
   }
-  exit(0);
+  return(0);
 
   while (1 && (q <= MAX_QTY_LIMIT)) {
     q++;

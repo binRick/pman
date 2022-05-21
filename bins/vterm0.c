@@ -1,19 +1,21 @@
+// MESON_BIN_ENABLED=true
 #ifndef VTERM0_C
 #define VTERM0_C
-#include "../include/includes.h"
-// MESON_BIN_ENABLED=true
-//#include "../../libvterms/cryptomilk
+
+#ifndef VERBOSE_DEBUG_MODE
+//#define VERBOSE_DEBUG_MODE
+#endif
+
+#include "../src/includes.c"
+//#include "../include/includes.h"
 #include "include/vterm.h"
 #include "include/vterm_keycodes.h"
-//#include "../../libvterms/cryptomilk/include/vterm_keycodes.h"
-#include <limits.h>
-#include <stdio.h>
-#include <string.h>
-//#include "../include/vterm.h"
-//#include "../include/vterm_input.h"
+//#include <limits.h>
+//#include <stdio.h>
+//#include <string.h>
 
-int ROWS = 2, COLS = 5;
-//typedef struct VTerm VTerm;
+unsigned int ROWS = 2, COLS = 6, WRITE_QTY = 3;
+const char   *STRING_TO_WRITE = "\033[31mHello \033[32mWorld\033[0m";
 
 struct terminal {
   VTerm       *vterm;
@@ -77,10 +79,12 @@ static void reset(struct terminal *terminal){
 
 
 static void redraw(struct terminal *terminal){
+  tq_start(NULL);
   if (terminal->redraw_row_start > terminal->redraw_row_end) {
     return;
   }
-  int q = 0;
+  unsigned int cells_redrawn_qty;
+  int          q = 0;
 
   for (int row = terminal->redraw_row_start; row < terminal->redraw_row_end; row++) {
     for (int col = 0; col < terminal->width; col++) {
@@ -88,11 +92,14 @@ static void redraw(struct terminal *terminal){
       VTermScreenCell cell;
       VTermPos        pos = { row, col };
       vterm_screen_get_cell(terminal->screen, pos, &cell);
-      printf(" Redraw Cell #%d:   %dx%d ", q, row, col);
+      printf(" Redraw Cell #%d:   %dx%d ", q, row + 1, col + 1);
+      cells_redrawn_qty++;
       print_cell(terminal->screen, &cell);
-      printf(" \n");
     }
   }
+  char *dur = tq_stop("Redrawn in");
+
+  printf("%d Cells %s\n", cells_redrawn_qty, dur);
 
   reset(terminal);
 }
@@ -214,7 +221,11 @@ int main(void){
 
   vterm_screen_set_callbacks(screen, &callbacks, &terminal);
   vterm_screen_reset(screen, 1);
-  vterm_input_write(vterm, str0, strlen(str0) + 1);
+
+  for (int cur_qty = 0; cur_qty < WRITE_QTY; cur_qty++) {
+    vterm_input_write(vterm, str0, strlen(str0) + 1);
+  }
+
   vterm_screen_flush_damage(screen);
 
   redraw(&terminal);
@@ -222,12 +233,14 @@ int main(void){
 
   puts("-----------------------");
 
-  vterm_input_write(vterm, str0, strlen(str0) + 1);
+  for (int cur_qty = 0; cur_qty < WRITE_QTY; cur_qty++) {
+    vterm_input_write(vterm, STRING_TO_WRITE, strlen(STRING_TO_WRITE) + 1);
+  }
   vterm_screen_flush_damage(screen);
 
   redraw(&terminal);
 
   return(0);
-}
+} /* main */
 
 #endif

@@ -68,7 +68,7 @@ pc: pc-cmd pc-help
 	@eval "$(DEV_CMD)"
 
 dev: 
-	@$(PASSH) -L .nodemon.log $(NODEMON) -I -V -w meson -w etc/tpl -w meson.build -w bins -w src -w Makefile -i build -i submodules -i deps -i 'include/embedded-*.h' -e tpl,build,sh,c,h,Makefile -x env -- bash -c 'make $(DEV_MAKE_TARGETS) $(DEV_TEST_TARGETS)||true'
+	@$(PASSH) -L .nodemon.log $(NODEMON) -I -V -w 'include/*.h' -w meson -w etc/tpl -w meson.build -w bins -w src -w Makefile -i build -i submodules -i deps -i 'include/embedded-*.h' -e tpl,build,sh,c,h,Makefile -x env -- bash -c 'make $(DEV_MAKE_TARGETS) $(DEV_TEST_TARGETS)||true'
 
 nodemon:
 	@$(PASSH) make

@@ -127,3 +127,21 @@
 [submodule "submodules/dirname"]
 	path = submodules/dirname
 	url = https://github.com/prodisDown/dirname
+[submodule "submodules/c_forever"]
+	path = submodules/c_forever
+	url = https://github.com/sagiegurari/c_forever
+[submodule "submodules/c_hs"]
+	path = submodules/c_hs
+	url = https://github.com/sagiegurari/c_hs
+[submodule "submodules/flingfd"]
+	path = submodules/flingfd
+	url = https://github.com/sharvil/flingfd
+[submodule "submodules/va_args_count"]
+	path = submodules/va_args_count
+	url = https://github.com/donmccaughey/va_args_count
+[submodule "submodules/libusb"]
+	path = submodules/libusb
+	url = https://github.com/libusb/libusb
+[submodule "submodules/c_eventemitter"]
+	path = submodules/c_eventemitter
+	url = https://github.com/sagiegurari/c_eventemitter
