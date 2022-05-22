@@ -1,17 +1,20 @@
 default: all
 ##########################################################
+COLORS_QTY = 51500
+EMBEDDED0_VIEW_QTY = 10
+##########################################################
 all: \
+    rm-embedded0 \
 	build \
-	test
+	colors 
 ##########################################################
 PWD="$(shell pwd)"
+ETC="$(PWD)/etc"
 BUILD_DIR=$(PWD)/build
 ##########################################################
 PMAN=$(BUILD_DIR)/pman
+PMAN_HELP_CMD=$(PMAN) --help 
 FIELD_RANGE_PARSER=$(BUILD_DIR)/field-range-parser
-##########################################################
-GC=$(GIT) clone --recurse-submodules
-GET_COMMIT=$(GIT) log -q |grep '^commit '|head -n1|cut -d' ' -f2
 ##########################################################
 PASSH=$(shell command -v passh)
 GIT=$(shell command -v git)
@@ -20,33 +23,44 @@ NODEMON=$(shell command -v nodemon)
 FZF=$(shell command -v fzf)
 BLINE=$(shell command -v bline)
 ##########################################################
+GC=$(GIT) clone --recurse-submodules
+GET_COMMIT=$(GIT) log -q |grep '^commit '|head -n1|cut -d' ' -f2
+##########################################################
 TEST_TITLE=$(BLINE) -a bold:underline:italic:yellow
 HELP_STYLE=$(BLINE) -H -a ff00ff
 ##########################################################
-DEV_MAKE_TARGETS = \
-				   all
-DEV_TEST_TARGETS = \
-				   pc 
-#\
-#				   field-range-parser \
-
-
+CSV0_IN_FILE = ./etc/colornames.csv
+CSV0_OUT_FILE = ./include/embedded-colornames-dev.h
+CSV0_CMD = cd $(BUILD_DIR) && ./csv0 -T -i ../$(CSV0_IN_FILE) -o ../$(CSV0_OUT_FILE) -c $(COLORS_QTY) && wc -l ../$(CSV0_OUT_FILE)
 ##########################################################
-PMAN_HELP_CMD=$(PMAN) --help 
+EMBEDDED0_CMD = cd $(BUILD_DIR) && ./embedded0 | tail -n $(EMBEDDED0_VIEW_QTY)
+##########################################################
+DEV_MAKE_TARGETS = \
+				   all \
+				   test 
+DEV_TEST_TARGETS = \
+				   c0 \
+				   e0 
+##########################################################
 DEV_CMD =\
 		$(PMAN) \
 		-t $(PWD)/etc/tpl/color-names/color-names.tpl \
 		-i $(PWD)/etc/colornames.csv \
 		-o $(PWD)/tmp/colornames.c \
-		-c -T
+		-c -T 
 DEV_CMD_10=\
 		$(PMAN) \
 		-t $(PWD)/etc/tpl/color-names/color-names.tpl \
 		-i $(PWD)/etc/colornames-10.csv \
 		-o $(PWD)/tmp/colornames.c \
-		-c -T
-#r -T 
+		-c -T 
 ##########################################################
+
+all: build
+
+rm-embedded0:
+	@unlink $(BUILD_DIR)/embedded0 2>/dev/null||true
+	@true
 
 enabled-bins:
 	@grep 'MESON_BIN_ENABLED=true' bins/*.c|cut -d: -f1|sort -u|xargs -I % basename % .c
@@ -68,7 +82,7 @@ pc: pc-cmd pc-help
 	@eval "$(DEV_CMD)"
 
 dev: 
-	@$(PASSH) -L .nodemon.log $(NODEMON) -I -V -w 'include/*.h' -w meson -w etc/tpl -w meson.build -w bins -w src -w Makefile -i build -i submodules -i deps -i 'include/embedded-*.h' -e tpl,build,sh,c,h,Makefile -x env -- bash -c 'make $(DEV_MAKE_TARGETS) $(DEV_TEST_TARGETS)||true'
+	@$(PASSH) -L .nodemon.log $(NODEMON) -I -V -w 'include/*.h' -w meson -w etc/tpl -w meson.build -w bins -w src -w Makefile -i $(BUILD_DIR) -i submodules -i deps -i 'include/embedded-*.h' -e tpl,build,sh,c,h,Makefile -x env -- bash -c 'make $(DEV_MAKE_TARGETS) $(DEV_TEST_TARGETS)||true'
 
 nodemon:
 	@$(PASSH) make
@@ -94,10 +108,24 @@ tools:
 	@command -v nodemon || npm i nodemon -g
 	@command -v meson || pip install meson
 
-build: 
+make-setup:
 	@[[ -d deps && -d submodules && -d .venv ]] || make -J 10 setup
-	@test -d $(BUILD_DIR) && {  meson $(BUILD_DIR) --reconfigure; } || { meson $(BUILD_DIR); }
+
+meson-build:
+	@meson $(BUILD_DIR) || { make meson-reconfigure || make meson-wipe || make build; }
+	@true
+
+meson-wipe:
+	@meson $(BUILD_DIR) --wipe
+
+meson-reconfigure:
+	@{ meson $(BUILD_DIR) --reconfigure || { make meson-wipe && make meson-reconfigure; }; } || { make meson-wipe && make build; }
+	@true
+
+ninja-build:
 	@ninja -C build
+
+build: make-setup meson-build ninja-build
 
 test:
 	@meson test -C $(BUILD_DIR) --verbose
@@ -155,3 +183,16 @@ fix-dbg:
 	@gsed 's|, % zu);|, %zu);|g' -i bins/*.c
 
 tidy: uncrustify fix-dbg uncrustify-clean
+
+c0:
+	$(CSV0_CMD)
+
+e0:
+	$(EMBEDDED0_CMD)
+
+colors:
+	@make c0
+	@make e0
+
+colors-dev:
+	@$(PASSH) -L .colors-dev-nodemon.log $(NODEMON) -I -V -w 'build/*' -w Makefile -i build -i submodules -i deps -i 'include/embedded-*.h' -x /bin/sh -- -c 'make colors||true'

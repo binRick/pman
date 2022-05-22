@@ -22,26 +22,28 @@
 #define COLOR_RESET_TO_DEFAULT           L"\033[0m"
 /***********************/
 #define COLOR_NAME_T_STRUCT_TEST_MAIN    "\
-int main(const int argc, const char **argv) {\n\
-    printf(\"|%zu Colors|%zu Color Content Bytes|\\n\"\
+int test_color_sizes(const int argc, const char **argv) {\n\
+    printf(\"|%zu Colors|%zu Color Content Bytes|\\n\"\n\
             , COLOR_NAMES_QTY\n\
             , COLOR_NAMES_PATH_SIZES\n\
           );\n\
+    return(0);\n\
 }\n\
 "
-#define COLOR_NAME_T_STRUCT              "\
+#define COLOR_NAME_T_STRUCT_PREFIX       "\
 #include <stdio.h>\n\
 #include <stdlib.h>\n\
-#include <stdbool.h>\n\
-\#ifndef COLOR_NAME_STRUCT_DEFINED\n\
-#define COLOR_NAME_STRUCT_DEFINED\n\
+#include <stdbool.h>\n\n\
+"
+#define COLOR_NAME_T_STRUCT              "\
 typedef struct color_name_t {\n\
   unsigned long      id;\n\
+  char               hex[8], name[64];\n\
   uint32_t           red, green, blue, alpha;\n\
   bool               exists;\n\
   size_t             path_size;\n\
-  char               hex[7], name[64], path[256], encoded_path_contents[1024];\n\
-} color_name_t;\n"
+  char               path[256], encoded_path_contents[1024];\n\
+} color_name_t;\n\n"
 /***********************/// ANSI Structs
 typedef struct test_struct {
   int a;
@@ -214,12 +216,15 @@ int main(const int argc, const char **argv) {
   ////////////////////////////////////////////////////////
 
   ////////////////////////////////////////////////////////
+  stringbuffer_append_string(ro->out_buffer, COLOR_NAME_T_STRUCT_PREFIX);
+  stringbuffer_append_string(ro->out_buffer, "#ifndef COLOR_NAME_STRUCT_DEFINED\n");
+  stringbuffer_append_string(ro->out_buffer, "#define COLOR_NAME_STRUCT_DEFINED\n\n");
   stringbuffer_append_string(ro->out_buffer, COLOR_NAME_T_STRUCT);
   stringbuffer_append_string(ro->out_buffer, "color_name_t COLOR_NAMES[] = {\n");
   ////////////////////////////////////////////////////////
 
 
-  for (int i = 0; (i < ro->InputLines.count) && (ro->processed_qty < parser_args->colors_qty) && (ro->processed_qty <= MAX_COLORS_QTY); i++) {
+  for (unsigned long i = 0; (i < ro->InputLines.count) && (ro->processed_qty < parser_args->colors_qty) && (ro->processed_qty <= MAX_COLORS_QTY); i++) {
     ro->processed_qty++;
 
     if (strlen(ro->InputLines.strings[i]) < 3 || strsplit(ro->InputLines.strings[i], s, ",") != 2) {
@@ -227,8 +232,12 @@ int main(const int argc, const char **argv) {
     }
 
     color_name_t *cn = malloc(sizeof(color_name_t));
-    cn->name = trim(s[0]);
-    cn->hex  = case_upper(trim(s[1]));
+
+    cn->name                   = trim(s[0]);
+    cn->name[strlen(cn->name)] = '\0';
+
+    cn->hex    = case_upper(trim(s[1]));
+    cn->hex[7] = '\0';
 
     if (strlen(cn->name) < 3 || strlen(cn->hex) != 7) {
       continue;
@@ -277,39 +286,28 @@ int main(const int argc, const char **argv) {
       continue;
     }
 
-    size_t path_size = (size_t)(exists ? fs_size(PATH) : 0);
-    path_size_sum += path_size;
+    size_t path_size              = (size_t)(exists ? fs_size(PATH) : 0);
     char   *encoded_path_contents = (char *)(b64_encode((const unsigned char *)fsio_read_binary_file(PATH), path_size));
 
-
-    char *__dat = malloc(1024 * 2);
+    char   *__dat = malloc(1024 * 2);
     sprintf(
       __dat,
-      "  "
-      "{ "
-      ".id = %lu, "
-      ".hex = \"%s\", "
-      ".red = %d, .green = %d, .blue = %d, .alpha = %d, "
-      ".name = \"%.32s\", "
-      ".path = \"%s\", "
-      ".exists = %d, "
-      ".path_size = %lu, "
-      ".encoded_path_contents = \"%s\", "
-      "},\n",
-      ro->processed_qty,
-      cn->hex,
-      cn->red,
-      cn->green,
-      cn->blue,
+      "  { \n"
+      "\t.id = %lu,\t.hex = \"%s\",\t.name = \"%.32s\",\n"
+      "\t.red = %d,\t.green = %d,\t\t.blue = %d,\n"
+      "\t.alpha = %d,\n"
+      "\t.path = \"%s\",\t.exists = %s,\t.path_size = %lu,\n"
+      "\t.encoded_path_contents = \"%s\",\n"
+      "  },\n",
+      i, cn->hex, cn->name,
+      cn->red, cn->green, cn->blue,
       cn->alpha,
-      cn->name,
-      PATH,
-      exists,
-      path_size,
+      PATH, exists == 1 ? "true" : "false", path_size,
       encoded_path_contents
       );
 
     stringbuffer_append_string(ro->out_buffer, __dat);
+    path_size_sum += path_size;
 
     if (parser_args->verbose_mode) {
       _reset_terminal_to_default_color();
@@ -323,22 +321,27 @@ int main(const int argc, const char **argv) {
   }
   char *dur = tq_stop("Duration");
 
-  stringbuffer_append_string(ro->out_buffer, "};\nconst size_t COLOR_NAMES_QTY = ");
+  stringbuffer_append_string(ro->out_buffer, "};");
+  stringbuffer_append_string(ro->out_buffer, "\n\n");
+  stringbuffer_append_string(ro->out_buffer, "const size_t COLOR_NAMES_QTY = ");
   stringbuffer_append_unsigned_long(ro->out_buffer, ro->processed_qty);
   stringbuffer_append_string(ro->out_buffer, ";\n");
 
   stringbuffer_append_string(ro->out_buffer, "const size_t COLOR_NAMES_PATH_SIZES = ");
   stringbuffer_append_unsigned_long(ro->out_buffer, path_size_sum);
   stringbuffer_append_string(ro->out_buffer, ";\n");
+  stringbuffer_append_string(ro->out_buffer, "\n");
+  stringbuffer_append_string(ro->out_buffer, "#endif");
+  stringbuffer_append_string(ro->out_buffer, "\n");
 
   if (parser_args->test_mode) {
     stringbuffer_append_string(ro->out_buffer, "\n//TEST MODE ENABLED\n");
+    stringbuffer_append_string(ro->out_buffer, "#define TEST_MODE_ENABLED\n");
     stringbuffer_append_string(ro->out_buffer, (char *)test_main);
     stringbuffer_append_string(ro->out_buffer, "\n");
   }else{
     stringbuffer_append_string(ro->out_buffer, "//TEST MODE DISABLED\n");
   }
-  stringbuffer_append_string(ro->out_buffer, "#endif\n");
 
   fs_write(parser_args->output_file, stringbuffer_to_string(ro->out_buffer));
 

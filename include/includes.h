@@ -41,6 +41,7 @@ static char *get_datetime();
 /////////////////////////////////////////////////////
 #include "../include/macros.h"
 /////////////////////////////////////////////////////
+#include "../deps/bytes/bytes.h"
 #include "../deps/b64/b64.h"
 #include "../deps/case/case.h"
 #include "../deps/commander/commander.h"
