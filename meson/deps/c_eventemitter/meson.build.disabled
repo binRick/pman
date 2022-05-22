@@ -1,0 +1,16 @@
+c_eventemitter_lib = library('c_eventemitter', 
+    '../../../submodules/c_eventemitter/src/eventemitter.c',
+    install: false, dependencies: [], 
+    include_directories: [
+        '../../../submodules/c_vector/include',
+        '../../../submodules/c_eventemitter/include',
+    ]
+)
+
+c_eventemitter_dep = declare_dependency(include_directories: [
+        '../../../submodules/c_vector/include',
+        '../../../submodules/c_eventemitter/include',
+    ], link_with: c_eventemitter_lib
+)
+
+deps += c_eventemitter_dep

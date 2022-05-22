@@ -36,5 +36,8 @@
     "jb55/is_number.c": "0.1",
     "rikvdh/matching": "0.2.0",
     "hkjels/slug.c": "0.0.1",
+    "stephenmathieson/is-email.c": "0.0.2",
+    "stephenmathieson/tempdir.c": "0.0.2",
+    "jwerle/url.h": "0.2.0"
   }
 }

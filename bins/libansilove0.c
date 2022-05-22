@@ -2,13 +2,13 @@
 #include "../src/includes.c"
 
 #define VERBOSE         false
-#define WIDTH           "50"
+#define WIDTH           "140"
 #define BAT_STYLE       "header,numbers,rule"
 #define PNG_FILE        "/tmp/ansilove.png"
 #define FILE_NAME       "source.c"
 
-#define SRC_FILE1       "../bins/libansilove0.c"
-#define SRC_FILE        "../../c_timer/bins/timer2.c"
+#define SRC_FILE0       "../bins/libansilove0.c"
+#define SRC_FILE        "../bins/scrabble.c"
 
 #define CMD_TEMPLATE    "bat"             \
   " "                                     \
@@ -96,7 +96,7 @@ int bat(){
   assert_eq(fsio_file_exists(SRC_FILE), -1, %d);
   struct ScriptExecResult result = scriptexec_run_with_options(cmd, options);
 
-  assert_eq(result.code, 0, %d);
+  assert_ge(result.code, 0, %d);
   bat_content = malloc(strlen(result.out));
   sprintf(bat_content, "%s", result.out);
   assert_ge(strlen(bat_content), 0, %lu);

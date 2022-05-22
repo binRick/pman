@@ -1,0 +1,22 @@
+libusb_lib = library('libusb', 
+    '../../../submodules/libusb/libusb/core.c',
+    '../../../submodules/libusb/libusb/descriptor.c',
+    '../../../submodules/libusb/libusb/hotplug.c',
+    '../../../submodules/libusb/libusb/io.c',
+    '../../../submodules/libusb/libusb/sync.c',
+    '../../../submodules/libusb/libusb/os/darwin_usb.c',
+    '../../../submodules/libusb/libusb/os/events_posix.c',
+    install: false, dependencies: [], 
+    include_directories: [
+        '../../../submodules/libusb/libusb',
+        '../../../submodules/libusb/Xcode',
+        '../../../submodules/libusb/libusb/os',
+    ]
+)
+
+libusb_dep = declare_dependency(include_directories: [
+        '../../../submodules/libusb/libusb',
+    ], link_with: libusb_lib
+)
+
+deps += libusb_dep

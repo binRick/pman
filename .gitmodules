@@ -18,7 +18,7 @@
 	url = git@github.com:binRick/c_printf.git
 [submodule "submodules/generic-print"]
 	path = submodules/generic-print
-	url = https://github.com/exebook/generic-print.git
+	url = https://github.com/exebook/generic-print
 [submodule "submodules/csv_parser"]
 	path = submodules/csv_parser
 	url = https://github.com/semitrivial/csv_parser
@@ -148,3 +148,30 @@
 [submodule "submodules/djbhash"]
 	path = submodules/djbhash
 	url = https://github.com/gdi/djbhash
+[submodule "submodules/buffet"]
+	path = submodules/buffet
+	url = https://github.com/alcover/buffet
+[submodule "submodules/stricks"]
+	path = submodules/stricks
+	url = https://github.com/alcover/stricks
+[submodule "submodules/socket99"]
+	path = submodules/socket99
+	url = https://github.com/silentbicycle/socket99
+[submodule "submodules/path-join.c"]
+	path = submodules/path-join.c
+	url = https://github.com/stephenmathieson/path-join.c
+[submodule "submodules/str-ends-with.c"]
+	path = submodules/str-ends-with.c
+	url = https://github.com/stephenmathieson/str-ends-with.c
+[submodule "submodules/str-ends-with"]
+	path = submodules/str-ends-with
+	url = https://github.com/stephenmathieson/str-ends-with.c
+[submodule "submodules/path-join"]
+	path = submodules/path-join
+	url = https://github.com/stephenmathieson/path-join.c
+[submodule "submodules/https_client"]
+	path = submodules/https_client
+	url = https://github.com/HISONA/https_client
+[submodule "submodules/expand-braces"]
+	path = submodules/expand-braces
+	url = https://github.com/stephenmathieson/expand-braces.c

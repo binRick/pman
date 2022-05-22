@@ -1,0 +1,18 @@
+pathjoin_lib = library('pathjoin', 
+    '../../../submodules/path-join/src/path-join.c',
+    install: false, dependencies: [strendswith_dep], 
+    include_directories: [
+        '../../../deps',
+        '../../../submodules',
+        '../../../submodules/path-join/src',
+    ]
+)
+
+pathjoin_dep = declare_dependency(include_directories: [
+        '../../../deps',
+        '../../../submodules',
+        '../../../submodules/path-join/src',
+    ], link_with: pathjoin_lib
+)
+
+deps += pathjoin_dep

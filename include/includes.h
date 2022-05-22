@@ -3,6 +3,7 @@
 #define ASSERTF_DEF_ONCE
 /////////////////////////////////////////////////////
 #include <assert.h>
+#include <stddef.h>
 #include <dirent.h>
 #include <errno.h>
 #include <math.h>
@@ -27,20 +28,28 @@
 /////////////////////////////////////////////////////
 static char *get_datetime();
 /////////////////////////////////////////////////////
+#include "../submodules/generic-print/print.h"
 #include "../include/pman.h"
-#include "../include/vterm.h"
+//#include "../include/vterm.h"
 #include "../include/vterm_keycodes.h"
 #include "../include/ansicodes.h"
 #include "../include/tmt.h"
 #include "../include/dbg.h"
 #include "../deps/sqlite/sqlite3ext.h"
+#include "../deps/url/url.h"
+#include "../deps/case/case.h"
+#include "../deps/is-email/is-email.h"
 #include "../submodules/djbhash/src/djbhash.h"
-#include "../include/print.h"
 #include "../include/timequick.h"
 #include "../submodules/assertf.h/assertf.h"
+#include "../submodules/expand-braces/expand-braces.h"
+/////////////////////////////////////////////////////
+#include "../submodules/str-ends-with/src/str-ends-with.h"
 /////////////////////////////////////////////////////
 #include "../include/macros.h"
 /////////////////////////////////////////////////////
+#include "../deps/tempdir/tempdir.h"
+#include "../deps/strdup/strdup.h"
 #include "../deps/bytes/bytes.h"
 #include "../deps/b64/b64.h"
 #include "../deps/case/case.h"
@@ -56,8 +65,8 @@ static char *get_datetime();
 #include "../deps/timestamp/timestamp.h"
 #include "../deps/trim/trim.h"
 #include "../include/fort.h"
+#include "../submodules/buffet/src/buffet.h"
 #include "../submodules/bestline/bestline.h"
-#include "../submodules/c_string_buffer/include/stringbuffer.h"
 #include "../submodules/c_string_buffer/include/stringbuffer.h"
 #include "../submodules/csv_parser/csv.h"
 #include "../submodules/env.h/env.h"
@@ -81,6 +90,7 @@ static char *get_datetime();
 #include "../include/template/template.h"
 //#include "../submodules/c_eventemitter/include/eventemitter.h"
 #include "../submodules/c_forever/include/forever.h"
+#include "../submodules/socket99/socket99.h"
 //////////////////////////////////////
 #include "../deps/is_number/is_number.h"
 #include "../deps/list/list.h"

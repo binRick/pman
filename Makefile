@@ -1,16 +1,16 @@
 default: all
 ##########################################################
-COLORS_QTY = 51500
+COLORS_QTY = 50
 EMBEDDED0_VIEW_QTY = 10
 ##########################################################
 all: \
-    rm-embedded0 \
 	build \
 	colors 
 ##########################################################
 PWD="$(shell pwd)"
 ETC="$(PWD)/etc"
 BUILD_DIR=$(PWD)/build
+INCLUDES_DIR=$(PWD)/include
 ##########################################################
 PMAN=$(BUILD_DIR)/pman
 PMAN_HELP_CMD=$(PMAN) --help 
@@ -23,6 +23,8 @@ NODEMON=$(shell command -v nodemon)
 FZF=$(shell command -v fzf)
 BLINE=$(shell command -v bline)
 ##########################################################
+COLOR_NAMES_HEADER_FILE = $(INCLUDES_DIR)/embedded-colornames-dev.h
+##########################################################
 GC=$(GIT) clone --recurse-submodules
 GET_COMMIT=$(GIT) log -q |grep '^commit '|head -n1|cut -d' ' -f2
 ##########################################################
@@ -33,14 +35,16 @@ CSV0_IN_FILE = ./etc/colornames.csv
 CSV0_OUT_FILE = ./include/embedded-colornames-dev.h
 CSV0_CMD = cd $(BUILD_DIR) && ./csv0 -T -i ../$(CSV0_IN_FILE) -o ../$(CSV0_OUT_FILE) -c $(COLORS_QTY) && wc -l ../$(CSV0_OUT_FILE)
 ##########################################################
-EMBEDDED0_CMD = cd $(BUILD_DIR) && ./embedded0 | tail -n $(EMBEDDED0_VIEW_QTY)
+EMBEDDED0_CMD = cd $(BUILD_DIR) && { ./embedded0 | tail -n $(EMBEDDED0_VIEW_QTY); }
+CEMBED_CMD0 = cd $(BUILD_DIR) && { ./cembed0 -o ../include/embedded-colornames-compiled.h -p __CEMBED_CMD0__ -t __CEMBED_TBL__ -z ../include/embedded-colornames-dev.h && wc -l ../include/embedded-colornames-compiled.h; }
 ##########################################################
 DEV_MAKE_TARGETS = \
 				   all \
 				   test 
 DEV_TEST_TARGETS = \
 				   c0 \
-				   e0 
+				   e0 \
+				   ce0
 ##########################################################
 DEV_CMD =\
 		$(PMAN) \
@@ -87,9 +91,6 @@ dev:
 nodemon:
 	@$(PASSH) make
 
-#dependencies:
-#base252 objectively
-
 clibs-cmds:
 	@./scripts/clib-cmds.sh
 
@@ -102,17 +103,20 @@ clibs-install:
 submodules-install:
 	@./scripts/submodule-cmds.sh|env bash
 
-setup: clibs-install submodules-install tools
-
 tools:
 	@command -v nodemon || npm i nodemon -g
 	@command -v meson || pip install meson
 
+setup: clibs-install submodules-install tools
+
 make-setup:
 	@[[ -d deps && -d submodules && -d .venv ]] || make -J 10 setup
 
+_meson-build:
+	@meson $(BUILD_DIR)
+
 meson-build:
-	@meson $(BUILD_DIR) || { make meson-reconfigure || make meson-wipe || make build; }
+	@make _meson-build || { make meson-reconfigure || make meson-wipe || make _meson-build; }
 	@true
 
 meson-wipe:
@@ -125,13 +129,18 @@ meson-reconfigure:
 ninja-build:
 	@ninja -C build
 
-build: make-setup meson-build ninja-build
+_build: make-setup meson-build ninja-build
+
+build:
+	@make _build || { make clean && make _build; }
 
 test:
 	@meson test -C $(BUILD_DIR) --verbose
 
 clean:
-	@test -d $(BUILD_DIR) && rm -rf $(BUILD_DIR)
+	@[[ -d $(BUILD_DIR) ]] && rm -rf $(BUILD_DIR) || true
+	@echo '' > $(COLOR_NAMES_HEADER_FILE)
+	@true
 
 install:
 	@echo Install OK
@@ -185,10 +194,13 @@ fix-dbg:
 tidy: uncrustify fix-dbg uncrustify-clean
 
 c0:
-	$(CSV0_CMD)
+	@$(CSV0_CMD)
+
+ce0:
+	@$(CEMBED_CMD0)
 
 e0:
-	$(EMBEDDED0_CMD)
+	@$(EMBEDDED0_CMD)
 
 colors:
 	@make c0

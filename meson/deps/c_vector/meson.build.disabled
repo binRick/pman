@@ -1,0 +1,14 @@
+c_vector_lib = library('c_vector', 
+    '../../../submodules/c_vector/src/vector.c',
+    install: false, dependencies: [], 
+    include_directories: [
+        '../../../submodules/c_vector/include',
+    ]
+)
+
+c_vector_dep = declare_dependency(include_directories: [
+        '../../../submodules/c_vector/include',
+    ], link_with: c_vector_lib
+)
+
+deps += c_vector_dep

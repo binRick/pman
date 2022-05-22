@@ -1,69 +1,24 @@
-#include "../include/includes.h"
 // MESON_BIN_ENABLED=true
+#include "../src/includes.c"
+#define BAD_DIR    "/...........BAR_DIR---------"
 
-
-#define CLEAR_ENV_VARS                            \
-  assert(0 == putenv("TMPDIR=/not/real"));        \
-  assert(0 == putenv("TEMP=/not/real"));          \
-  assert(0 == putenv("TMP=/not/real"));           \
-  assert(0 == putenv("Wimp$ScrapDir=/not/real")); \
 
 int main(const int argc, const char **argv){
-  printf("OK!\n");
+  char *dir = gettempdir();
+  int  exists;
+
+  exists = fsio_dir_exists(BAD_DIR);
+  assert_eq(exists, 0, %d);
+  OK(BAD_DIR);
+
+  exists = fsio_dir_exists("/");
+  assert_eq(exists, 1, %d);
+  OK("/");
+
+  exists = fsio_dir_exists(dir);
+  assert_eq(exists, 1, %d);
+  OK(dir);
+
+  OK("Temp dir OK");
   return(0);
 }
-/*
- * int
- * main(void) {
- * // test TMPDIR
- * {
- *  CLEAR_ENV_VARS;
- *  assert(0 == putenv("TMPDIR=./"));
- *  char *dir = gettempdir();
- *  assert(dir && 0 == strcmp("./", dir));
- *  assert(0 == fs_exists(dir));
- *  free(dir);
- * }
- *
- * // test TEMP
- * {
- *  CLEAR_ENV_VARS;
- *  assert(0 == putenv("TEMP=./"));
- *  char *dir = gettempdir();
- *  assert(dir && 0 == strcmp("./", dir));
- *  assert(0 == fs_exists(dir));
- *  free(dir);
- * }
- *
- * // test TMP
- * {
- *  CLEAR_ENV_VARS;
- *  assert(0 == putenv("TMP=./"));
- *  char *dir = gettempdir();
- *  assert(dir && 0 == strcmp("./", dir));
- *  assert(0 == fs_exists(dir));
- *  free(dir);
- * }
- *
- * // test Wimp$ScrapDir (RiscOS)
- * {
- *  CLEAR_ENV_VARS;
- *  assert(0 == putenv("Wimp$ScrapDir=./"));
- *  char *dir = gettempdir();
- *  assert(dir && 0 == strcmp("./", dir));
- *  assert(0 == fs_exists(dir));
- *  free(dir);
- * }
- *
- * // test platform checks / cwd
- * {
- *  CLEAR_ENV_VARS;
- *  char *dir = gettempdir();
- *  assert(dir);
- *  assert(0 == fs_exists(dir));
- *  free(dir);
- * }
- *
- * return 0;
- * }
- */
