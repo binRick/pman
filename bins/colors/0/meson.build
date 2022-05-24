@@ -1,5 +1,5 @@
 
-bin_name = 'katmodule0'
+bin_name = 'colors0'
 
 bin = {
  'name': bin_name,
@@ -8,9 +8,7 @@ bin = {
      [
        './' + bin_name + '.c',
      ],
-     dependencies: [
-        deps,
-     ],
+     dependencies: [deps],
      include_directories: [
        '../../../',
      ],

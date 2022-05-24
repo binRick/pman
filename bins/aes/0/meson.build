@@ -1,5 +1,5 @@
 
-bin_name = 'katmodule0'
+bin_name = 'aes0'
 
 bin = {
  'name': bin_name,
@@ -9,7 +9,8 @@ bin = {
        './' + bin_name + '.c',
      ],
      dependencies: [
-        deps,
+       deps,
+       tiny_aes_dep,
      ],
      include_directories: [
        '../../../',

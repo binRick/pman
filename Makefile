@@ -5,7 +5,7 @@ EMBEDDED0_VIEW_QTY = 10
 NINJA_CONCURRENCY = 25
 ENABLED_BINS_PATTERN= ^katmodule1.*\.c|^assert.*\.c
 ENABLED_BINS_PATTERN= ^assert.*\.c|^uptime.*\.c|json.*\.c
-ENABLED_DEPS_PATTERN = ^[a-n].*|^[w-z].*|.*fs.*|.*stringbuffer.*|.*occurrences.*|.*stringfn.*|.*uptime.*|.*json.*|parson|.*usb.*|.*socket99.*|.*url.*|.*scriptexec.*|.*md5.*
+ENABLED_DEPS_PATTERN = ^[a-n].*|^[w-z].*|.*fs.*|.*stringbuffer.*|.*occurrences.*|.*stringfn.*|.*uptime.*|.*json.*|parson|.*usb.*|.*socket99.*|.*url.*|.*scriptexec.*|.*md5.*|tiny_aes
 TIDIED_FILES = bins/*.c src/*module*.c include/*module*.h
 ##########################################################
 ENABLED_DEPS_HASH=etc/enabled-deps-hash.txt

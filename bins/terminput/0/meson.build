@@ -1,5 +1,5 @@
 
-bin_name = 'katmodule0'
+bin_name = 'terminput0'
 
 bin = {
  'name': bin_name,
