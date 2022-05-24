@@ -51,7 +51,7 @@
 /////////////////////////////////////////////////////
 #include "../include/macros.h"
 /////////////////////////////////////////////////////
-#include "../deps/timer/timer.h"
+//#include "../deps/timer/timer.h"
 #include "../deps/closure/closure.h"
 #include "../deps/tempdir/tempdir.h"
 #include "../deps/strdup/strdup.h"
