@@ -1,5 +1,5 @@
 #include "../include/includes.h"
-// MESON_BIN_ENABLED=true
+// MESON_BIN_ENABLED=false
 
 static struct option getopt_long_options[] = {
   { "name", 1, NULL, 'n' }, { "bell", 0, NULL, 'b' }, { NULL, 0, NULL, 0 }

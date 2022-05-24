@@ -11,7 +11,7 @@ rm rgb-*.png rgb-*.txt rgb-*.png.c 2>/dev/null || true
 PNG_FILE="$(\ls rgb-*.png)"
 C_PNG_FILE="${PNG_FILE}.c"
 
-kitty +kitten icat $PNG_FILE
+make view-rgb-png
 
 ./build/cembed0 -o ${C_PNG_FILE} -t rgb_png $PNG_FILE
 file $C_PNG_FILE

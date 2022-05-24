@@ -1,4 +1,4 @@
-// MESON_BIN_ENABLED=true
+// MESON_BIN_ENABLED=false
 #include "../include/includes.h"
 //////////////////////////////////////
 #define DEFAULT_BIG_NUMBER    1000000000

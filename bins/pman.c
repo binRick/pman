@@ -1,4 +1,4 @@
-// MESON_BIN_ENABLED=true
+// MESON_BIN_ENABLED=false
 #include "../src/includes.c"
 /***********************/
 #include "../include/includes-pman.h"

@@ -1,4 +1,4 @@
-// MESON_BIN_ENABLED=true
+// MESON_BIN_ENABLED=false
 #ifndef VTERM0_C
 #define VTERM0_C
 

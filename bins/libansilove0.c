@@ -1,14 +1,14 @@
 // MESON_BIN_ENABLED=true
 #include "../src/includes.c"
 
-#define VERBOSE         false
+#define VERBOSE         true
 #define WIDTH           "140"
 #define BAT_STYLE       "header,numbers,rule"
 #define PNG_FILE        "/tmp/ansilove.png"
 #define FILE_NAME       "source.c"
 
-#define SRC_FILE0       "../bins/libansilove0.c"
-#define SRC_FILE        "../bins/scrabble.c"
+#define SRC_FILE        "../bins/libansilove0.c"
+#define SRC_FILE0       "../bins/scrabble.c"
 
 #define CMD_TEMPLATE    "bat"             \
   " "                                     \
@@ -21,8 +21,13 @@
   "--paging never --force-colorization"   \
   " "                                     \
   "--style=" BAT_STYLE " --theme=ansi '" SRC_FILE "'"
+/***********************************************************/
+int init();
+int bat();
+int load_buffer();
 
-int res;
+/***********************************************************/
+int                     res;
 char                    *src_dirname, *src_basename, *cmd, *bat_content;
 struct ansilove_ctx     ctx;
 struct ansilove_options options, png_options = {
@@ -34,10 +39,7 @@ struct ansilove_options options, png_options = {
   .icecolors = true,
   // .scale_factor = 2,
 };
-
-int init();
-int bat();
-int load_buffer();
+/***********************************************************/
 
 
 int main(const int argc, const char **argv){
@@ -111,13 +113,11 @@ int bat(){
 
 
 int init(){
-  //SRC_FILE = malloc(1024);
-//  strcpy(SRC_FILE, "../bins/libansilove0.c");
   if (fsio_file_exists(PNG_FILE)) {
     fsio_remove(PNG_FILE);
   }
-  assert_eq(fsio_file_exists(PNG_FILE), 0, %d);
 
+  assert_eq(fsio_file_exists(PNG_FILE), 0, %d);
   assert_eq(fsio_file_exists(SRC_FILE), -1, %d);
 
   src_dirname  = malloc(strlen(SRC_FILE));

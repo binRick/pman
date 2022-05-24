@@ -1,5 +1,5 @@
 #include "../include/includes.h"
-// MESON_BIN_ENABLED=true
+// MESON_BIN_ENABLED=false
 #define MD5_LEN    16
 char *str = "hello world";
 

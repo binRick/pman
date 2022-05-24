@@ -1,4 +1,4 @@
-// MESON_BIN_ENABLED=true
+// MESON_BIN_ENABLED=false
 #define _XOPEN_SOURCE
 #define DEV_MODE    false
 #include "../src/includes.c"

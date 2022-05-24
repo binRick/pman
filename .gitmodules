@@ -175,3 +175,27 @@
 [submodule "submodules/expand-braces"]
 	path = submodules/expand-braces
 	url = https://github.com/stephenmathieson/expand-braces.c
+[submodule "submodules/csplit"]
+	path = submodules/csplit
+	url = https://github.com/jwlodek/csplit
+[submodule "submodules/svpng"]
+	path = submodules/svpng
+	url = https://github.com/miloyip/svpng
+[submodule "submodules/boydemdb"]
+	path = submodules/boydemdb
+	url = https://github.com/dimkr/boydemdb
+[submodule "submodules/colorin"]
+	path = submodules/colorin
+	url = https://github.com/Lunlumo-ex-machina/colorin
+[submodule "submodules/sqlite"]
+	path = submodules/sqlite
+	url = https://github.com/sqlite/sqlite
+[submodule "submodules/log.c"]
+	path = submodules/log.c
+	url = https://github.com/rxi/log.c
+[submodule "submodules/kat"]
+	path = submodules/kat
+	url = https://github.com/Theldus/kat
+[submodule "submodules/tinydir"]
+	path = submodules/tinydir
+	url = https://github.com/cxong/tinydir

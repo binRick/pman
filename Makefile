@@ -2,10 +2,12 @@ default: all
 ##########################################################
 COLORS_QTY = 50
 EMBEDDED0_VIEW_QTY = 10
+NINJA_CONCURRENCY = 25
 ##########################################################
 all: \
 	build \
-	colors 
+	colors \
+	rgb-png
 ##########################################################
 PWD="$(shell pwd)"
 ETC="$(PWD)/etc"
@@ -40,7 +42,7 @@ CEMBED_CMD0 = cd $(BUILD_DIR) && { ./cembed0 -o ../include/embedded-colornames-c
 ##########################################################
 DEV_MAKE_TARGETS = \
 				   all \
-				   test 
+				   test
 DEV_TEST_TARGETS = \
 				   c0 \
 				   e0 \
@@ -127,7 +129,7 @@ meson-reconfigure:
 	@true
 
 ninja-build:
-	@ninja -C build
+	@ninja -C build -j $(NINJA_CONCURRENCY)
 
 _build: make-setup meson-build ninja-build
 
@@ -139,6 +141,7 @@ test:
 
 clean:
 	@[[ -d $(BUILD_DIR) ]] && rm -rf $(BUILD_DIR) || true
+	@rm rgb-*.png rgb-*.c 2>/dev/null|| true
 	@echo '' > $(COLOR_NAMES_HEADER_FILE)
 	@true
 
@@ -208,3 +211,12 @@ colors:
 
 colors-dev:
 	@$(PASSH) -L .colors-dev-nodemon.log $(NODEMON) -I -V -w 'build/*' -w Makefile -i build -i submodules -i deps -i 'include/embedded-*.h' -x /bin/sh -- -c 'make colors||true'
+
+rgb-png:
+	@passh timeout 1 ./rgb.sh
+
+rgb-png-dev:
+	@passh ./rgb-dev.sh
+
+view-rgb-png:
+	@kitty +kitten icat rgb-*.png

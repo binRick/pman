@@ -1,23 +1,26 @@
 // MESON_BIN_ENABLED=true
 #include "../src/includes.c"
 /********************************************************************/
-#define SIZE                 50
-#define RED                  100
-#define GREEN                150
-#define BLUE                 120
-#define ALPHA                0
-#define PNG_FILE_TEMPLATE    "rgb-%d-%d-%d-%d.png"
-#define ENCODED_PNG_FILE_TEMPLATE    "%s.txt"
+#define TIMER_ENABLED        true
+#define BUF_SIZE             1024 * 1
 /********************************************************************/
-FILE   *fp;
-int    res = -1, BUF_SIZE = 1024;
+#define SIZE                 40
+#define RED                  150
+#define GREEN                170
+#define BLUE                 220
+#define ALPHA                0
+#define PNG_FILE_TEMPLATE    "rgb-%dx%d-%d-%d-%d-%d.png"
+/********************************************************************/
+FILE *fp;
+int    res = -1;
 char   *PNG_FILE, *msg, *rgb_data_dur, *total_dur, *write_png_dur, *init_dur, *handle_rgb_png_dur, *cleanup_dur;
 size_t png_file_size;
 /********************************************************************/
 
 
 int handle_rgb_png(void) {
-  unsigned x, y; unsigned char rgb[SIZE * SIZE * 3], *p = rgb;
+  unsigned      x, y;
+  unsigned char rgb[SIZE * SIZE * 3], *p = rgb;
 
   tq_start(NULL);
   for (y = 0; y < SIZE; y++) {
@@ -57,21 +60,23 @@ int init(){
 
   int filename_len = sprintf(PNG_FILE,
                              PNG_FILE_TEMPLATE,
+                             SIZE, SIZE,
                              RED,
                              GREEN,
                              BLUE,
                              ALPHA
                              );
-  assert_ge(filename_len, 0, %d);
 
-  char *ts = stringfn_trim(stringfn_substring(PNG_FILE, 0, strlen(PNG_FILE)-4));
+  assert_ge(filename_len, 0, %d);
+  assert_eq(filename_len, strlen(PNG_FILE), %d);
 
   if (fs_exists(PNG_FILE) == 0) {
     res = unlink(PNG_FILE);
     assert_eq(res, 0, %d);
-    res = fs_exists(PNG_FILE);
-    assert_eq(res, -1, %d);
   }
+
+  res = fs_exists(PNG_FILE);
+  assert_eq(res, -1, %d);
 
   fp = fopen(PNG_FILE, "wb");
   assert_nonnull(fp);
@@ -86,9 +91,8 @@ int rgb_png_logic(void) {
   init_dur = tq_stop("");
   assert_eq(res, 0, %d);
 
-  res                = handle_rgb_png(); 
+  res = handle_rgb_png();
   assert_eq(res, 0, %d);
-
 
 
   tq_start(NULL);
@@ -118,7 +122,7 @@ int rgb_report(){
           AC_RESETALL "\n\t|Cleanup:         " AC_ITALIC AC_REVERSED AC_BLUE "%s" AC_RESETALL ""
           AC_RESETALL "\n\t|Total:           " AC_ITALIC AC_REVERSED AC_BLUE "%s" AC_RESETALL "",
 
-          PNG_FILE, bytes_to_string(png_file_size), SIZE, SIZE, 
+          PNG_FILE, bytes_to_string(png_file_size), SIZE, SIZE,
           RED, GREEN, BLUE, ALPHA,
           init_dur, handle_rgb_png_dur, write_png_dur, cleanup_dur, total_dur
           );
@@ -132,11 +136,15 @@ int rgb_report(){
 }
 
 
-int main(void) {
+int main(int argc, char **argv) {
+  if ((argc >= 2) && (strcmp(argv[1], "--test") == 0)) {
+    OK("test OK");
+    return(0);
+  }
   tq_start(NULL); //total_dur
 
   tq_start(NULL);
-  res       = rgb_png_logic();
+  res = rgb_png_logic();
   assert_eq(res, 0, %d);
   handle_rgb_png_dur = tq_stop("");
 

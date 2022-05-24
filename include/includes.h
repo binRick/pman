@@ -28,9 +28,13 @@
 /////////////////////////////////////////////////////
 static char *get_datetime();
 /////////////////////////////////////////////////////
+#include "../include/includes-module.h"
+#include "../submodules/tinydir/tinydir.h"
+/////////////////////////////////////////////////////
+#include "../submodules/svpng/svpng.inc"
 #include "../submodules/generic-print/print.h"
+#include "../submodules/csplit/csplit.h"
 #include "../include/pman.h"
-//#include "../include/vterm.h"
 #include "../include/vterm_keycodes.h"
 #include "../include/ansicodes.h"
 #include "../include/tmt.h"
@@ -111,3 +115,5 @@ static char *get_datetime();
 
 
 
+#include "../submodules/kat/include/highlight.h"
+#include "../submodules/kat/include/optparse.h"

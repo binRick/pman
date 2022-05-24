@@ -1,5 +1,7 @@
 project('pman',          ['c'],         version : '0.0.1',         default_options : ['warning_level=0','c_std=gnu99'])
 add_project_arguments('-D_GNU_SOURCE', language : 'c')
+add_project_arguments('-Wno-pragma-once-outside-header', language : 'c')
+add_project_arguments('-Wno-incompatible-pointer-types', language : 'c')
 #//***********************************************************/
 deps = []
 test_deps = []
@@ -8,6 +10,7 @@ pman_test_env = environment()
 test_env = environment()
 cc = meson.get_compiler('c')
 #//***********************************************************/
+m_dep = cc.find_library('m')
 find_deps_cmd = 'find meson/deps -type f -name meson.build|xargs dirname|sort -u'
 find_enabled_bins_cmd = 'make enabled-bins'
 csv = ['submodules/csv_parser/csv.c','submodules/csv_parser/split.c','submodules/csv_parser/fread_csv_line.c']
@@ -23,6 +26,22 @@ ensure_dev_includes = run_command(sh, '-c', '[[ -f include/embedded-colornames-d
 find_deps = run_command(sh, '-c', find_deps_cmd, check: true).stdout().strip().split('\n')
 enabled_bins = run_command(sh, '-c', find_enabled_bins_cmd, check: true).stdout().strip().split('\n')
 pwd = run_command(pwd_bin, check: true).stdout().strip()
+
+#//***********************************************************/
+inc = include_directories(
+  '.',
+  './include', 
+  './deps', 
+  './src', 
+  './submodules',
+  './submodules/libvterm',
+  './submodules/libvterm/include',
+  './submodules/libvterm/src',
+  './submodules/c_string_buffer/include',
+  './submodules/c_stringfn/include',
+  './submodules/c_stringfn/src',
+  './include/template',
+)
 #//***********************************************************/
 foreach m : find_deps
   subdir(m)
@@ -44,26 +63,13 @@ deps += cc.find_library('m', required : true)
 opts.set_override_option('werror', 'false')
 opts.set_override_option('warning_level', '1')
 #//***********************************************************/
-incdir = include_directories(
-  '.',
-  './include', 
-  './deps', 
-  './src', 
-  './include/template',
-  './submodules/libvterm',
-  './submodules/libvterm/include',
-  './submodules/libvterm/src',
-  './submodules/c_string_buffer/include',
-  './submodules/c_stringfn/include',
-  './submodules/c_stringfn/src',
-)
 install_headers([])
 #/////////////////////////////////
 srcs += csv
 srcs += template
 srcs += vterm
 #//***********************************************************/
-#pman = executable('pman',['bins/pman.c', files(srcs)], dependencies: [deps], include_directories: [incdir])
+#pman = executable('pman',['bins/pman.c', files(srcs)], dependencies: [deps], include_directories: [inc])
 #//***********************************************************/
 test_env.set('__MESON_TEST_MODE__', '1')
 test_env.set('__SH', sh.full_path())
@@ -82,7 +88,7 @@ foreach b : enabled_bins
         'name': b,
         'executable': executable(b, ['bins/' + b + '.c', files(srcs)], 
           dependencies: [deps],
-          include_directories: [incdir],
+          include_directories: [inc],
         )
       }
 endforeach

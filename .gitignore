@@ -31,3 +31,5 @@ build
 *.uncrustify
 submodules/**
 etc/*.tkvdb
+rgb-*.png
+rgb-*.c

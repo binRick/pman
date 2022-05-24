@@ -1,5 +1,5 @@
 #include "../src/includes.c"
-// MESON_BIN_ENABLED=true
+// MESON_BIN_ENABLED=false
 #define RESIZE_SCRIPT_TEMPLATE    "env RESIZE_WIDTH=%u RESIZE_HEIGHT=%u ../../ansi/get_rgb_image.sh %u %u %u"
 #define VERBOSE_MODE              false
 #define COLOR_BOUNDARY            1

@@ -1,5 +1,5 @@
 #include "../../include/includes.h"
-// MESON_BIN_ENABLED=true
+// MESON_BIN_ENABLED=false
 
 
 void completion(const char *buf, bestlineCompletions *lc) {

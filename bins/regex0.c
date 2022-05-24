@@ -1,5 +1,5 @@
 #include "../include/includes.h"
-// MESON_BIN_ENABLED=true
+// MESON_BIN_ENABLED=false
 
 #define OK     ((char *)1)
 #define NOK    ((char *)0)
