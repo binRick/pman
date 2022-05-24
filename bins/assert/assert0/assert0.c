@@ -1,5 +1,5 @@
 // MESON_BIN_ENABLED=false
-#include "../src/includes.c"
+#include "../../../include/includes.h"
 
 
 int main(void){
@@ -10,5 +10,6 @@ int main(void){
   assert_true(-1, %d);
   assert_false(0, %d);
   assert_eqf(!1, 0, % d, "foobar");
+  OK("Assert0 OK");
   return(0);
 }

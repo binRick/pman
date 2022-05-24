@@ -1,5 +1,7 @@
-#include "../include/includes.h"
-// MESON_BIN_ENABLED=false
+// MESON_BIN_ENABLED=true
+/////////////////////////////////
+#include "../src/includes.c"
+/////////////////////////////////
 
 
 int main(const int argc, const char **argv){

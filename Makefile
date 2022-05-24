@@ -3,8 +3,9 @@ default: all
 COLORS_QTY = 50
 EMBEDDED0_VIEW_QTY = 10
 NINJA_CONCURRENCY = 25
-ENABLED_BINS_PATTERN="^katmodule1.*\.c"
-ENABLED_DEPS_PATTERN = ^[a-n].*|^[w-z].*|.*fs.*|.*stringbuffer.*|.*occurrences.*|.*stringfn.*
+ENABLED_BINS_PATTERN= ^katmodule1.*\.c|^assert.*\.c
+ENABLED_BINS_PATTERN= ^assert.*\.c|^uptime.*\.c|json.*\.c
+ENABLED_DEPS_PATTERN = ^[a-n].*|^[w-z].*|.*fs.*|.*stringbuffer.*|.*occurrences.*|.*stringfn.*|.*uptime.*|.*json.*|parson|.*usb.*|.*socket99.*|.*url.*|.*scriptexec.*|.*md5.*
 TIDIED_FILES = bins/*.c src/*module*.c include/*module*.h
 ##########################################################
 ENABLED_DEPS_HASH=etc/enabled-deps-hash.txt
@@ -102,7 +103,7 @@ pc: pc-cmd pc-help
 	@eval "$(DEV_CMD)"
 
 dev: 
-	@$(PASSH) -L .nodemon.log $(NODEMON) -I -V -w 'include/*.h' -w meson -w etc/tpl -w meson.build -w bins -w src -w Makefile -i $(BUILD_DIR) -i submodules -i deps -i 'include/embedded-*.h' -e tpl,build,sh,c,h,Makefile -x env -- bash -c 'make $(DEV_MAKE_TARGETS) $(DEV_TEST_TARGETS)||true'
+	@$(PASSH) -L .nodemon.log $(NODEMON) -I -V -w 'bins/*/*/*.c' -w 'bins/*/*/meson.build' -w 'include/*.h' -w meson -w etc/tpl -w meson.build -w bins -w src -w Makefile -i $(BUILD_DIR) -i submodules -i deps -i 'include/embedded-*.h' -e tpl,build,sh,c,h,Makefile -x env -- bash -c 'make $(DEV_MAKE_TARGETS) $(DEV_TEST_TARGETS)||true'
 
 nodemon:
 	@$(PASSH) make

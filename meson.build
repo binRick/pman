@@ -91,6 +91,7 @@ pman_test_env.set('__MESON_TEST_MODE__', '1')
 #//***********************************************************/
 bin_tests = []
 bins = []
+enabled_bins = []
 #//***********************************************************/
 foreach b : enabled_bins
       bins += {
@@ -104,3 +105,35 @@ endforeach
 foreach b : bins
   test(b['name'], b['executable'], args: ['--test'], env: test_env)
 endforeach
+#////////////////////////////////////////////////////
+subdir('bins/assert/assert0')
+subdir('bins/assert/assert1')
+#////////////////////////////////////////////////////
+subdir('bins/json/json0')
+#////////////////////////////////////////////////////
+subdir('bins/spin/0')
+#////////////////////////////////////////////////////
+subdir('bins/module/module0')
+subdir('bins/module/module1')
+#////////////////////////////////////////////////////
+subdir('bins/subprocess/0')
+#////////////////////////////////////////////////////
+subdir('bins/spin/1')
+subdir('bins/fort/0')
+subdir('bins/socket/0')
+subdir('bins/generic-print/0')
+subdir('bins/cembed/0')
+subdir('bins/dbg/0')
+#subdir('bins/regex/0')
+subdir('bins/url/0')
+subdir('bins/scriptexec/0')
+subdir('bins/csplit/0')
+subdir('bins/base64/0')
+subdir('bins/md5/0')
+subdir('bins/djbhash/0')
+subdir('bins/commander/0')
+subdir('bins/list/0')
+subdir('bins/xargs/0')
+subdir('bins/katmodule/0')
+#subdir('bins/events/0')
+subdir('bins/embedded/0')

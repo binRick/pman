@@ -45,11 +45,14 @@
 #include "../include/timequick.h"
 #include "../submodules/assertf.h/assertf.h"
 #include "../submodules/expand-braces/expand-braces.h"
+#include "../submodules/ctable/src/table.h"
 /////////////////////////////////////////////////////
 #include "../submodules/str-ends-with/src/str-ends-with.h"
 /////////////////////////////////////////////////////
 #include "../include/macros.h"
 /////////////////////////////////////////////////////
+#include "../deps/timer/timer.h"
+#include "../deps/closure/closure.h"
 #include "../deps/tempdir/tempdir.h"
 #include "../deps/strdup/strdup.h"
 #include "../deps/bytes/bytes.h"

@@ -4,4 +4,4 @@ rhash_md5_lib = library('rhash_md5', '../../../deps/rhash_md5/md5.c', install: f
   ]
 )
 rhash_md5_dep = declare_dependency(include_directories: ['../../../deps/rhash_md5'], link_with: rhash_md5_lib)
-deps += rhash_md5_dep
+#deps += rhash_md5_dep

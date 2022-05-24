@@ -39,6 +39,8 @@
     "stephenmathieson/is-email.c": "0.0.2",
     "stephenmathieson/tempdir.c": "0.0.2",
     "jwerle/url.h": "0.2.0",
-    "clibs/module": "0.1.1"
+    "clibs/module": "0.1.1",
+    "mobiushorizons/closure_module": "0.0.2",
+    "clibs/timer": "1.0.0"
   }
 }
