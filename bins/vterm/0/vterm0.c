@@ -8,8 +8,8 @@
 
 #include "../src/includes.c"
 //#include "../include/includes.h"
-#include "include/vterm.h"
-#include "include/vterm_keycodes.h"
+#include "../../../../include/vterm.h"
+//#include "include/vterm_keycodes.h"
 //#include <limits.h>
 //#include <stdio.h>
 //#include <string.h>

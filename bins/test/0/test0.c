@@ -1,5 +1,5 @@
 
-#include "src/case.h"
+#include "../include/includes.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
