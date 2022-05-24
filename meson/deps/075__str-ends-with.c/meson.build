@@ -11,4 +11,4 @@ strendswith_dep = declare_dependency(include_directories: [
     ], link_with: strendswith_lib
 )
 
-deps += strendswith_dep
+#deps += strendswith_dep

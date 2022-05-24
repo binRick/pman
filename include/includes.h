@@ -33,7 +33,7 @@
 #include "../submodules/generic-print/print.h"
 #include "../submodules/csplit/csplit.h"
 #include "../include/pman.h"
-#include "../include/vterm_keycodes.h"
+//#include "../include/vterm_keycodes.h"
 #include "../include/ansicodes.h"
 #include "../include/tmt.h"
 #include "../include/dbg.h"

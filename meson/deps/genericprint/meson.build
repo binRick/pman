@@ -10,4 +10,4 @@ genericprint_dep = declare_dependency(include_directories: [
     ], link_with: genericprint_lib
 )
 
-deps += genericprint_dep
+#deps += genericprint_dep

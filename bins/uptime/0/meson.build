@@ -10,6 +10,7 @@ bin = {
      ],
      dependencies: [
         deps,
+        uptime_dep,
      ],
      include_directories: [
        '../../../',

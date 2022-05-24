@@ -4,4 +4,4 @@ bestline_lib = library('bestline', '../../../submodules/bestline/bestline.c', in
   ]
 )
 bestline_dep = declare_dependency(include_directories: ['../../../submodules/bestline'], link_with: bestline_lib)
-deps += bestline_dep
+#deps += bestline_dep

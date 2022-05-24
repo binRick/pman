@@ -10,6 +10,7 @@ bin = {
      ],
      dependencies: [
         deps,
+        simpleconf_dep,
      ],
      include_directories: [
        '../../../',

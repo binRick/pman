@@ -4,4 +4,4 @@ parson_lib = library('parson', '../../../deps/parson/parson.c', install: false, 
   ]
 )
 parson_dep = declare_dependency(include_directories: [], link_with: parson_lib)
-deps += parson_dep
+#deps += parson_dep

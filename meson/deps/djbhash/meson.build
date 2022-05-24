@@ -11,4 +11,4 @@ djbhash_dep = declare_dependency(include_directories: [
     ], link_with: djbhash_lib
 )
 
-deps += djbhash_dep
+#deps += djbhash_dep

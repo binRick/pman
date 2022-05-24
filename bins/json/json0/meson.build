@@ -4,7 +4,7 @@ bin = {
      [
        './json0.c',
      ],
-     dependencies: [deps],
+     dependencies: [deps, parson_dep],
      include_directories: [
        '../../../',
      ],

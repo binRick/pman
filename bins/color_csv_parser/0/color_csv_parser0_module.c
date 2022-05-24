@@ -1,0 +1,9 @@
+#pragma once
+#ifndef COLOR_PARSER_MODULE
+#define COLOR_PARSER_MODULE
+//////////////////////////////////////////
+#include "./color_csv_parser0_includes.c"
+//////////////////////////////////////////
+
+
+#endif

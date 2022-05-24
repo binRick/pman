@@ -10,6 +10,7 @@ bin = {
      ],
      dependencies: [
         deps,
+        libansilove_dep,
      ],
      include_directories: [
        '../../../',

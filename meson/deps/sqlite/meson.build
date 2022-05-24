@@ -11,4 +11,4 @@ sqlite_dep = declare_dependency(include_directories: [
     ], link_with: sqlite_lib
 )
 
-deps += sqlite_dep
+#deps += sqlite_dep

@@ -1,4 +1,6 @@
 #pragma once
+#ifndef COLOR_PARSER_INIT
+#define COLOR_PARSER_INIT
 #include "../include/macros.h"
 #include "../include/pman0-defines.h"
 #include "../include/pman0-types.h"
@@ -44,3 +46,5 @@ void pman_init() {
       fprintf(stderr, " cols: %d | rows: %d\n", cols, rows);
 }
 
+
+#endif

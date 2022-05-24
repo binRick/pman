@@ -4,4 +4,4 @@ simpleconf_lib = library('simpleconf', '../../../submodules/simpleconf/simplecon
   ]
 )
 simpleconf_dep = declare_dependency(include_directories: ['../../../submodules/simpleconf'], link_with: simpleconf_lib)
-deps += simpleconf_dep
+#deps += simpleconf_dep

@@ -10,6 +10,7 @@ bin = {
      ],
      dependencies: [
         deps,
+        buffet_dep,
      ],
      include_directories: [
        '../../../',

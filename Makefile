@@ -6,7 +6,7 @@ NINJA_CONCURRENCY = 25
 ENABLED_BINS_PATTERN= ^katmodule1.*\.c|^assert.*\.c
 ENABLED_BINS_PATTERN= ^assert.*\.c|^uptime.*\.c|json.*\.c
 ENABLED_DEPS_PATTERN = ^[a-n].*|^[w-z].*|.*fs.*|.*stringbuffer.*|.*occurrences.*|.*stringfn.*|.*uptime.*|.*json.*|parson|.*usb.*|.*socket99.*|.*url.*|.*scriptexec.*|.*md5.*|tiny_aes|.*tempdir.*|.*rgba.*|.*md5.*|.*strsplit.*|.*trim.*|.*rhash.*|.*conf.*|.*memtrace.*
-TIDIED_FILES = bins/*.c src/*module*.c include/*module*.h
+TIDIED_FILES = bins/*.c src/*module*.c include/*module*.h bins/*/*/*.c
 ##########################################################
 ENABLED_DEPS_HASH=etc/enabled-deps-hash.txt
 ENABLED_BINS_HASH=etc/enabled-bins-hash.txt

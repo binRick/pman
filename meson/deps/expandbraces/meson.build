@@ -11,4 +11,4 @@ expandbraces_dep = declare_dependency(include_directories: [
     ], link_with: expandbraces_lib
 )
 
-deps += expandbraces_dep
+#deps += expandbraces_dep

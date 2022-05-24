@@ -10,4 +10,4 @@ stricks_dep = declare_dependency(include_directories: [
     ], link_with: stricks_lib
 )
 
-deps += stricks_dep
+#deps += stricks_dep

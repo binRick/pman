@@ -10,4 +10,4 @@ csplit_dep = declare_dependency(include_directories: [
     ], link_with: csplit_lib
 )
 
-deps += csplit_dep
+#deps += csplit_dep

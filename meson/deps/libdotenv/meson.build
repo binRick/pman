@@ -4,4 +4,4 @@ libdotenv_lib = library('libdotenv', '../../../submodules/libdotenv/dot_env.h', 
   ]
 )
 libdotenv_dep = declare_dependency(include_directories: ['../../../submodules/libdotenv'], link_with: libdotenv_lib)
-deps += libdotenv_dep
+#deps += libdotenv_dep

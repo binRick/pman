@@ -1,0 +1,10 @@
+#ifndef COLOR_PARSER_MAIN
+#define COLOR_PARSER_MAIN
+////////////////////////////////////////////////////////////////////////
+#include "./color_csv_parser0_includes.c"
+////////////////////////////////////////////////////////////////////////
+
+int main(const int argc, const char **argv) {
+  return(colorcsvparser0_modulemain(argc, argv));
+}
+#endif

@@ -8,7 +8,7 @@ bin = {
      [
        './' + bin_name + '.c',
      ],
-     dependencies: [deps],
+     dependencies: [deps, scriptexec_dep],
      include_directories: [
        '../../../',
      ],

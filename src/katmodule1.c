@@ -33,14 +33,14 @@ static inline int katmodule1_writepng() {
   assert_eq(r, 0, %d);
 
   //KM1->options.columns = 140;
-  KM1->options.columns = KM1->max_content_width + 2;
-  KM1->options.mode         = katmodule1_default_options.mode;
+  KM1->options.columns   = KM1->max_content_width + 2;
+  KM1->options.mode      = katmodule1_default_options.mode;
   KM1->options.truecolor = katmodule1_default_options.truecolor;
   //KM1->options.scale_factor = 4;
-  KM1->options.dos = katmodule1_default_options.dos;
-  KM1->options.diz = katmodule1_default_options.diz;
-   KM1->options.font         = katmodule1_default_options.font;
-  KM1->options.icecolors    = katmodule1_default_options.icecolors;
+  KM1->options.dos       = katmodule1_default_options.dos;
+  KM1->options.diz       = katmodule1_default_options.diz;
+  KM1->options.font      = katmodule1_default_options.font;
+  KM1->options.icecolors = katmodule1_default_options.icecolors;
 
 
   KM1->ctx->maplen = KM1->ctx->length = strlen(KM1->highlighted_content);

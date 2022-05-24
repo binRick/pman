@@ -10,6 +10,7 @@ bin = {
      ],
      dependencies: [
         deps,
+        libterminput_dep,
      ],
      include_directories: [
        '../../../',

@@ -4,4 +4,4 @@ libterminput_lib = library('libterminput', '../../../submodules/libterminput/lib
   ]
 )
 libterminput_dep = declare_dependency(include_directories: [], link_with: libterminput_lib)
-deps += libterminput_dep
+#deps += libterminput_dep

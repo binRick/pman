@@ -10,6 +10,7 @@ bin = {
      ],
      dependencies: [
         deps,
+        tempdir_dep,
      ],
      include_directories: [
        '../../../',

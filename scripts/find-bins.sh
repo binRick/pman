@@ -12,8 +12,8 @@ md5() {
 	md5sum | cut -d' ' -f1
 }
 
-meson_build_files(){
-    find "${BINS_DIR}" -type f -name meson.build
+meson_build_files() {
+	find "${BINS_DIR}" -type f -name meson.build
 }
 
 bin_c_files() {

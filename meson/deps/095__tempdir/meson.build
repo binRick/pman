@@ -12,4 +12,4 @@ tempdir_dep = declare_dependency(include_directories: [
     '../../../deps/tempdir',
 ], link_with: tempdir_lib)
 
-deps += tempdir_dep
+#deps += tempdir_dep

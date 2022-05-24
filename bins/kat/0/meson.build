@@ -10,6 +10,7 @@ bin = {
      ],
      dependencies: [
         deps,
+        kat_dep,
      ],
      include_directories: [
        '../../../',

@@ -13,4 +13,4 @@ socket99_dep = declare_dependency(include_directories: [
     ], link_with: socket99_lib
 )
 
-deps += socket99_dep
+#deps += socket99_dep

@@ -10,6 +10,7 @@ bin = {
      ],
      dependencies: [
         deps,
+        c_forever_dep,
      ],
      include_directories: [
        '../../../',

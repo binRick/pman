@@ -19,4 +19,4 @@ libansilove_lib = library('libansilove',
   ]
 )
 libansilove_dep = declare_dependency(include_directories: ['../../../submodules/libansilove/include'], link_with: libansilove_lib)
-deps += libansilove_dep
+#deps += libansilove_dep

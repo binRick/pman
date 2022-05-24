@@ -11,4 +11,4 @@ buffet_dep = declare_dependency(include_directories: [
     ], link_with: buffet_lib
 )
 
-deps += buffet_dep
+#deps += buffet_dep

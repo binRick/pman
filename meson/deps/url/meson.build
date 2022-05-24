@@ -13,4 +13,4 @@ url_dep = declare_dependency(include_directories: [
     link_with: url_lib
 )
 
-deps += url_dep
+#deps += url_dep

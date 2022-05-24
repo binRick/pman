@@ -8,7 +8,10 @@ bin = {
      [
        './' + bin_name + '.c',
      ],
-     dependencies: [deps],
+     dependencies: [
+       deps,
+       socket99_dep,
+     ],
      include_directories: [
        '../../../',
      ],

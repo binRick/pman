@@ -4,4 +4,4 @@ scriptexec_lib = library('scriptexec', '../../../submodules/scriptexec/src/scrip
   ]
 )
 scriptexec_dep = declare_dependency(include_directories: ['../../../submodules/scriptexec/include'], link_with: scriptexec_lib)
-deps += scriptexec_dep
+#deps += scriptexec_dep

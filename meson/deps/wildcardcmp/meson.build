@@ -4,4 +4,4 @@ wildcardcmp_lib = library('wildcardcmp', '../../../submodules/wildcardcmp/wildca
   ]
 )
 wildcardcmp_dep = declare_dependency(include_directories: ['../../../submodules/wildcardcmp'], link_with: wildcardcmp_lib)
-deps += wildcardcmp_dep
+#deps += wildcardcmp_dep

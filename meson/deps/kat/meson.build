@@ -14,4 +14,4 @@ kat_dep = declare_dependency(include_directories: [
     ], link_with: kat_lib
 )
 
-deps += kat_dep
+#deps += kat_dep

@@ -10,6 +10,7 @@ bin = {
      ],
      dependencies: [
         deps,
+        bestline_dep,
      ],
      include_directories: [
        '../../../',
