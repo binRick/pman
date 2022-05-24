@@ -3,20 +3,27 @@ default: all
 COLORS_QTY = 50
 EMBEDDED0_VIEW_QTY = 10
 NINJA_CONCURRENCY = 25
+ENABLED_BINS_PATTERN="^katmodule1.*\.c"
+ENABLED_DEPS_PATTERN = ^[a-n].*|^[w-z].*|.*fs.*|.*stringbuffer.*|.*occurrences.*|.*stringfn.*
+TIDIED_FILES = bins/*.c src/*module*.c include/*module*.h
+##########################################################
+ENABLED_DEPS_HASH=etc/enabled-deps-hash.txt
+ENABLED_BINS_HASH=etc/enabled-bins-hash.txt
 ##########################################################
 all: \
-	build \
-	colors \
-	rgb-png
+	build 
 ##########################################################
-PWD="$(shell pwd)"
-ETC="$(PWD)/etc"
+PWD=$(shell pwd)
+ETC=$(PWD)/etc
 BUILD_DIR=$(PWD)/build
 INCLUDES_DIR=$(PWD)/include
+SCRIPTS_DIR=$(PWD)/scripts
 ##########################################################
 PMAN=$(BUILD_DIR)/pman
 PMAN_HELP_CMD=$(PMAN) --help 
 FIELD_RANGE_PARSER=$(BUILD_DIR)/field-range-parser
+FIND_BINS_CMD = $(SCRIPTS_DIR)/find-bins.sh
+FIND_DEPS_CMD = $(SCRIPTS_DIR)/find-deps.sh
 ##########################################################
 PASSH=$(shell command -v passh)
 GIT=$(shell command -v git)
@@ -40,13 +47,17 @@ CSV0_CMD = cd $(BUILD_DIR) && ./csv0 -T -i ../$(CSV0_IN_FILE) -o ../$(CSV0_OUT_F
 EMBEDDED0_CMD = cd $(BUILD_DIR) && { ./embedded0 | tail -n $(EMBEDDED0_VIEW_QTY); }
 CEMBED_CMD0 = cd $(BUILD_DIR) && { ./cembed0 -o ../include/embedded-colornames-compiled.h -p __CEMBED_CMD0__ -t __CEMBED_TBL__ -z ../include/embedded-colornames-dev.h && wc -l ../include/embedded-colornames-compiled.h; }
 ##########################################################
+KATMODULE_TEST_TARGETS = \
+				   test-katmodule1
+COLORS_TEST_TARGETS = \
+				   c0 \
+				   e0 \
+				   ce0
 DEV_MAKE_TARGETS = \
 				   all \
 				   test
 DEV_TEST_TARGETS = \
-				   c0 \
-				   e0 \
-				   ce0
+				   $(KATMODULE_TEST_TARGETS)
 ##########################################################
 DEV_CMD =\
 		$(PMAN) \
@@ -68,8 +79,11 @@ rm-embedded0:
 	@unlink $(BUILD_DIR)/embedded0 2>/dev/null||true
 	@true
 
+enabled-deps:
+	@env ENABLED_DEPS_PATTERN="$(ENABLED_DEPS_PATTERN)" $(FIND_DEPS_CMD)
+
 enabled-bins:
-	@grep 'MESON_BIN_ENABLED=true' bins/*.c|cut -d: -f1|sort -u|xargs -I % basename % .c
+	@env ENABLED_BINS_PATTERN="$(ENABLED_BINS_PATTERN)" $(FIND_BINS_CMD)
 
 pc-cmd:
 	@printf '%s\n' "$(DEV_CMD)"
@@ -113,19 +127,20 @@ setup: clibs-install submodules-install tools
 
 make-setup:
 	@[[ -d deps && -d submodules && -d .venv ]] || make -J 10 setup
+	@true
 
 _meson-build:
 	@meson $(BUILD_DIR)
 
 meson-build:
-	@make _meson-build || { make meson-reconfigure || make meson-wipe || make _meson-build; }
+	@make _meson-build 2>/dev/null || { make meson-reconfigure 2>/dev/null || make meson-wipe 2>/dev/null || make _meson-build; }
 	@true
 
 meson-wipe:
 	@meson $(BUILD_DIR) --wipe
 
 meson-reconfigure:
-	@{ meson $(BUILD_DIR) --reconfigure || { make meson-wipe && make meson-reconfigure; }; } || { make meson-wipe && make build; }
+	@{ meson $(BUILD_DIR) --reconfigure 2>/dev/null || { make meson-wipe && make meson-reconfigure; }; } 2>/dev/null || { make meson-wipe && make build; }
 	@true
 
 ninja-build:
@@ -133,17 +148,22 @@ ninja-build:
 
 _build: make-setup meson-build ninja-build
 
-build:
-	@make _build || { make clean && make _build; }
+build: enabled-deps enabled-bins _build
+
+#@make _build || { make clean && make _build; }
 
 test:
 	@meson test -C $(BUILD_DIR) --verbose
 
 clean:
 	@[[ -d $(BUILD_DIR) ]] && rm -rf $(BUILD_DIR) || true
+#	@echo '' > $(ENABLED_BINS_HASH)
+#	@echo '' > $(ENABLED_DEPS_HASH)
+	@true
+
+clean-colors:
 	@rm rgb-*.png rgb-*.c 2>/dev/null|| true
 	@echo '' > $(COLOR_NAMES_HEADER_FILE)
-	@true
 
 install:
 	@echo Install OK
@@ -179,7 +199,7 @@ do-bins: make-bins
 
 
 uncrustify:
-	@uncrustify -c etc/uncrustify.cfg --replace bins/*.c
+	@uncrustify -c etc/uncrustify.cfg --replace $(TIDIED_FILES)
 	@shfmt -w scripts/*.sh
 
 #	include/*.h src/*.c||true
@@ -189,25 +209,28 @@ uncrustify-clean:
 	@find . -type f -name "*unc-back*"|xargs -I % unlink %
 
 fix-dbg:
-	@gsed 's|, % s);|, %s);|g' -i bins/*.c
-	@gsed 's|, % lu);|, %lu);|g' -i bins/*.c
-	@gsed 's|, % d);|, %d);|g' -i bins/*.c
-	@gsed 's|, % zu);|, %zu);|g' -i bins/*.c
+	@gsed 's|, % s);|, %s);|g' -i $(TIDIED_FILES)
+	@gsed 's|, % lu);|, %lu);|g' -i $(TIDIED_FILES)
+	@gsed 's|, % d);|, %d);|g' -i $(TIDIED_FILES)
+	@gsed 's|, % zu);|, %zu);|g' -i $(TIDIED_FILES)
 
 tidy: uncrustify fix-dbg uncrustify-clean
 
+test-katmodule1:
+	$(KATMODULE1_CMD)
+
 c0:
-	@$(CSV0_CMD)
+	$(CSV0_CMD)
 
 ce0:
-	@$(CEMBED_CMD0)
+	$(CEMBED_CMD0)
 
 e0:
-	@$(EMBEDDED0_CMD)
+	$(EMBEDDED0_CMD)
 
 colors:
-	@make c0
-	@make e0
+	make c0
+	make e0
 
 colors-dev:
 	@$(PASSH) -L .colors-dev-nodemon.log $(NODEMON) -I -V -w 'build/*' -w Makefile -i build -i submodules -i deps -i 'include/embedded-*.h' -x /bin/sh -- -c 'make colors||true'

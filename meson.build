@@ -1,17 +1,26 @@
 project('pman',          ['c'],         version : '0.0.1',         default_options : ['warning_level=0','c_std=gnu99'])
+#//***********************************************************/
 add_project_arguments('-D_GNU_SOURCE', language : 'c')
+add_project_arguments('-DDBG_H_DEF_ONCE', language : 'c')
+add_project_arguments('-DDBG_H_NO_WARNING', language : 'c')
+add_project_arguments('-DASSERTF_DEF_ONCE', language : 'c')
+add_project_arguments('-DLOG_USE_COLOR', language : 'c')
+add_project_arguments('-DLOG_LEVEL=TRACE', language : 'c')
 add_project_arguments('-Wno-pragma-once-outside-header', language : 'c')
 add_project_arguments('-Wno-incompatible-pointer-types', language : 'c')
-#//***********************************************************/
 deps = []
 test_deps = []
 srcs = []
 pman_test_env = environment()
 test_env = environment()
 cc = meson.get_compiler('c')
+config = configuration_data()
+version = run_command('git','rev-parse','HEAD', check: true).stdout().strip()
+config.set('version', version)
+add_project_arguments('-D__GIT_HASH__=' + version, language : 'c')
 #//***********************************************************/
 m_dep = cc.find_library('m')
-find_deps_cmd = 'find meson/deps -type f -name meson.build|xargs dirname|sort -u'
+find_deps_cmd = 'make enabled-deps'
 find_enabled_bins_cmd = 'make enabled-bins'
 csv = ['submodules/csv_parser/csv.c','submodules/csv_parser/split.c','submodules/csv_parser/fread_csv_line.c']
 vterm = ['submodules/libvterm/src/vterm.c','submodules/libvterm/src/pen.c','submodules/libvterm/src/unicode.c',

@@ -13,9 +13,9 @@ module(katmodule0) {
 
   enum katmodule0_mode mode;
 
-  void              (*info)(char *);
-  void              (*debug)(char *);
-  void              (*error)(char *);
+  void                 (*info)(char *);
+  void                 (*debug)(char *);
+  void                 (*error)(char *);
 };
 
 int  katmodule0_init(module(katmodule0) * exports);

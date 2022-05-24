@@ -1,6 +1,5 @@
 #pragma once
 #define _DEFAULT_SOURCE
-#define ASSERTF_DEF_ONCE
 /////////////////////////////////////////////////////
 #include <assert.h>
 #include <stddef.h>
@@ -26,7 +25,6 @@
 /////////////////////////////////////////////////////
 #include "../include/includes-pman-ansi.h"
 /////////////////////////////////////////////////////
-static char *get_datetime();
 /////////////////////////////////////////////////////
 #include "../include/includes-module.h"
 #include "../submodules/tinydir/tinydir.h"
@@ -99,21 +97,12 @@ static char *get_datetime();
 #include "../deps/is_number/is_number.h"
 #include "../deps/list/list.h"
 #include "../include/int.h"
-#include "../src/datetime.c"
-//#include "../include/errnos.h"
-//#include "../include/utils.h"
+//#include "../src/datetime.c"
 #include "../include/strconv.h"
 #include "../submodules/c_stringfn/include/stringfn.h"
 #include "../deps/rhash_md5/md5.h"
-#include "../deps/rhash_md5/md5.h"
-
-#define OK(MSG){ fprintf(stderr, "  \e[32m\u2713 \e[90mOK- %s\e[0m\n", MSG); }
-
-
-
-
-
-
-
 #include "../submodules/kat/include/highlight.h"
 #include "../submodules/kat/include/optparse.h"
+
+#define OK(MSG){ fprintf(stderr, "  \e[32m\u2713 \e[90mOK- %s\e[0m\n", MSG); }
+static char *get_datetime();
