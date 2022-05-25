@@ -82,8 +82,8 @@
 [submodule "submodules/bestline"]
 	path = submodules/bestline
 	url = https://github.com/jart/bestline
-[submodule "submodules/scriptexec"]
-	path = submodules/scriptexec
+[submodule "submodules/c_scriptexec"]
+	path = submodules/c_scriptexec
 	url = https://github.com/sagiegurari/c_scriptexec
 [submodule "submodules/c_fsio"]
 	path = submodules/c_fsio

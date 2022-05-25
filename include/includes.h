@@ -80,7 +80,7 @@
 #include "../submodules/libconfuse/src/confuse.h"
 #include "../submodules/libdotenv/dot_env.h"
 #include "../submodules/libterminput/libterminput.h"
-#include "../submodules/scriptexec/include/scriptexec.h"
+#include "../submodules/c_scriptexec/include/scriptexec.h"
 #include "../submodules/simpleconf/simpleconf.h"
 #include "../submodules/spin/spin.h"
 #include "../submodules/tiny-regex-c/re.h"
