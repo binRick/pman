@@ -18,7 +18,7 @@ clib_name() { printf '%s' "$1" | tr '/' '\n' | tail -n1; }
 clib_dirname() { printf '%s/%s' "$CLIBS_DIR" "$(clib_name "$m")"; }
 
 clib_cmd() {
-	printf '[[ -d "%s/%s" ]] || { clib i "%s"; }' \
+	printf '[[ -d "%s/%s" ]] || { clib i -C 1 -f "%s"; }' \
 		"$CLIBS_DIR" \
 		"$(clib_name "$1")" \
 		"$1"
