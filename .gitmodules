@@ -187,9 +187,9 @@
 [submodule "submodules/colorin"]
 	path = submodules/colorin
 	url = https://github.com/Lunlumo-ex-machina/colorin
-[submodule "submodules/sqlite"]
-	path = submodules/sqlite
-	url = https://github.com/sqlite/sqlite
+#[submodule "submodules/sqlite"]
+#	path = submodules/sqlite
+#	url = https://github.com/sqlite/sqlite
 [submodule "submodules/log.c"]
 	path = submodules/log.c
 	url = https://github.com/rxi/log.c
