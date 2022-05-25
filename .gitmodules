@@ -15,7 +15,7 @@
 	url = https://github.com/binRick/debug_print_h
 [submodule "submodules/c_printf"]
 	path = submodules/c_printf
-	url = https://github.com:binRick/c_printf
+	url = https://github.com/binRick/c_printf
 [submodule "submodules/generic-print"]
 	path = submodules/generic-print
 	url = https://github.com/exebook/generic-print
