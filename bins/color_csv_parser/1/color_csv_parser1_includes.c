@@ -1,9 +1,9 @@
 #pragma once
 #ifndef COLOR_PARSER_INCLUDES
 #define COLOR_PARSER_INCLUDES
-#include "../../../deps/clibs/module/def.h"
-#include "../../../deps/clibs/module/module.h"
-#include "../../../deps/clibs/module/require.h"
+#include "../module/def.h"
+#include "../module/module.h"
+#include "../module/require.h"
 //////////////////////////////////////////
 #include "./color_csv_parser1_types.h"
 //////////////////////////////////////////
