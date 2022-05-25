@@ -44,21 +44,29 @@ RUN cd /ansi && make install
 RUN cd /root/repos/pman/submodules/libansilove && cmake . && make install
 RUN apk add gd-dev file bat ripgrep
 RUN cp /root/repos/pman/bins/uptime/0/uptime0.c /tmp/uptime0.c
+RUN cd /root/repos/pman && git reset --hard && git pull
+RUN rm -rf /root/pman/deps /root/repos/pman/submodules
+COPY ./submodules /root/repos/pman/submodules
+COPY ./deps /root/repos/pman/deps
+
+
+
+
 #RUN cd /root/repos/pman && git pull
 #RUN cd /root/repos/pman && ls
-RUN cd /root/repos/pman && git pull
-RUN cd /root/repos/pman && make clean
+#RUN cd /root/repos/pman && git pull
+#RUN cd /root/repos/pman && make clean
 #RUN rm -rf /root/repos/pman/build
 #RUN cd /root/repos/pman && clib i -C 1 -f -c
 #RUN cd /root/repos/pman && rm -rf o al uild
 #RUN cd /root/repos/pman && make clean
 #RUN cd /root/repos/pman && passh scripts/submodule-cmds.sh
-RUN cd /root/repos/pman && git pull
-RUN cd /root/repos/pman && git reset --hard
-RUN rm -rf  /root/repos/pman/submodules
-RUN rm -rf  /root/repos/pman/build
+#RUN cd /root/repos/pman && git pull
+#RUN cd /root/repos/pman && git reset --hard
+#RUN rm -rf  /root/repos/pman/submodules
+#RUN rm -rf  /root/repos/pman/build
 #RUN cd /root/repos/pman && ./scripts/submodule-cmds.sh|bash
-RUN cd /root/repos/pman && passh -P continue -p y make setup||true
+#RUN cd /root/repos/pman && passh -P continue -p y make setup||true
 #RUN cd /root/repos/pman && passh scripts/clib-cmds.sh
 #RUN rm -rf /root/repos/pman/uild
 #RUN rm -rf /root/repos/pman/build
@@ -68,8 +76,8 @@ RUN cd /root/repos/pman && passh -P continue -p y make setup||true
 #RUN cd /root/repos/pman && make all||true
 #RUN cd /root/repos/pman/build && ninja||true
 #RUN rm -rf /root/repos/pman/build
-RUN cd /root/repos/pman && meson build
-RUN cd /root/repos/pman/build && ninja
+#RUN cd /root/repos/pman && meson build
+#RUN cd /root/repos/pman/build && ninja
 #meson build
 #RUN cd /root/repos/pman/build && passh ninja -C build
 #meson build
