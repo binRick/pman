@@ -22,9 +22,13 @@
 #include <unistd.h>
 #include <wchar.h>
 #include <wctype.h>
+#include "../deps/clibs/module/def.h"
+#include "../deps/clibs/module/module.h"
+#include "../deps/clibs/module/require.h"
+/////////////////////////////////////////////////////
+#include "../include/includes-module.h"
 /////////////////////////////////////////////////////
 #include "../include/includes-pman-ansi.h"
-/////////////////////////////////////////////////////
 /////////////////////////////////////////////////////
 #include "../include/includes-module.h"
 #include "../submodules/tinydir/tinydir.h"
@@ -44,10 +48,10 @@
 #include "../submodules/djbhash/src/djbhash.h"
 #include "../include/timequick.h"
 #include "../submodules/assertf.h/assertf.h"
-#include "../submodules/expand-braces/expand-braces.h"
+//#include "../submodules/expand-braces/expand-braces.h"
 #include "../submodules/ctable/src/table.h"
 /////////////////////////////////////////////////////
-#include "../submodules/str-ends-with/src/str-ends-with.h"
+//#include "../submodules/str-ends-with/src/str-ends-with.h"
 /////////////////////////////////////////////////////
 #include "../include/macros.h"
 /////////////////////////////////////////////////////
@@ -70,7 +74,7 @@
 #include "../deps/timestamp/timestamp.h"
 #include "../deps/trim/trim.h"
 #include "../include/fort.h"
-#include "../submodules/buffet/src/buffet.h"
+//#include "../submodules/buffet/src/buffet.h"
 #include "../submodules/bestline/bestline.h"
 #include "../submodules/c_string_buffer/include/stringbuffer.h"
 #include "../submodules/csv_parser/csv.h"

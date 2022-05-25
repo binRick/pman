@@ -7,6 +7,9 @@ bin = {
      bin_name,
      [
        './' + bin_name + '.c',
+       './module/def.h',
+       './module/module.h',
+       './module/require.h',
      ],
      dependencies: [
         deps,

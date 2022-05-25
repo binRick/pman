@@ -1,5 +1,5 @@
 
-bin_name = 'module1'
+bin_name = 'csv1'
 
 bin = {
  'name': bin_name,
@@ -8,7 +8,17 @@ bin = {
      [
        './' + bin_name + '.c',
      ],
-     dependencies: [deps],
+     dependencies: [
+        deps,
+        rhash_md5_dep,
+        djbhash_dep,
+        list_dep,
+        bestline_dep,
+        case_dep,
+        rgba_dep,
+        commander_dep,
+        trim_dep,
+     ],
      include_directories: [
        '../../../',
      ],

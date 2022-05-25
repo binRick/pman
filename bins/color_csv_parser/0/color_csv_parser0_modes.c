@@ -2,11 +2,14 @@
 #ifndef COLOR_PARSER_MODES
 #define COLOR_PARSER_MODES
 #include "./color_csv_parser0_defines.h"
-#include "./color_csv_parser0_types.h"
 #include "./color_csv_parser0_globals.c"
+#include "./color_csv_parser0_types.h"
+
+
 static void enable_verbose_mode() {
   parser_args->verbose_mode = true;
 }
+
 
 static void enable_test_mode(command_t *self){
   parser_args->test_mode = true;
@@ -28,6 +31,7 @@ static void set_input_file(command_t *self){
   assert_nonnull(parser_args->input_file);
 }
 
+
 ////////////////////////////////////////////////////////////////////////
 int init_parser_args(const int argc, const char **argv){
   if (parser_args != NULL) {
@@ -35,17 +39,18 @@ int init_parser_args(const int argc, const char **argv){
   }
   ////////////////////////////////////////////////////////////////
   command_t cmd;
+
   parser_args = malloc(sizeof(pman_args_t));
   ro          = malloc(sizeof(struct render_t));
   ////////////////////////////////////////////////////////////////
-  ro->input_buffer_bytes      = 0;
-  ro->path_size_sum = 0;
+  ro->input_buffer_bytes = 0;
+  ro->path_size_sum      = 0;
   ////////////////////////////////////////////////////////////////
-  parser_args->test_mode    = DEFAULT_TEST_MODE;
-  parser_args->verbose_mode = DEFAULT_VERBOSE_MODE;
-  parser_args->input_file   = malloc(MAX_INPUT_FILE_NAME_LEN);
-  parser_args->output_file  = strdup(DEFAULT_OUTPUT_FILE);
-  parser_args->max_colors_qty   = DEFAULT_COLORS_QTY;
+  parser_args->test_mode      = DEFAULT_TEST_MODE;
+  parser_args->verbose_mode   = DEFAULT_VERBOSE_MODE;
+  parser_args->input_file     = malloc(MAX_INPUT_FILE_NAME_LEN);
+  parser_args->output_file    = strdup(DEFAULT_OUTPUT_FILE);
+  parser_args->max_colors_qty = DEFAULT_COLORS_QTY;
   ////////////////////////////////////////////////////////////////
   sprintf(parser_args->input_file, "%s", DEFAULT_INPUT_FILE);
   ////////////////////////////////////////////////////////////////
@@ -59,10 +64,10 @@ int init_parser_args(const int argc, const char **argv){
   ////////////////////////////////////////////////////////////////
   if (DEBUG_ARGUMENTS || parser_args->verbose_mode) {
     if (parser_args->verbose_mode) {
-     fprintf(stderr, "Additional Args:\n");
-     for (int i = 0; i < cmd.argc; ++i) {
-       fprintf(stderr, "  - '%s'\n", cmd.argv[i]);
-     }
+      fprintf(stderr, "Additional Args:\n");
+      for (int i = 0; i < cmd.argc; ++i) {
+        fprintf(stderr, "  - '%s'\n", cmd.argv[i]);
+      }
     }
     fprintf(stderr, "================================\n");
     fprintf(stderr, "Input File:             %s\n", parser_args->input_file);
@@ -73,6 +78,6 @@ int init_parser_args(const int argc, const char **argv){
     fprintf(stderr, "================================\n");
   }
   command_free(&cmd);
-  return(0);                                                                                                                                    
+  return(0);
 } /* init_parser_args */
 #endif

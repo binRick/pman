@@ -2,6 +2,9 @@
 #ifndef COLOR_PARSER_MODULE_H
 #define COLOR_PARSER_MODULE_H
 ///////////////////////////////////////////
+#include "../../../deps/clibs/module/def.h"
+#include "../../../deps/clibs/module/module.h"
+#include "../../../deps/clibs/module/require.h"
 #include "./color_csv_parser1_includes.c"
 ///////////////////////////////////////////
 module(colorcsvparser1) {

@@ -5,6 +5,6 @@
 #include "./color_csv_parser1_includes.c"
 ////////////////////////////////////////////////
 #include "./color_csv_parser1_defines.h"
-#include "./color_csv_parser1_types.h"
 #include "./color_csv_parser1_globals.c"
+#include "./color_csv_parser1_types.h"
 #endif

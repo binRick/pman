@@ -2,6 +2,9 @@
 #ifndef COLOR_PARSER_MODULE_H
 #define COLOR_PARSER_MODULE_H
 #include "../include/includes.h"
+#include "../module/def.h"
+#include "../module/module.h"
+#include "../module/require.h"
 #include "./color_csv_parser0_includes.c"
 
 enum colorcsvparser0_mode {

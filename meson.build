@@ -107,6 +107,7 @@ foreach b : bins
   test(b['name'], b['executable'], args: ['--test'], env: test_env)
 endforeach
 #////////////////////////////////////////////////////
+#subdir('meson/deps/module')
 subdir('bins/assert/assert0')
 subdir('bins/assert/assert1')
 #////////////////////////////////////////////////////
@@ -114,8 +115,8 @@ subdir('bins/json/json0')
 #////////////////////////////////////////////////////
 subdir('bins/spin/0')
 #////////////////////////////////////////////////////
-subdir('bins/module/module0')
-subdir('bins/module/module1')
+#subdir('bins/module/module0')
+#subdir('bins/module/module1')
 #////////////////////////////////////////////////////
 subdir('bins/subprocess/0')
 #////////////////////////////////////////////////////
@@ -142,10 +143,10 @@ subdir('bins/bat/0')
 subdir('bins/dotenv/0')
 subdir('bins/colors/0')
 subdir('bins/terminput/0')
-subdir('bins/katmodule/0')
-subdir('bins/katmodule/1')
+#subdir('bins/katmodule/0')
+#subdir('bins/katmodule/1')
 subdir('bins/bestline/0')
-subdir('bins/buffet/0')
+#subdir('bins/buffet/0')
 subdir('bins/case/0')
 subdir('bins/rgbpng/0')
 subdir('bins/tempdir/0')
@@ -165,4 +166,4 @@ subdir('bins/conf/0')
 #subdir('bins/libansilove/0')
 #subdir('bins/libansilove/1')
 subdir('bins/color_csv_parser/0')
-#subdir('bins/color_csv_parser/1')
+subdir('bins/color_csv_parser/1')

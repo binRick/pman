@@ -1,10 +1,10 @@
-#pragma once 
+#pragma once
 #ifndef COLOR_PARSER_MODULE_SETUP
 #define COLOR_PARSER_MODULE_SETUP
 ////////////////////////////////////////////////////////////
-#include "./color_csv_parser0_module.h"  
+#include "./color_csv_parser0_module.h"
 ////////////////////////////////////////////////////////////
-#define M                             require(colorcsvparser0)
+#define M    require(colorcsvparser0)
 ////////////////////////////////////////////////////////////
 
 
@@ -21,6 +21,7 @@ void colorcsvparser0_deinit(module(colorcsvparser0) *exports) {
   fprintf(stderr, "colorcsvparser0> deinit\n");
   clib_module_deinit(colorcsvparser0);
   char *dur = tq_stop("colorcsvparser0");
+
   dbg(dur, %s);
 }
 

@@ -49,7 +49,7 @@ main() {
 	ed_hash="$(enabled_dep_files_hash)"
 	#ansi >&2 --blue --bold "$ed_hash"
 	if \grep -q "^${ed_hash}" "$ENABLED_DEPS_HASH_FILE"; then
-        true
+		true
 		#ansi >&2 --green --bold "OK deps hash :: $ed_hash"
 	else
 		#ansi >&2 --red --bold "expired deps hash :: $(\cat $ENABLED_DEPS_HASH_FILE) => $ed_hash"

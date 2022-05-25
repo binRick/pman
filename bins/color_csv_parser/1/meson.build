@@ -18,6 +18,7 @@ bin = {
         rgba_dep,
         commander_dep,
         trim_dep,
+        module_dep,
      ],
      include_directories: [
        '../../../',
