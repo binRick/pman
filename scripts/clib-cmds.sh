@@ -26,7 +26,7 @@ clib_cmd() {
 
 clib_cmds() {
 	while read -r m; do
-		ansi >&2 --yellow --bg-black --italic "$(printf '%s\n' "$m")"
+		#ansi >&2 --yellow --bg-black --italic "$(printf '%s\n' "$m")"
 		printf '%s\n' "$(clib_cmd "$m")"
 	done < <(get_clibs)
 }

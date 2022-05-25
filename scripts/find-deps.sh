@@ -41,17 +41,18 @@ make_clean() {
 handle_expired_deps_hash() {
 	#make_clean
 	enabled_dep_files_hash >$ENABLED_DEPS_HASH_FILE
-	ansi >&2 --green --bold "deps hash updated"
+	#ansi >&2 --green --bold "deps hash updated"
 }
 
 main() {
 	ed="$(enabled_dep_dirs)"
 	ed_hash="$(enabled_dep_files_hash)"
-	ansi >&2 --blue --bold "$ed_hash"
+	#ansi >&2 --blue --bold "$ed_hash"
 	if \grep -q "^${ed_hash}" "$ENABLED_DEPS_HASH_FILE"; then
-		ansi >&2 --green --bold "OK deps hash :: $ed_hash"
+        true
+		#ansi >&2 --green --bold "OK deps hash :: $ed_hash"
 	else
-		ansi >&2 --red --bold "expired deps hash :: $(\cat $ENABLED_DEPS_HASH_FILE) => $ed_hash"
+		#ansi >&2 --red --bold "expired deps hash :: $(\cat $ENABLED_DEPS_HASH_FILE) => $ed_hash"
 		handle_expired_deps_hash
 	fi
 	echo -e "$ed"

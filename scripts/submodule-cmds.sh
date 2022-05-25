@@ -18,7 +18,7 @@ module_cmd() {
 }
 module_cmds() {
 	while read -r m; do
-		ansi >&2 --yellow --bg-black --italic "$(printf '%s\n' "$m")"
+		#aansi >&2 --yellow --bg-black --italic "$(printf '%s\n' "$m")"
 		printf '%s\n' "$(module_cmd "$m")"
 	done < <(get_modules)
 }
