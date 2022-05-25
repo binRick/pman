@@ -85,8 +85,8 @@
 [submodule "submodules/scriptexec"]
 	path = submodules/scriptexec
 	url = https://github.com/sagiegurari/c_scriptexec
-[submodule "submodules/fsio"]
-	path = submodules/fsio
+[submodule "submodules/c_fsio"]
+	path = submodules/c_fsio
 	url = https://github.com/sagiegurari/c_fsio
 [submodule "submodules/memtrace"]
 	path = submodules/memtrace

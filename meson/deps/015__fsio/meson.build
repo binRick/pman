@@ -1,8 +1,8 @@
 fsio_lib = library('fsio', 
-  '../../../submodules/fsio/src/fsio.c', 
+  '../../../submodules/c_fsio/src/fsio.c', 
   install: false, dependencies: [stringbuffer_dep], 
   include_directories: [
-  '../../../submodules/fsio/include',
+  '../../../submodules/c_fsio/include',
   '../../../submodules/c_string_buffer/include',
   ]
 )

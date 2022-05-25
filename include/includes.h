@@ -75,7 +75,7 @@
 #include "../submodules/c_string_buffer/include/stringbuffer.h"
 #include "../submodules/csv_parser/csv.h"
 #include "../submodules/env.h/env.h"
-#include "../submodules/fsio/include/fsio.h"
+#include "../submodules/c_fsio/include/fsio.h"
 #include "../submodules/libansilove/include/ansilove.h"
 #include "../submodules/libconfuse/src/confuse.h"
 #include "../submodules/libdotenv/dot_env.h"
