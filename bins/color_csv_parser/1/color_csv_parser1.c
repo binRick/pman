@@ -15,6 +15,7 @@ int main(const int argc, const char **argv) {
 
   r = init_parser_args(argc, argv);
   assert_eq(r, 0, %d);
+  return(0);
   return(colorcsvparser1_modulemain(argc, argv));
 }
 #endif

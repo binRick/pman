@@ -43,9 +43,9 @@ static void set_input_file(command_t *self){
 
 ////////////////////////////////////////////////////////////////////////
 int init_parser_args(const int argc, const char **argv){
-  if (M->parser_args != NULL) {
-    return(0);
-  }
+//  if (M->parser_args != NULL) {
+//    return(0);
+//  }
   ////////////////////////////////////////////////////////////////
   command_t cmd;
 
@@ -108,12 +108,12 @@ int colorcsvparser1_logicinit(){
   M->ro->input_file_exists = (int)fs_exists(M->parser_args->input_file);
 
 
+  //return(0);
   dbg(M->parser_args->input_file, %s);
 
   assert_eq(M->ro->input_file_exists, 0, %d);
 
 
-  return(0);
 
 
   ////////////////////////////////////////////////////////
@@ -345,8 +345,8 @@ int colorcsvparser1_clean(){
 int colorcsvparser1_modulemain(const int argc, const char **argv){
   int r;
 
-//  r = colorcsvparser1_logicinit();
-//  assert_eq(r, 0, %d);
+  r = colorcsvparser1_logicinit();
+  assert_eq(r, 0, %d);
 
   // r = colorcsvparser1_work();
   // assert_eq(r, 0, %d);

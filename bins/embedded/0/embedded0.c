@@ -2,7 +2,7 @@
 ////////////////////////////////////////////////////
 #include "../src/includes.c"
 ////////////////////////////////////////////////////
-#include "../include/embedded-colornames-dev.h"
+#include "/Users/rick/repos/pman/include/embedded-colornames-dev.h"
 #include "../include/pman0-types.h"
 ////////////////////////////////////////////////////
 #define MAX_TEST_COLORS_QTY      10
