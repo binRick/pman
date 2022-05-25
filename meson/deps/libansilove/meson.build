@@ -10,6 +10,7 @@ libansilove_lib = library('libansilove',
     '../../../submodules/libansilove/src/clean.c',
     '../../../submodules/libansilove/src/loaders/ansi.c',
     '../../../submodules/libansilove/compat/reallocarray.c',
+    '../../../submodules/libansilove/compat/strtonum.c',
   install: false, 
   dependencies: [gd_dep, m_dep], 
   include_directories: [

@@ -52,6 +52,7 @@ inc = include_directories(
   './include/template',
 )
 #//***********************************************************/
+#find_deps = []
 foreach m : find_deps
   subdir(m)
 endforeach

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -eou pipefail
 cd "$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)"
-
+if ! command -v gsed >/dev/null; then alias gsed=sed; fi
 DEFAULT_ENABLED_DEPS_PATTERN='^.*|^[a-z].*'
 
 ENABLED_DEPS_HASH_FILE=$(cd ../. && pwd)/etc/enabled-deps-hash.txt

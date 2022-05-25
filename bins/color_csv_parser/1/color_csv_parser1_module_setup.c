@@ -18,6 +18,8 @@ int colorcsvparser1_init(module(colorcsvparser1) *exports) {
   exports->loggermode = colorcsvparser1_DEFAULT_LOGGER_MODE;
   exports->dur_msg = malloc(DEFAULT_BUFFER_SIZE);      
   exports->split_csv_buffer_lines = malloc(DEFAULT_BUFFER_SIZE);
+  exports->ro          = malloc(sizeof(struct render_t));
+  exports->parser_args = malloc(sizeof(pman_args_t));
   return(0);
 }
 

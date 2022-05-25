@@ -210,10 +210,10 @@ uncrustify-clean:
 	@find . -type f -name "*unc-back*"|xargs -I % unlink %
 
 fix-dbg:
-	@gsed 's|, % s);|, %s);|g' -i $(TIDIED_FILES)
-	@gsed 's|, % lu);|, %lu);|g' -i $(TIDIED_FILES)
-	@gsed 's|, % d);|, %d);|g' -i $(TIDIED_FILES)
-	@gsed 's|, % zu);|, %zu);|g' -i $(TIDIED_FILES)
+	@$(SED) 's|, % s);|, %s);|g' -i $(TIDIED_FILES)
+	@$(SED) 's|, % lu);|, %lu);|g' -i $(TIDIED_FILES)
+	@$(SED) 's|, % d);|, %d);|g' -i $(TIDIED_FILES)
+	@$(SED) 's|, % zu);|, %zu);|g' -i $(TIDIED_FILES)
 
 tidy: uncrustify fix-dbg uncrustify-clean
 

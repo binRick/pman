@@ -2,6 +2,7 @@
 set -eou pipefail
 cd "$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)"
 cd ../.
+if ! command -v gsed >/dev/null; then alias gsed=sed; fi
 SUBMODULES_DIR=$(pwd)/submodules
 GIT_CLONE_ARGS="--recurse-submodules"
 [[ -d "$SUBMODULES_DIR" ]] || mkdir -p "$SUBMODULES_DIR"

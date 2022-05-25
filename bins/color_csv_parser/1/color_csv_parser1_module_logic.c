@@ -12,6 +12,78 @@ module(colorcsvparser1) * colorcsvparser1;
 #define M                             require(colorcsvparser1)
 ////////////////////////////////////////////////////////////
 
+  static void enable_verbose_mode() {
+  M->parser_args->verbose_mode = true;
+  }
+
+  static void enable_test_mode(command_t *self){
+  M->parser_args->test_mode = true;
+  }
+
+
+  static void set_max_colors_qty(command_t *self){
+  M->parser_args->max_colors_qty = atoi(self->arg);
+  }
+
+
+  static void set_output_file(command_t *self){
+  M->parser_args->output_file = strdup(self->arg);
+  }
+
+
+  static void set_input_file(command_t *self){
+  M->parser_args->input_file = strdup(self->arg);
+  assert_nonnull(M->parser_args->input_file);
+  }
+
+  ////////////////////////////////////////////////////////////////////////
+  int init_parser_args(const int argc, const char **argv){
+  if (M->parser_args != NULL) {
+      return(0);
+    }
+    ////////////////////////////////////////////////////////////////
+    command_t cmd;
+  M->parser_args = malloc(sizeof(pman_args_t));
+  M->ro          = malloc(sizeof(struct render_t));
+    ////////////////////////////////////////////////////////////////
+  M->ro->input_buffer_bytes      = 0;
+  M->ro->path_size_sum = 0;
+    ////////////////////////////////////////////////////////////////
+  M->parser_args->test_mode    = DEFAULT_TEST_MODE;
+  M->parser_args->verbose_mode = DEFAULT_VERBOSE_MODE;
+  M->parser_args->input_file   = malloc(MAX_INPUT_FILE_NAME_LEN);
+  M->parser_args->output_file  = strdup(DEFAULT_OUTPUT_FILE);
+  M->parser_args->max_colors_qty   = DEFAULT_COLORS_QTY;
+    ////////////////////////////////////////////////////////////////
+  sprintf(M->parser_args->input_file, "%s", DEFAULT_INPUT_FILE);
+    ////////////////////////////////////////////////////////////////
+    command_init(&cmd, argv[0], PARSER_VERSION);
+    command_option(&cmd, "-v", "--verbose", "Enable Verbose Mode", enable_verbose_mode);
+    command_option(&cmd, "-T", "--test", "Enable Test Mode", enable_test_mode);
+    command_option(&cmd, "-i", "--input-file  [in-file]", "Input Color File", set_input_file);
+    command_option(&cmd, "-o", "--output-file  [out-file]", "Output Color File", set_output_file);
+    command_option(&cmd, "-c", "--colors-qty  [colors-qty]", "Colors Quantity", set_max_colors_qty);
+    command_parse(&cmd, argc, (char **)argv);
+    ////////////////////////////////////////////////////////////////
+  if (DEBUG_ARGUMENTS || M->parser_args->verbose_mode) {
+      if (M->parser_args->verbose_mode) {
+      fprintf(stderr, "Additional Args:\n");
+      for (int i = 0; i < cmd.argc; ++i) {
+        fprintf(stderr, "  - '%s'\n", cmd.argv[i]);
+      }
+      }
+      fprintf(stderr, "================================\n");
+      fprintf(stderr, "Input File:             %s\n", M->parser_args->input_file);
+      fprintf(stderr, "Output File:            %s\n", M->parser_args->output_file);
+      fprintf(stderr, "Colors Quantity:        %lu\n", M->parser_args->max_colors_qty);
+      fprintf(stderr, "Test mode Enabled?      %s\n", M->parser_args->test_mode    ? "Yes" : "No");
+      fprintf(stderr, "Verbose Enabled?        %s\n", M->parser_args->verbose_mode ? "Yes" : "No");
+      fprintf(stderr, "================================\n");
+    }
+    command_free(&cmd);
+    return(0);
+  } /* init_parser_args */
+
 int colorcsvparser1_logicinit(){
   colorcsvparser1 = require(colorcsvparser1);
   dbg(colorcsvparser1->loggermode, %d);
@@ -21,39 +93,45 @@ int colorcsvparser1_logicinit(){
   djbhash_init(M->djb__hash);
   assert_nonnull(M->djb__hash);
 
-  M->ro          = malloc(sizeof(struct render_t));
-  M->parser_args = malloc(sizeof(pman_args_t));
-  M->ro->input_file_exists = (int)fs_exists(parser_args->input_file);a
+//static render_t    *ro;
+//static pman_args_t *parser_args;
+//static const char *test_main = COLOR_NAME_T_STRUCT_TEST_MAIN;
+//  M->ro          = malloc(sizeof(struct render_t));
+//  M->parser_args = malloc(sizeof(pman_args_t));
+  M->ro->input_file_exists = (int)fs_exists(M->parser_args->input_file);
 
   
+dbg(M->parser_args->input_file,%s);
+
+  assert_eq(M->ro->input_file_exists, 0, %d);
 
 
-  assert_eq(ro->input_file_exists, 0, %d);
+return(0);
+
 
   ////////////////////////////////////////////////////////
   M->ro->OutputBuffer = stringbuffer_new_with_options(DEFAULT_BUFFER_SIZE, true);
-  assert_nonnull(ro->OutputBuffer);
+  assert_nonnull(M->ro->OutputBuffer);
   M->ro->InputBuffer = stringbuffer_new_with_options(DEFAULT_BUFFER_SIZE, true);
-  assert_nonnull(ro->InputBuffer);
+  assert_nonnull(M->ro->InputBuffer);
   ////////////////////////////////////////////////////////
-  stringbuffer_append_string(ro->InputBuffer,  (char *)fs_read(parser_args->input_file));
-  M->ro->input_buffer_bytes   = stringbuffer_get_content_size(ro->InputBuffer);
-  assert_ge(ro->input_buffer_bytes, MIN_INPUT_FILE_SIZE, %lu);
-  M->ro->InputLines = stringfn_split_lines_and_trim(stringbuffer_to_string(ro->InputBuffer));
-  assert_ge(ro->InputLines.count, MIN_INPUT_FILE_LINES, %d);
-
+  stringbuffer_append_string(M->ro->InputBuffer,  (char *)fs_read(M->parser_args->input_file));
+  M->ro->input_buffer_bytes   = stringbuffer_get_content_size(M->ro->InputBuffer);
+  assert_ge(M->ro->input_buffer_bytes, MIN_INPUT_FILE_SIZE, %lu);
+  M->ro->InputLines = stringfn_split_lines_and_trim(stringbuffer_to_string(M->ro->InputBuffer));
+  assert_ge(M->ro->InputLines.count, MIN_INPUT_FILE_LINES, %d);
   ////////////////////////////////////////////////////////
-  stringbuffer_append_string(ro->OutputBuffer, COLOR_NAME_T_STRUCT_PREFIX);
-  stringbuffer_append_string(ro->OutputBuffer, "#ifndef COLOR_NAME_STRUCT_DEFINED\n");
-  stringbuffer_append_string(ro->OutputBuffer, "#define COLOR_NAME_STRUCT_DEFINED\n\n");
-  stringbuffer_append_string(ro->OutputBuffer, COLOR_NAME_T_STRUCT);
-  stringbuffer_append_string(ro->OutputBuffer, "color_name_t COLOR_NAMES[] = {\n");
+  stringbuffer_append_string(M->ro->OutputBuffer, COLOR_NAME_T_STRUCT_PREFIX);
+  stringbuffer_append_string(M->ro->OutputBuffer, "#ifndef COLOR_NAME_STRUCT_DEFINED\n");
+  stringbuffer_append_string(M->ro->OutputBuffer, "#define COLOR_NAME_STRUCT_DEFINED\n\n");
+  stringbuffer_append_string(M->ro->OutputBuffer, COLOR_NAME_T_STRUCT);
+  stringbuffer_append_string(M->ro->OutputBuffer, "color_name_t COLOR_NAMES[] = {\n");
   ////////////////////////////////////////////////////////
 
-  for (unsigned long i = 0; (i < M->roInputLines.count) && (ro->processed_colors_qty < M->parser_argsmax_colors_qty) && (ro->processed_colors_qty <= MAX_COLORS_QTY); i++) {
-    M->roprocessed_colors_qty++;
+  for (unsigned long i = 0; (i < M->ro->InputLines.count) && (M->ro->processed_colors_qty < M->parser_args->max_colors_qty) && (M->ro->processed_colors_qty <= MAX_COLORS_QTY); i++) {
+    M->ro->processed_colors_qty++;
 
-    if (strlen(ro->InputLines.strings[i]) < MIN_INPUT_FILE_LINES || strsplit(ro->InputLines.strings[i], M->split_csv_buffer_lines, ",") != CSV_INPUT_FIELDS_QTY) {
+    if (strlen(M->ro->InputLines.strings[i]) < MIN_INPUT_FILE_LINES || strsplit(M->ro->InputLines.strings[i], M->split_csv_buffer_lines, ",") != CSV_INPUT_FIELDS_QTY) {
      continue;
     }
 
@@ -158,10 +236,10 @@ int colorcsvparser1_logicinit(){
      encoded_path_contents
      );
 
-    stringbuffer_append_string(ro->OutputBuffer, __dat);
-    M->ropath_size_sum += path_size;
+    stringbuffer_append_string(M->ro->OutputBuffer, __dat);
+    M->ro->path_size_sum += path_size;
 
-    if (parser_args->verbose_mode) {
+    if (M->parser_args->verbose_mode) {
      _reset_terminal_to_default_color();
      _change_terminal_color_name(cn);
      _change_terminal_color_fg(PREVIEW_COLOR_FG_RED, PREVIEW_COLOR_FG_GREEN, PREVIEW_COLOR_FG_BLUE);
@@ -178,53 +256,53 @@ int colorcsvparser1_logicinit(){
 
     char *dur = tq_stop("Duration");
 
-  stringbuffer_append_string(ro->OutputBuffer, "};");
-  stringbuffer_append_string(ro->OutputBuffer, "\n\n");
-  stringbuffer_append_string(ro->OutputBuffer, "const size_t COLOR_NAMES_QTY = ");
-  stringbuffer_append_unsigned_long(ro->OutputBuffer, M->roprocessed_colors_qty);
-  stringbuffer_append_string(ro->OutputBuffer, ";\n");
+  stringbuffer_append_string(M->ro->OutputBuffer, "};");
+  stringbuffer_append_string(M->ro->OutputBuffer, "\n\n");
+  stringbuffer_append_string(M->ro->OutputBuffer, "const size_t COLOR_NAMES_QTY = ");
+  stringbuffer_append_unsigned_long(M->ro->OutputBuffer, M->ro->processed_colors_qty);
+  stringbuffer_append_string(M->ro->OutputBuffer, ";\n");
 
-  stringbuffer_append_string(ro->OutputBuffer, "const size_t COLOR_NAMES_PATH_SIZES = ");
-  stringbuffer_append_unsigned_long(ro->OutputBuffer, M->ropath_size_sum);
-  stringbuffer_append_string(ro->OutputBuffer, ";\n");
-  stringbuffer_append_string(ro->OutputBuffer, "\n");
-  stringbuffer_append_string(ro->OutputBuffer, "#endif");
-  stringbuffer_append_string(ro->OutputBuffer, "\n");
+  stringbuffer_append_string(M->ro->OutputBuffer, "const size_t COLOR_NAMES_PATH_SIZES = ");
+  stringbuffer_append_unsigned_long(M->ro->OutputBuffer, M->ro->path_size_sum);
+  stringbuffer_append_string(M->ro->OutputBuffer, ";\n");
+  stringbuffer_append_string(M->ro->OutputBuffer, "\n");
+  stringbuffer_append_string(M->ro->OutputBuffer, "#endif");
+  stringbuffer_append_string(M->ro->OutputBuffer, "\n");
 
-  if (parser_args->test_mode) {
-    stringbuffer_append_string(ro->OutputBuffer, "\n//TEST MODE ENABLED\n");
-    stringbuffer_append_string(ro->OutputBuffer, "#define TEST_MODE_ENABLED\n");
-    stringbuffer_append_string(ro->OutputBuffer, (char *)test_main);
-    stringbuffer_append_string(ro->OutputBuffer, "\n");
+  if (M->parser_args->test_mode) {
+    stringbuffer_append_string(M->ro->OutputBuffer, "\n//TEST MODE ENABLED\n");
+    stringbuffer_append_string(M->ro->OutputBuffer, "#define TEST_MODE_ENABLED\n");
+    stringbuffer_append_string(M->ro->OutputBuffer, (char *)M->test_main);
+    stringbuffer_append_string(M->ro->OutputBuffer, "\n");
   }else{
-    stringbuffer_append_string(ro->OutputBuffer, "//TEST MODE DISABLED\n");
+    stringbuffer_append_string(M->ro->OutputBuffer, "//TEST MODE DISABLED\n");
   }
 
-  int wrote_bytes = fs_write(parser_args->output_file, stringbuffer_to_string(ro->OutputBuffer));
-  bool output_file_created = (bool)((fs_exists(parser_args->output_file) == 0) ? true : false);
+  int wrote_bytes = fs_write(M->parser_args->output_file, stringbuffer_to_string(M->ro->OutputBuffer));
+  bool output_file_created = (bool)((fs_exists(M->parser_args->output_file) == 0) ? true : false);
   assert_eq(output_file_created, true, %d);
-  int output_buffer_size = stringbuffer_get_content_size(ro->OutputBuffer);
+  int output_buffer_size = stringbuffer_get_content_size(M->ro->OutputBuffer);
   assert_eq(wrote_bytes, output_buffer_size, %d);
 
   sprintf(M->dur_msg,
     "Processed %lu Colors from %lu byte file %s with %d lines :: %s and wrote %d bytes to %s",
-    M->roprocessed_colors_qty,
-    M->roinput_buffer_bytes,
-    M->parser_argsinput_file,
-    M->roInputLines.count,
+    M->ro->processed_colors_qty,
+    M->ro->input_buffer_bytes,
+    M->parser_args->input_file,
+    M->ro->InputLines.count,
     dur,
     wrote_bytes,
-    M->parser_argsoutput_file
+    M->parser_args->output_file
     );
 
-  stringbuffer_release(ro->OutputBuffer);
-  stringbuffer_release(ro->InputBuffer);
-  stringfn_release_strings_struct(ro->InputLines);
+  stringbuffer_release(M->ro->OutputBuffer);
+  stringbuffer_release(M->ro->InputBuffer);
+  stringfn_release_strings_struct(M->ro->InputLines);
   djbhash_destroy(colorcsvparser1->djb__hash);
-  free(parser_args->input_file);
-  free(parser_args->output_file);
-  free(ro);
-  free(parser_args);
+  free(M->parser_args->input_file);
+  free(M->parser_args->output_file);
+  free(M->ro);
+  free(M->parser_args);
   OK(M->dur_msg);
   free(M->dur_msg);
   dbg("logic init OK", %s);
@@ -258,8 +336,6 @@ int colorcsvparser1_clean(){
 
 int colorcsvparser1_modulemain(const int argc, const char **argv){
     int r;
-  r = init_parser_args(argc,argv);
-  assert_eq(r, 0, %d);
 
   r = colorcsvparser1_logicinit();
   assert_eq(r, 0, %d);

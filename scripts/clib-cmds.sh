@@ -4,7 +4,7 @@ cd "$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)"
 cd ../.
 CLIB_JSON=$(pwd)/clib.json
 CLIBS_DIR=$(pwd)/deps
-
+if ! command -v gsed >/dev/null; then alias gsed=sed; fi
 [[ -d "$CLIBS_DIR" ]] || mkdir -p "$CLIBS_DIR"
 
 extract_clibs() {
