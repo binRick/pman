@@ -55,6 +55,7 @@ RUN cd /root/repos/pman && make clean
 #RUN cd /root/repos/pman && passh scripts/submodule-cmds.sh
 RUN cd /root/repos/pman && git pull
 RUN cd /root/repos/pman && git reset --hard
+RUN cd /root/repos/pman && ./scripts/submodule-cmds.sh|bash
 RUN cd /root/repos/pman && passh -P continue -p y make setup||true
 #RUN cd /root/repos/pman && passh scripts/clib-cmds.sh
 #RUN rm -rf /root/repos/pman/uild
